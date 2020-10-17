@@ -1,5 +1,5 @@
 :root {
-
+    
     /* Light mode variable definitions */
     --page-background-color: #ffffff;
     --content-background-color: #eeeeee;
@@ -32,23 +32,38 @@
 
 }
 
+html, body {
+    position: absolute;
+}
+
 body {
 
     margin: 0;
+    overflow: hidden;
     color: var(--primary-text-color);
     background-color: var(--page-background-color);
     font-family: omnes-pro, sans-serif;
     font-weight: 700;
     height: 100vh;
+    height: -webkit-fill-available;
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
     width: 100vw;
+    -webkit-user-select: none;
+    user-select: none;
     
     /* To prevent a delay after tapping on iOS */
     touch-action: manipulation;
 
 }
 
-/* To prevent Safari on iOS zooming in when the input field is focused */
 input[type="text"] {
+    -webkit-user-select: element;
+    user-select: element;
+    
+    /* To prevent Safari on iOS zooming in when the input field is focused */
     font-size: 16px;
 }
 
@@ -103,7 +118,7 @@ input[type="text"] {
 
 .webClipPromptContainer div.header p {
     
-    position: fixed;
+    position: absolute;
     top: calc(20vh + 30px);
     left: 50%;
     transform: translate(-50%, 0);
@@ -133,8 +148,9 @@ input[type="text"] {
 
 button.fullWidthButton {
 
-    position: absolute;
+    position: fixed;
     bottom: 5px;
+    bottom: env(safe-area-inset-bottom);
     left: 5px;
     width: calc(100% - 10px);
     height: 50px;
@@ -160,6 +176,7 @@ button.fullWidthButton:active {
 .setupContainer {
 
     padding-left: 20px;
+    position: fixed;
 
 }
 
@@ -189,9 +206,28 @@ button.fullWidthButton:active {
     height: 45px;
     border-radius: 10px;
     margin: 10px;
-    position: relative;
+    position: fixed;
     top: 35px;
 
+}
+
+.quizzerCard:nth-child(3) {
+    top: 40px;
+}
+.quizzerCard:nth-child(4) {
+    top: 100px;
+}
+.quizzerCard:nth-child(5) {
+    top: 150px;
+}
+.quizzerCard:nth-child(6) {
+    top: 200px;
+}
+.quizzerCard:nth-child(7) {
+    top: 250px;
+}
+.quizzerCard:nth-child(8) {
+    top: 300px;
 }
 
 .quizzerCard.disabled {
@@ -226,7 +262,7 @@ button.fullWidthButton:active {
     width: calc(100% - 50px);
     height: calc((100% / 2) - 47.5px);
     border-radius: 25px;
-    position: absolute;
+    position: fixed;
     overflow: hidden;
 
 }
@@ -280,7 +316,7 @@ button.fullWidthButton:active {
     background-color: var(--page-background-color);
     height: calc(25% - 2.5px);
     border-radius: 5px;
-    width: 150px;
+    width: 125px;
     margin-bottom: 5px;
     position: relative;
     transition: opacity 0.1s ease;
@@ -305,13 +341,14 @@ button.fullWidthButton:active {
     position: absolute;
     top: 50%;
     left: 50%;
+    font-size: 18px;
     transform: translate(-50%, -50%);
 
 }
 
 .screenTitle {
 
-    position: absolute;
+    position: fixed;
     margin: 0;
     top: 10px;
     right: 25px;
@@ -440,7 +477,7 @@ button.fullWidthButton:active {
 
 .selectionScreen button {
 
-    position: absolute;
+    position: fixed;
     top: 10px;
     left: 10px;
     height: 25px;
@@ -466,7 +503,7 @@ button.fullWidthButton:active {
 
 .endRoundButton {
 
-    position: absolute;
+    position: fixed;
     top: 10px;
     left: 25px;
     height: 25px;
@@ -487,4 +524,22 @@ button.fullWidthButton:active {
     left: 50%;
     transform: translate(-50%, -50%);
 
+}
+
+.welcomeContainer {
+    
+    position: fixed;
+    
+}
+
+.webClipPromptContainer {
+    
+    position: fixed;
+    
+}
+
+.mainContainer {
+    
+    position: fixed;
+    
 }
