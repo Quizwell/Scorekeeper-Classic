@@ -1,0 +1,490 @@
+:root {
+
+    /* Light mode variable definitions */
+    --page-background-color: #ffffff;
+    --content-background-color: #eeeeee;
+    --primary-text-color: #000000;
+    --secondary-text-color: #555555;
+    --contrast-text-color: #ffffff;
+    --primary-shadow-color: #dddddd;
+    --primary-button-color: #52A7FA;
+    --input-background-color: #f8f8f8;
+    --input-border-color: #bbbbbb;
+    --overlay-color: #000000;
+
+}
+
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        /* Dark mode variable definitions */
+        --page-background-color: #000000;
+        --content-background-color: #222222;
+        --primary-text-color: #ffffff;
+        --secondary-text-color: #555555;
+        --contrast-text-color: #000000;
+        --primary-shadow-color: #222222;
+        --primary-button-color: #3C78FB;
+        --input-background-color: #222222;
+        --input-border-color: #4a4a4a;
+        --overlay-color: #000000;
+    }
+
+}
+
+body {
+
+    margin: 0;
+    color: var(--primary-text-color);
+    background-color: var(--page-background-color);
+    font-family: omnes-pro, sans-serif;
+    font-weight: 700;
+    height: 100vh;
+    width: 100vw;
+    
+    /* To prevent a delay after tapping on iOS */
+    touch-action: manipulation;
+
+}
+
+/* To prevent Safari on iOS zooming in when the input field is focused */
+input[type="text"] {
+    font-size: 16px;
+}
+
+.hidden {
+
+    display: none !important;
+
+}
+
+.welcomeContainer img.header {
+    
+    width: 100vw;
+    height: 40vh;
+    object-fit: cover;
+    
+}
+
+.welcomeContainer h1, .webClipPromptContainer h1 {
+    
+    font-size: 40px;
+    line-height: 1em;
+    margin: 25px;
+    
+}
+
+.welcomeContainer > p, .webClipPromptContainer > p {
+    
+    margin: 0 0 0 25px;
+    font-size: 22px;
+    
+}
+
+.webClipPromptContainer div.header {
+    
+    width: 100vw;
+    height: 40vh;
+    background-color: var(--content-background-color);
+    
+}
+
+.webClipPromptContainer div.header img {
+    
+    position: absolute;
+    top: 20vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75px;
+    height: 75px;
+    border-radius: 15px;
+    
+}
+
+.webClipPromptContainer div.header p {
+    
+    position: fixed;
+    top: calc(20vh + 30px);
+    left: 50%;
+    transform: translate(-50%, 0);
+    font-size: 15px;
+    font-family: system-ui;
+    font-weight: 500;
+    
+}
+
+.webClipPromptContainer p img {
+    
+    margin-left: 4px;
+    height: 20px;
+    width: auto;
+    
+}
+
+.webClipPromptContainer p span {
+    
+    background-color: var(--content-background-color);
+    padding: 2px 5px 2px 5px;
+    border-radius: 5px;
+    font-family: system-ui;
+    font-weight: 500;
+    
+}
+
+button.fullWidthButton {
+
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    width: calc(100% - 10px);
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--primary-button-color);
+
+    color: var(--contrast-text-color);
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 700;
+
+    transition: opacity 0.1s ease;
+
+}
+
+button.fullWidthButton:active {
+
+    opacity: 0.5;
+
+}
+
+.setupContainer {
+
+    padding-left: 20px;
+
+}
+
+.setupContainer h1 {
+
+    margin: 20px 0 0 0;
+
+}
+
+.setupContainer input {
+
+    display: block;
+    margin-top: 5px;
+    background-color: var(--input-background-color);
+    border: 0.5px solid var(--input-border-color);
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 2px var(--primary-shadow-color);
+    color: var(--primary-text-color);
+
+}
+
+.quizzerCard {
+
+    background-color: var(--content-background-color);
+    width: calc(100% - 20px);
+    height: 45px;
+    border-radius: 10px;
+    margin: 10px;
+    position: relative;
+    top: 35px;
+
+}
+
+.quizzerCard.disabled {
+    opacity: 0.5;
+}
+
+.quizzerCard .cardLabel {
+
+    margin: 0;
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translate(0, -50%);
+
+}
+
+.quizzerCard .cardScore {
+
+    margin: 0;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translate(0, -50%);
+
+}
+
+.overviewContainer > div.team1,
+.overviewContainer > div.team2 {
+
+    background-color: var(--content-background-color);
+    margin: 25px;
+    width: calc(100% - 50px);
+    height: calc((100% / 2) - 47.5px);
+    border-radius: 25px;
+    position: absolute;
+    overflow: hidden;
+
+}
+
+.overviewContainer > div.team1 {
+    top: 20px;
+}
+
+.overviewContainer > div.team2 {
+    bottom: 0;
+}
+
+.overviewContainer > div > p.teamName {
+
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    margin: 0;
+
+}
+
+.overviewContainer > div > h1.teamScore {
+
+    position: absolute;
+    font-size: 50px;
+    top: 40px;
+    left: 25px;
+    margin: 0;
+
+}
+
+.overviewContainer div.teamStatusContainer {
+
+    position: absolute;
+    bottom: 15px;
+    left: 25px;
+
+}
+
+.overviewContainer div.actionsContainer {
+
+    position: absolute;
+    height: calc(100% - 50px);
+    margin-top: 25px;
+    right: 25px;
+
+}
+
+.overviewContainer div.actionsContainer div {
+
+    background-color: var(--page-background-color);
+    height: calc(25% - 2.5px);
+    border-radius: 5px;
+    width: 150px;
+    margin-bottom: 5px;
+    position: relative;
+    transition: opacity 0.1s ease;
+
+}
+
+.overviewContainer div.actionsContainer div:active {
+
+    opacity: 0.5;
+
+}
+
+.overviewContainer div.actionsContainer div.disabled {
+
+    opacity: 0.5;
+
+}
+
+.overviewContainer div.actionsContainer p {
+
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+.screenTitle {
+
+    position: absolute;
+    margin: 0;
+    top: 10px;
+    right: 25px;
+
+}
+
+.confirmationDialog {
+
+    background-color: var(--content-background-color);
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: calc(100% - 20px);
+    height: 300px;
+    box-shadow: 0 0 5px var(--primary-shadow-color);
+    border-radius: 20px;
+    z-index: 3;
+
+    transform: translate(0, calc(100% + 20px));
+    transition: transform 0.3s ease;
+
+}
+
+.confirmationDialog .closeButton {
+
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--page-background-color);
+
+}
+
+.confirmationDialog .closeButton p {
+
+    margin: 0;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 25px;
+
+}
+
+.confirmationDialog > p {
+
+    position: absolute;
+    top: 85px;
+    left: 25px;
+    font-size: 20px;
+
+}
+
+.confirmationDialog h2 {
+
+    margin: 0;
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    color: var(--secondary-text-color);
+
+}
+
+.confirmationDialog h1 {
+
+    margin: 0;
+    position: absolute;
+    top: 40px;
+    left: 25px;
+    font-size: 50px;
+
+}
+
+.confirmationDialog button {
+
+    position: absolute;
+    bottom: 15px;
+    width: calc(50% - 22.5px);
+    height: 50px;
+    border: none;
+    background-color: var(--page-background-color);
+    border-radius: 15px;
+    color: var(--primary-text-color);
+    font-size: 20px;
+    font-family: inherit;
+    font-weight: 700;
+    line-height: 95%;
+
+}
+
+.confirmationDialog button:touchstart {
+    
+    opacity: 0.5;
+    
+}
+
+.confirmationDialog button:nth-of-type(1) {
+
+    left: 15px;
+
+}
+
+.confirmationDialog button:nth-of-type(2) {
+
+    right: 15px;
+
+}
+
+.overlay {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background-color: var(--overlay-color);
+    opacity: 0.0;
+    display: none;
+
+    transition: opacity 0.2s ease;
+
+}
+
+.selectionScreen button {
+
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 25px;
+    width: 60px;
+    border: none;
+    background-color: var(--content-background-color);
+    color: var(--primary-text-color);
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 700;
+
+}
+
+.selectionScreen button p {
+
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+.endRoundButton {
+
+    position: absolute;
+    top: 10px;
+    left: 25px;
+    height: 25px;
+    width: 35px;
+    border: none;
+    background-color: var(--content-background-color);
+    color: var(--primary-text-color);
+    border-radius: 10px;
+
+}
+
+.endRoundButton p {
+
+    font-size: 20px;
+    margin: 0;
+    position: absolute;
+    top: 42.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}

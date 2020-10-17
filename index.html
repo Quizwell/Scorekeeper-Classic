@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+
+    <title>Scorekeeper</title>
+    
+    <meta name="apple-mobile-web-app-title" content="Scorekeeper">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#74bcbd">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="application-name" content="Scorekeeper">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://use.typekit.net/pmi2lxk.css">
+
+</head>
+
+<body>
+
+   <div class="welcomeContainer">
+       <img class="header" src="header.svg">
+       <h1>Welcome to<br><span style="color: var(--primary-button-color)">Scorekeeper</span></h1>
+       <p>Scorekeeper allows you to keep score of quiz rounds from your phone.</p>
+       <button class="fullWidthButton" onclick="hideWelcomeScreen()">Next</button>
+   </div>
+   
+   <div class="webClipPromptContainer hidden">
+       
+       <div class="header">
+           
+           <img src="apple-touch-icon.png">
+           <p>Scorekeeper</p>
+           
+       </div>
+       <h1>Add Scorekeeper to your Home Screen</h1>
+       <p>You can add Scorekeeper as an app on your Home Screen. Tap 
+       <picture>
+           <source srcset="ShareIconDark.svg" media="(prefers-color-scheme: dark)">
+           <img src="ShareIcon.svg">
+       </picture>
+       , then tap <span>Add to Home Screen</span>.</p>
+       
+       <button class="fullWidthButton" onclick="hideWebClipPromptScreen()">Start Round</button>
+       
+   </div>
+   
+    <div class="setupContainer hidden">
+
+        <h1>Team 1</h1>
+        <input class="quizzerNameInput" name="quizzer1" type="text">
+        <input class="quizzerNameInput" name="quizzer2" type="text">
+        <input class="quizzerNameInput" name="quizzer3" type="text">
+        <input class="quizzerNameInput" name="quizzer4" type="text">
+        <input class="quizzerNameInput" name="quizzer5" type="text">
+
+        <h1>Team 2</h1>
+        <input class="quizzerNameInput" name="quizzer6" type="text">
+        <input class="quizzerNameInput" name="quizzer7" type="text">
+        <input class="quizzerNameInput" name="quizzer8" type="text">
+        <input class="quizzerNameInput" name="quizzer9" type="text">
+        <input class="quizzerNameInput" name="quizzer10" type="text">
+
+        <button class="fullWidthButton" onclick="finishSetup()">Done</button>
+
+    </div>
+
+    <div class="mainContainer hidden">
+
+        <div class="overviewContainer">
+            
+            <div class="endRoundButton" onclick="showConfirmationDialog('endRound')">
+                <p>&times;</p>
+            </div>
+            
+            <p class="questionNumber screenTitle"></p>
+            
+            <div class="team1">
+                <p class="teamName">Team 1</p>
+                <h1 class="teamScore" onclick="showScoreAdjustment(1)">0</h1>
+                <div class="teamStatusContainer"></div>
+                <div class="actionsContainer">
+                    <div onclick="showSelectionScreen('jump', 1)">
+                        <img src="">
+                        <p>Jump</p>
+                    </div>
+                    <div onclick="showSelectionScreen('foul', 1)">
+                        <img src="">
+                        <p>Foul</p>
+                    </div>
+                    <div class="disabled">
+                        <img src="">
+                        <p>Challenge</p>
+                    </div>
+                    <div class="disabled">
+                        <img src="">
+                        <p>Appeal</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="team2">
+                <p class="teamName">Team 2</p>
+                <h1 class="teamScore" onclick="showScoreAdjustment(2)">0</h1>
+                <div class="teamStatusContainer"></div>
+                <div class="actionsContainer">
+                    <div onclick="showSelectionScreen('jump', 2)">
+                        <img src="">
+                        <p>Jump</p>
+                    </div>
+                    <div onclick="showSelectionScreen('foul', 2)">
+                        <img src="">
+                        <p>Foul</p>
+                    </div>
+                    <div class="disabled">
+                        <img src="">
+                        <p>Challenge</p>
+                    </div>
+                    <div class="disabled">
+                        <img src="">
+                        <p>Appeal</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+       
+        <div class="team1SelectionScreen selectionScreen hidden">
+            
+            <button onclick="hideSelectionScreen(1)">Cancel</button>
+            <p class="screenTitle"></p>
+            
+        </div>
+
+        <div class="team2SelectionScreen selectionScreen hidden">
+            
+            <button onclick="hideSelectionScreen(2)">Cancel</button>
+            <p class="screenTitle"></p>
+            
+        </div>
+        
+        <div class="overlay"></div>
+        
+        <div class="confirmationDialog">
+            <div class="closeButton" onclick="hideConfirmationDialog()">
+                <p>&times;</p>
+            </div>
+            <h2>Subtitle</h2>
+            <h1>Title</h1>
+            <p></p>
+            <button>Correct</button>
+            <button>Incorrect</button>
+        </div>
+
+    </div>
+
+    <script src="index.js"></script>
+
+</body>
+
+</html>
