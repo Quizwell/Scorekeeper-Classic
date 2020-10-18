@@ -215,7 +215,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
         case "endRound":
             subtitle = "End Round"
             title = "Are you sure?";
-            document.querySelector(".confirmationDialog > p").textContent = "If you leave the page without ending the round, the current state of the round will be remembered.";
+            document.querySelector(".confirmationDialog > p").textContent = "If you leave the " + (window.navigator.standalone ? "app" : "page") + " without ending the round, the current state of the round will be remembered.";
             button1Text = "Cancel";
             button2Text = "End Round";
             button1Function = function () {
@@ -253,7 +253,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
 function hideConfirmationDialog() {
 
     // Hide the confirmation dialog element and the overlay
-    document.querySelector(".confirmationDialog").style.transform = "translate(0, calc(100% + 20px))";
+    document.querySelector(".confirmationDialog").style.transform = "translate(0, 125%)";
     document.querySelector(".overlay").style.opacity = 0;
     setTimeout(function () {
         document.querySelector(".overlay").style.display = "none";
@@ -883,5 +883,8 @@ window.addEventListener("load", function () {
         document.querySelector(".mainContainer").classList.remove("hidden");
 
     }
+    
+    // Enable :active CSS on mobile Safari
+    document.addEventListener("touchstart", function () {}, true);
 
 });
