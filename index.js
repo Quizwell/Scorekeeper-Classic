@@ -2,6 +2,7 @@ var currentRoundState = {
 
     question: 1,
     team1: {
+        name: null,
         score: 0,
         fouls: 0,
         errors: 0,
@@ -9,6 +10,7 @@ var currentRoundState = {
         overturnedChallenges: 0,
     },
     team2: {
+        name: null,
         score: 0,
         fouls: 0,
         errors: 0,
@@ -293,11 +295,38 @@ function hideConfirmationDialog() {
 }
 
 function finishSetup() {
+    
+    var teamInputs = document.querySelectorAll(".teamNameInput");
+    var quizzerInputs = document.querySelectorAll(".quizzerNameInput");
+    
+    var team1QuizzerInputsHaveValue = false;
+    var team2QuizzerInputsHaveValue = false;
+    for (var i = 0; i < quizzerInputs.length; i++) {
+        if (quizzerInputs[i].value) {
+            if (i <= 5) {
+                team1QuizzerInputsHaveValue = true;
+            } else if (i >= 6) {
+                team2QuizzerInputsHaveValue = true;
+            }
+        }
+    }
+    
+    // If the user hasn't entered enough information, don't let them continue.
+    if (
+        !teamInputs[0].value ||
+        !teamInputs[1].value ||
+        !team1QuizzerInputsHaveValue ||
+        !team2QuizzerInputsHaveValue
+    ) {
+        return;
+    }
+    
+    currentRoundState.team1.name = teamInputs[0].value;
+    currentRoundState.team2.name = teamInputs[1].value;
 
-    var nameInputs = document.querySelectorAll(".quizzerNameInput");
-    for (var i = 0; i < nameInputs.length; i++) {
+    for (var i = 0; i < quizzerInputs.length; i++) {
 
-        var currentInput = nameInputs[i];
+        var currentInput = quizzerInputs[i];
 
         var quizzerID = Number(currentInput.name.slice(7));
         var quizzerTeam, quizzerNumber;
@@ -356,7 +385,9 @@ function redrawScoreboard() {
     while (team2StatusContainer.firstChild) {
         team2StatusContainer.removeChild(team2StatusContainer.firstChild);
     }
-
+    
+    document.querySelector(".overviewContainer .team1 .teamName").textContent = currentRoundState.team1.name;
+    document.querySelector(".overviewContainer .team2 .teamName").textContent = currentRoundState.team2.name;
 
     for (var i = 0; i < 10; i++) {
 

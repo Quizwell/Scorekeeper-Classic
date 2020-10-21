@@ -183,7 +183,7 @@ button.fullWidthButton:active {
 
 }
 
-.setupContainer h1 {
+.setupContainer h2 {
 
     margin: 20px 0 0 0;
 
@@ -193,13 +193,24 @@ button.fullWidthButton:active {
 
     display: block;
     margin-top: 5px;
+    width: calc(100vw - 50px);
+    
     background-color: var(--input-background-color);
     border: 0.5px solid var(--input-border-color);
     padding: 5px;
     border-radius: 5px;
     box-shadow: 0 0 2px var(--primary-shadow-color);
     color: var(--primary-text-color);
+    font-family: inherit;
+    font-weight: 500;
 
+}
+
+.setupContainer input.teamNameInput {
+    
+    font-size: 20px;
+    height: 30px;
+    
 }
 
 .quizzerCard {
