@@ -5,13 +5,15 @@ var currentRoundState = {
         score: 0,
         fouls: 0,
         errors: 0,
-        uniqueJumps: 0
+        uniqueJumps: 0,
+        overturnedChallenges: 0,
     },
     team2: {
         score: 0,
         fouls: 0,
         errors: 0,
-        uniqueJumps: 0
+        uniqueJumps: 0,
+        overturnedChallenges: 0,
     }
 
 };
@@ -160,6 +162,11 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
             button2Text = "Accepted";
             button1Function = function () {
                 hideConfirmationDialog();
+                var overturnedChallenges = ++currentRoundState["team" + teamNumber].overturnedChallenges;
+                if (overturnedChallenges >= 2) {
+                    currentRoundState["team" + teamNumber].score -= 10;
+                }
+                redrawScoreboard();
             };
             button2Function = function () {
                 challenge();
