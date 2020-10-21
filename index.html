@@ -4,21 +4,21 @@
 <head>
 
     <title>Scorekeeper</title>
-    
+
     <meta name="apple-mobile-web-app-title" content="Scorekeeper">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#74bcbd">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    
+
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="application-name" content="Scorekeeper">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    
+
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://use.typekit.net/pmi2lxk.css">
 
@@ -26,33 +26,34 @@
 
 <body>
 
-   <div class="welcomeContainer">
-       <img class="header" src="Header.svg">
-       <h1>Welcome to<br><span style="color: var(--primary-button-color)">Scorekeeper</span></h1>
-       <p>Scorekeeper allows you to keep score of quiz rounds from your phone.</p>
-       <button class="fullWidthButton" onclick="hideWelcomeScreen()">Next</button>
-   </div>
-   
-   <div class="webClipPromptContainer hidden">
-       
-       <div class="header">
-           
-           <img src="apple-touch-icon.png">
-           <p>Scorekeeper</p>
-           
-       </div>
-       <h1>Add Scorekeeper to your Home Screen</h1>
-       <p>You can add Scorekeeper as an app on your Home Screen. Tap 
-       <picture>
-           <source srcset="ShareIconDark.svg" media="(prefers-color-scheme: dark)">
-           <img src="ShareIcon.svg">
-       </picture>
-       , then tap <span>Add to Home Screen</span>.</p>
-       
-       <button class="fullWidthButton" onclick="hideWebClipPromptScreen()">Start Round</button>
-       
-   </div>
-   
+    <div class="welcomeContainer">
+        <img class="header" src="Header.svg">
+        <h1>Welcome to<br><span style="color: var(--primary-button-color)">Scorekeeper</span></h1>
+        <p>Scorekeeper allows you to keep score of quiz rounds from your phone.</p>
+        <button class="fullWidthButton" onclick="hideWelcomeScreen()">Next</button>
+    </div>
+
+    <div class="webClipPromptContainer hidden">
+
+        <div class="header">
+
+            <img src="apple-touch-icon.png">
+            <p>Scorekeeper</p>
+
+        </div>
+        <h1>Add Scorekeeper to your Home Screen</h1>
+        <p>You can add Scorekeeper as an app on your Home Screen. Tap
+            <picture>
+                <source srcset="ShareIconDark.svg" media="(prefers-color-scheme: dark)">
+                <img src="ShareIcon.svg">
+            </picture>
+            , then tap <span>Add to Home Screen</span>.
+        </p>
+
+        <button class="fullWidthButton" onclick="hideWebClipPromptScreen()">Start Round</button>
+
+    </div>
+
     <div class="setupContainer hidden">
 
         <h1>Team 1</h1>
@@ -76,13 +77,13 @@
     <div class="mainContainer hidden">
 
         <div class="overviewContainer">
-            
+
             <div class="endRoundButton" onclick="showConfirmationDialog('endRound')">
                 <p>&times;</p>
             </div>
-            
+
             <p class="questionNumber screenTitle" onclick="showNoJumpPrompt()"></p>
-            
+
             <div class="team1">
                 <p class="teamName">Team 1</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(1)">0</h1>
@@ -106,7 +107,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="team2">
                 <p class="teamName">Team 2</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(2)">0</h1>
@@ -130,33 +131,33 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
-       
+
         <div class="team1SelectionScreen selectionScreen hidden">
-            
+
             <button onclick="hideSelectionScreen(1)">Cancel</button>
             <p class="screenTitle"></p>
-            
+
             <div class="quizzerCard miscellaneousCard" onclick="selectedQuizzer('team1')">
                 <p class="cardLabel"></p>
             </div>
-            
+
         </div>
 
         <div class="team2SelectionScreen selectionScreen hidden">
-            
+
             <button onclick="hideSelectionScreen(2)">Cancel</button>
             <p class="screenTitle"></p>
-            
+
             <div class="quizzerCard miscellaneousCard" onclick="selectedQuizzer('team2')">
                 <p class="cardLabel"></p>
             </div>
-            
+
         </div>
-        
+
         <div class="overlay"></div>
-        
+
         <div class="confirmationDialog">
             <div class="closeButton" onclick="hideConfirmationDialog()">
                 <p>&times;</p>
@@ -164,6 +165,18 @@
             <h2>Subtitle</h2>
             <h1>Title</h1>
             <p></p>
+            <div class="erroneousInformationCheckbox challenge">
+                <div class="checkbox">
+                    <p>&check;</p>
+                </div>
+                <p>Erroneous Information in Challenge</p>
+            </div>
+            <div class="erroneousInformationCheckbox rebuttal">
+                <div class="checkbox">
+                    <p>&check;</p>
+                </div>
+                <p>Erroneous Information in Rebuttal</p>
+            </div>
             <button>Correct</button>
             <button>Incorrect</button>
         </div>

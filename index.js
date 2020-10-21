@@ -51,26 +51,26 @@ function getNumbersFromID(quizzerID) {
 }
 
 function hideWelcomeScreen() {
-    
+
     document.querySelector(".welcomeContainer").classList.add("hidden");
     if ((window.navigator.userAgent.match(/iP(ad|hone)/i)) && !(window.navigator.userAgent.match(/CriOS/i)) && !window.navigator.standalone) {
-        
+
         document.querySelector(".webClipPromptContainer").classList.remove("hidden");
-        
+
     } else {
-        
+
         document.querySelector(".setupContainer").classList.remove("hidden");
-        
+
     }
-    
-    
+
+
 }
 
 function hideWebClipPromptScreen() {
-    
+
     document.querySelector(".webClipPromptContainer").classList.add("hidden");
     document.querySelector(".setupContainer").classList.remove("hidden");
-    
+
 }
 
 function showSelectionScreen(mode, teamNumber) {
@@ -78,15 +78,15 @@ function showSelectionScreen(mode, teamNumber) {
     selectMode = mode;
 
     if (mode === "jump") {
-        
+
         document.querySelector(".team" + teamNumber + "SelectionScreen .miscellaneousCard p.cardLabel").textContent = "No Jump";
         document.querySelector(".team" + teamNumber + "SelectionScreen p.screenTitle").textContent = "Jump";
-        
+
     } else if (mode === "foul") {
-        
+
         document.querySelector(".team" + teamNumber + "SelectionScreen .miscellaneousCard p.cardLabel").textContent = "Team Foul";
         document.querySelector(".team" + teamNumber + "SelectionScreen p.screenTitle").textContent = "Foul";
-        
+
     } else {
         return;
     }
@@ -115,9 +115,16 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
         button2Function;
 
     var numbers = getNumbersFromID(quizzerID);
-    
+
     document.querySelector(".confirmationDialog > p").textContent = "";
     document.querySelector(".confirmationDialog .closeButton").classList.remove("hidden");
+    
+    var challengeErroneousInformationCheckbox = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.challenge");
+    var rebuttalErroneousInformationCheckbox = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.rebuttal");
+    challengeErroneousInformationCheckbox.classList.remove("checked");
+    challengeErroneousInformationCheckbox.classList.add("hidden");
+    rebuttalErroneousInformationCheckbox.classList.remove("checked");
+    rebuttalErroneousInformationCheckbox.classList.add("hidden");
 
     switch (mode) {
 
@@ -162,15 +169,34 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
             button2Text = "Accepted";
             button1Function = function () {
                 hideConfirmationDialog();
+
+                // If applicable, grant a 10-point deduction for second or more overturned challenge
                 var overturnedChallenges = ++currentRoundState["team" + teamNumber].overturnedChallenges;
                 if (overturnedChallenges >= 2) {
                     currentRoundState["team" + teamNumber].score -= 10;
                 }
+
+                // If the challenge contained erroneous information, deduct ten points
+                if (document.querySelector(".confirmationDialog .erroneousInformationCheckbox.challenge").classList.contains("checked")) {
+
+                    currentRoundState["team" + teamNumber].score -= 10;
+
+                }
+
+                // If the rebuttal contained erroneous information, deduct ten points from the opposite team's score.
+                if (document.querySelector(".confirmationDialog .erroneousInformationCheckbox.rebuttal").classList.contains("checked")) {
+
+                    currentRoundState["team" + ((teamNumber == 1) ? 2 : 1)].score -= 10;
+
+                }
+
                 redrawScoreboard();
             };
             button2Function = function () {
                 challenge();
             };
+            challengeErroneousInformationCheckbox.classList.remove("hidden");
+            rebuttalErroneousInformationCheckbox.classList.remove("hidden");
             break;
         case "appeal":
             subtitle = "Team " + teamNumber
@@ -320,7 +346,7 @@ function finishSetup() {
 }
 
 function redrawScoreboard() {
-    
+
     // Clear the team status containers
     var team1StatusContainer = document.querySelector(".overviewContainer .team1 .teamStatusContainer");
     while (team1StatusContainer.firstChild) {
@@ -335,10 +361,6 @@ function redrawScoreboard() {
     for (var i = 0; i < 10; i++) {
 
         var quizzerID = i + 1;
-        
-        if (quizzerID == 6) {
-            console.log("test");
-        }
 
         var numbers = getNumbersFromID(quizzerID);
 
@@ -362,7 +384,7 @@ function redrawScoreboard() {
         if (!currentQuizzer.enabled) {
 
             if (!quizzerSelectionElement.classList.contains("disabled")) {
-                
+
                 quizzerSelectionElement.classList.add("disabled");
                 quizzerSelectionElement.onclick = null;
 
@@ -378,20 +400,20 @@ function redrawScoreboard() {
                 quizzerSelectionElementLabel.textContent += " - " + disabledReason;
 
             }
-            
+
             quizzerStatusStringElement.style.opacity = 0.5;
 
         } else if (currentQuizzer.enabled && quizzerSelectionElement.classList.contains("disabled")) {
-            
+
             quizzerSelectionElement.classList.remove("disabled");
             quizzerSelectionElement.onclick = function () {
-                selectedQuizzer(quizzerID);   
+                selectedQuizzer(quizzerID);
             };
 
             quizzerSelectionElementLabel.textContent = currentQuizzer.name;
 
             quizzerStatusStringElement.style.opacity = 1;
-            
+
         }
 
         overviewScreenTeamStatusContainer.appendChild(quizzerStatusStringElement);
@@ -404,17 +426,17 @@ function redrawScoreboard() {
     document.querySelector(".overviewContainer .team2 .teamScore").textContent = currentRoundState.team2.score;
 
     if (currentRoundState.question <= 20) {
-        
+
         document.querySelector(".overviewContainer .questionNumber").textContent = "Question " + currentRoundState.question;
-        
+
     } else if (currentRoundState.question > 20) {
-        
+
         if (currentRoundState.team1.score === currentRoundState.team2.score) {
-            
+
             // Keep going - the round continues with tiebreaker questions until the score is no longer tied.
-            
+
             document.querySelector(".overviewContainer .questionNumber").textContent = "Question " + currentRoundState.question;
-            
+
             // If there are no eligible quizzers, allow any quizzer to jump.
             var anyEligibleQuizzer = false;
             for (var i = 0; i < 10; i++) {
@@ -423,9 +445,9 @@ function redrawScoreboard() {
                     anyEligibleQuizzer = true;
                 }
             }
-            
+
             if (!anyEligibleQuizzer) {
-                
+
                 // If there are no eligible quizzers, enable all of the quizzers
                 for (var i = 0; i < 10; i++) {
                     var numbers = getNumbersFromID(i + 1);
@@ -435,11 +457,11 @@ function redrawScoreboard() {
                 }
                 redrawScoreboard();
                 return;
-                
+
             }
-            
+
         } else {
-            
+
             var team1Buttons = document.querySelectorAll(".overviewContainer .team1 .actionsContainer div");
             var team2Buttons = document.querySelectorAll(".overviewContainer .team2 .actionsContainer div");
             for (var i = 0; i < 4; i++) {
@@ -448,12 +470,12 @@ function redrawScoreboard() {
                 team2Buttons[i].classList.add("disabled");
                 team2Buttons[i].onclick = null;
             }
-            
+
             document.querySelector(".overviewContainer .screenTitle").textContent = "End of Round";
             document.querySelector(".overviewContainer .screenTitle").onclick = null;
-            
+
         }
-        
+
     }
 
     // Save current state to localStorage
@@ -462,7 +484,7 @@ function redrawScoreboard() {
 }
 
 function selectedQuizzer(quizzerID) {
-    
+
     if (quizzerID === "team1" || quizzerID === "team2") {
 
         if (selectMode === "jump") {
@@ -470,17 +492,17 @@ function selectedQuizzer(quizzerID) {
         } else if (selectMode === "foul") {
             teamFoul(quizzerID);
         }
-        
+
     } else {
-        
+
         if (selectMode === "jump") {
             showConfirmationDialog("jump", (quizzerID <= 5) ? 1 : 2, quizzerID);
         } else if (selectMode === "foul") {
             foul(quizzerID);
         }
-        
+
     }
-    
+
     switch (quizzerID) {
         case "team1":
             quizzerID = 1;
@@ -491,37 +513,37 @@ function selectedQuizzer(quizzerID) {
         default:
             quizzerID = (quizzerID <= 5) ? 1 : 2;
     }
-    
+
     hideSelectionScreen(quizzerID);
 
 }
 
 function savePreviousRoundState() {
-    
+
     previousRoundState = JSON.parse(JSON.stringify(currentRoundState));
-    
+
 }
 
 function incrementQuestion() {
-    
+
     currentRoundState.question++;
-    
+
 }
 
 function showScoreAdjustment(teamNumber) {
-    
+
     showConfirmationDialog("scoreAdjustment", teamNumber);
-    
+
 }
 
 function showNoJumpPrompt() {
-    
+
     showConfirmationDialog("noJump")
-    
+
 }
 
 function correct(quizzerID) {
-    
+
     savePreviousRoundState();
     challengeAction = function () {
         incorrect(quizzerID, true);
@@ -594,13 +616,13 @@ function correct(quizzerID) {
 }
 
 function incorrect(quizzerID, dontRefreshButtons) {
-    
+
     savePreviousRoundState();
     challengeAction = function () {
         correct(quizzerID);
         hideConfirmationDialog();
     };
-    
+
     var numbers = getNumbersFromID(quizzerID);
 
     function get(property) {
@@ -658,11 +680,11 @@ function incorrect(quizzerID, dontRefreshButtons) {
     }
 
     redrawScoreboard();
-    
+
     // Check to see if the bonus quizzer is enabled. If so, give him the bonus
-    var bonusQuizzerID = (quizzerID <= 5) ? (quizzerID + 5) : (quizzerID - 5); 
+    var bonusQuizzerID = (quizzerID <= 5) ? (quizzerID + 5) : (quizzerID - 5);
     var bonusQuizzerNumbers = getNumbersFromID(bonusQuizzerID);
-    if (currentRoundState[bonusQuizzerNumbers.teamPropertyName][bonusQuizzerNumbers.quizzerPropertyName].enabled) { 
+    if (currentRoundState[bonusQuizzerNumbers.teamPropertyName][bonusQuizzerNumbers.quizzerPropertyName].enabled) {
         showConfirmationDialog("bonus", bonusQuizzerNumbers.teamNumber, bonusQuizzerID, dontRefreshButtons);
     } else {
         hideConfirmationDialog();
@@ -674,21 +696,21 @@ function incorrect(quizzerID, dontRefreshButtons) {
 }
 
 function bonus(quizzerID, dontRefreshButtons) {
-    
+
     var numbers = getNumbersFromID(quizzerID);
-    
+
     currentRoundState[numbers.teamPropertyName].score += 10;
-    
+
     incrementQuestion();
     if (!dontRefreshButtons) {
         refreshChallengeAndAppealButtons("enable");
     }
     redrawScoreboard();
-    
+
 }
 
 function foul(quizzerID) {
-    
+
     var numbers = getNumbersFromID(quizzerID);
 
     function get(property) {
@@ -738,42 +760,42 @@ function foul(quizzerID) {
 }
 
 function teamFoul(team) {
-    
+
     currentRoundState[team].fouls += 1;
-    
+
     // If this is the team's second foul or more, deduct ten points from the team score
     if (currentRoundState[team].fouls >= 2) {
 
         currentRoundState[team].score -= 10;
 
     }
-    
+
     redrawScoreboard();
-    
+
 }
 
 function challenge() {
-    
+
     appeal();
     challengeAction();
     refreshChallengeAndAppealButtons("disable");
     redrawScoreboard();
-    
+
 }
 
 function appeal(teamNumber) {
-    
+
     currentRoundState = previousRoundState;
     previousRoundState = null;
-    
+
     refreshChallengeAndAppealButtons("disable");
-    
+
     redrawScoreboard();
-    
+
 }
 
 function refreshChallengeAndAppealButtons(toggleTo) {
-    
+
     function enableButtons() {
         var team1Challenge = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(3)");
         var team1Appeal = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)");
@@ -798,7 +820,7 @@ function refreshChallengeAndAppealButtons(toggleTo) {
             showConfirmationDialog("appeal", 2);
         };
     }
-    
+
     function disableButtons() {
         var team1Challenge = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(3)");
         var team1Appeal = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)");
@@ -815,7 +837,7 @@ function refreshChallengeAndAppealButtons(toggleTo) {
         team2Challenge.onclick = null;
         team2Appeal.onclick = null;
     }
-    
+
     if (toggleTo === "enable") {
         enableButtons();
     } else if (toggleTo === "disable") {
@@ -823,7 +845,7 @@ function refreshChallengeAndAppealButtons(toggleTo) {
     } else if (document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(3)").classList.contains("disabled")) {
         enableButtons();
     }
-    
+
 }
 
 // Populate all the quizzer cards
@@ -873,7 +895,7 @@ window.addEventListener("load", function () {
 
             var numbers = getNumbersFromID(i);
             var currentQuizzer = currentRoundState[numbers.teamPropertyName][numbers.quizzerPropertyName]
-            
+
             if (currentQuizzer.name !== null) {
                 document.querySelector(".quizzer" + i + "Card").classList.remove("hidden");
                 document.querySelector(".quizzer" + i + "Card .cardLabel").textContent = currentQuizzer.name;
@@ -888,7 +910,17 @@ window.addEventListener("load", function () {
         document.querySelector(".mainContainer").classList.remove("hidden");
 
     }
-    
+
+    // Set up challenge erroneous information checkbox event listeners
+    var challengeErroneousInformationCheckbox = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.challenge");
+    var rebuttalErroneousInformationCheckbox = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.rebuttal");
+    challengeErroneousInformationCheckbox.addEventListener("click", function () {
+        challengeErroneousInformationCheckbox.classList.toggle("checked");
+    });
+    rebuttalErroneousInformationCheckbox.addEventListener("click", function () {
+        rebuttalErroneousInformationCheckbox.classList.toggle("checked");
+    });
+
     // Enable :active CSS on mobile Safari
     document.addEventListener("touchstart", function () {}, true);
 

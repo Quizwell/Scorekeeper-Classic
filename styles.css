@@ -569,3 +569,52 @@ button.fullWidthButton:active {
     position: fixed;
     
 }
+
+.confirmationDialog .erroneousInformationCheckbox {
+    
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    
+}
+
+.confirmationDialog .erroneousInformationCheckbox:nth-of-type(2) {
+    bottom: 120px;
+}
+.confirmationDialog .erroneousInformationCheckbox:nth-of-type(3) {
+    bottom: 85px;
+}
+
+.confirmationDialog .erroneousInformationCheckbox .checkbox {
+    
+    width: 25px;
+    height: 25px;
+    background-color: var(--page-background-color);
+    display: inline-block;
+    border-radius: 7.5px;
+    
+}
+
+.confirmationDialog .erroneousInformationCheckbox .checkbox p {
+    
+    display: none;
+    margin-top: 8px;
+    margin-left: 5px;
+    cursor: default;
+    
+}
+.confirmationDialog .erroneousInformationCheckbox.checked .checkbox p {
+    
+    display: block;
+    
+}
+
+.confirmationDialog .erroneousInformationCheckbox p {
+    
+    margin: 0;
+    display: inline-block;
+    position: relative;
+    bottom: 7.5px;
+    margin-left: 7.5px;
+    
+}
