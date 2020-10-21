@@ -509,8 +509,10 @@ function redrawScoreboard() {
 
     }
 
-    // Save current state to localStorage
+    // Save states and challenge action to localStorage
     localStorage.setItem("currentRoundState", JSON.stringify(currentRoundState));
+    localStorage.setItem("previousRoundState", JSON.stringify(previousRoundState));
+    localStorage.setItem("challengeAction", JSON.stringify(challengeAction));
 
 }
 
@@ -576,8 +578,9 @@ function showNoJumpPrompt() {
 function correct(quizzerID) {
 
     savePreviousRoundState();
-    challengeAction = function () {
-        incorrect(quizzerID, true);
+    challengeAction = {
+        functionName: "incorrect",
+        arguments: [quizzerID, true],
     };
 
     var numbers = getNumbersFromID(quizzerID);
@@ -649,9 +652,9 @@ function correct(quizzerID) {
 function incorrect(quizzerID, dontRefreshButtons) {
 
     savePreviousRoundState();
-    challengeAction = function () {
-        correct(quizzerID);
-        hideConfirmationDialog();
+    challengeAction = {
+        functionName: "correct",
+        arguments: [quizzerID]
     };
 
     var numbers = getNumbersFromID(quizzerID);
@@ -808,7 +811,11 @@ function teamFoul(team) {
 function challenge() {
 
     appeal();
-    challengeAction();
+    
+    // Execute challenge action
+    window[challengeAction.functionName](...challengeAction.arguments);
+    // If the challenge action asks us to, hide the confirmation dialog as well
+    
     refreshChallengeAndAppealButtons("disable");
     redrawScoreboard();
 
@@ -915,6 +922,14 @@ for (var i = 0; i < 10; i++) {
 window.addEventListener("load", function () {
 
     var recalledRoundState = localStorage.getItem("currentRoundState");
+    var recalledPreviousRoundState = localStorage.getItem("previousRoundState");
+    var recalledChallengeAction = localStorage.getItem("challengeAction");
+    
+    if (recalledPreviousRoundState) {
+        previousRoundState = JSON.parse(recalledPreviousRoundState);
+        challengeAction = JSON.parse(recalledChallengeAction);
+        refreshChallengeAndAppealButtons("enable");
+    }
 
     if (recalledRoundState) {
 
