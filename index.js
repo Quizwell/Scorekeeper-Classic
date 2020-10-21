@@ -208,13 +208,11 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
             button2Text = "Add 10 Points";
             button1Function = function () {
                 currentRoundState["team" + teamNumber].score -= 10;
-                refreshChallengeAndAppealButtons("disable");
                 redrawScoreboard();
                 hideConfirmationDialog();
             };
             button2Function = function () {
                 currentRoundState["team" + teamNumber].score += 10;
-                refreshChallengeAndAppealButtons("disable");
                 redrawScoreboard();
                 hideConfirmationDialog();
             };
