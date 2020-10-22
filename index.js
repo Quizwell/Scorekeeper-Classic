@@ -919,6 +919,32 @@ for (var i = 0; i < 10; i++) {
 
 }
 
+// If the user holds down Shift, Option, and Control, autofill the setup screen with default values. (This is a feature to make it easier to debug and test the app)
+window.addEventListener("keydown", function (e) {
+    if (e.shiftKey &&
+        e.altKey &&
+        e.ctrlKey &&
+        e.code == "KeyP"
+    ) {
+        
+        var teamNameInputs = document.querySelectorAll(".teamNameInput");
+        var quizzerNameInputs = document.querySelectorAll(".quizzerNameInput");
+        
+        teamNameInputs[0].value = "Team A";
+        quizzerNameInputs[0].value = "A1";
+        quizzerNameInputs[1].value = "A2";
+        quizzerNameInputs[2].value = "A3";
+        quizzerNameInputs[3].value = "A4";
+        quizzerNameInputs[4].value = "A5";
+        teamNameInputs[1].value = "Team B";
+        quizzerNameInputs[5].value = "B1";
+        quizzerNameInputs[6].value = "B2";
+        quizzerNameInputs[7].value = "B3";
+        quizzerNameInputs[8].value = "B4";
+        
+    }
+});
+
 window.addEventListener("load", function () {
 
     var recalledRoundState = localStorage.getItem("currentRoundState");
