@@ -3,6 +3,7 @@ var currentRoundState = {
     question: 1,
     team1: {
         name: null,
+        color: null,
         score: 0,
         fouls: 0,
         errors: 0,
@@ -11,12 +12,14 @@ var currentRoundState = {
     },
     team2: {
         name: null,
+        color: null,
         score: 0,
         fouls: 0,
         errors: 0,
         uniqueJumps: 0,
         overturnedChallenges: 0,
-    }
+    },
+    useTeamColors: true,
 
 };
 var previousRoundState = null;
@@ -120,7 +123,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
 
     document.querySelector(".confirmationDialog > p").textContent = "";
     document.querySelector(".confirmationDialog .closeButton").classList.remove("hidden");
-    
+
     var challengeErroneousInformationCheckbox = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.challenge");
     var rebuttalErroneousInformationCheckbox = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.rebuttal");
     challengeErroneousInformationCheckbox.classList.remove("checked");
@@ -281,10 +284,11 @@ function hideConfirmationDialog() {
 }
 
 function finishSetup() {
-    
+
     var teamInputs = document.querySelectorAll(".teamNameInput");
+    var teamColorInputs = document.querySelectorAll(".teamColorInput");
     var quizzerInputs = document.querySelectorAll(".quizzerNameInput");
-    
+
     var team1QuizzerInputsHaveValue = false;
     var team2QuizzerInputsHaveValue = false;
     for (var i = 0; i < quizzerInputs.length; i++) {
@@ -296,7 +300,7 @@ function finishSetup() {
             }
         }
     }
-    
+
     // If the user hasn't entered enough information, don't let them continue.
     if (
         !teamInputs[0].value ||
@@ -306,9 +310,14 @@ function finishSetup() {
     ) {
         return;
     }
-    
+
     currentRoundState.team1.name = teamInputs[0].value;
     currentRoundState.team2.name = teamInputs[1].value;
+
+    currentRoundState.team1.color = teamColorInputs[0].value;
+    currentRoundState.team2.color = teamColorInputs[1].value;
+    
+    currentRoundState.useTeamColors = document.querySelector(".setupContainer .useTeamColorsCheckbox").classList.contains("checked");
 
     for (var i = 0; i < quizzerInputs.length; i++) {
 
@@ -371,9 +380,23 @@ function redrawScoreboard() {
     while (team2StatusContainer.firstChild) {
         team2StatusContainer.removeChild(team2StatusContainer.firstChild);
     }
-    
+
     document.querySelector(".overviewContainer .team1 .teamName").textContent = currentRoundState.team1.name;
     document.querySelector(".overviewContainer .team2 .teamName").textContent = currentRoundState.team2.name;
+    
+    if (currentRoundState.useTeamColors) {
+        
+        document.querySelector(".overviewContainer .team1").style.backgroundColor = currentRoundState.team1.color;
+        document.querySelector(".overviewContainer .team2").style.backgroundColor = currentRoundState.team2.color;
+
+        // Get the constasting color for the team background
+        var team1TextColor = getContrastingColor(currentRoundState.team1.color);
+        var team2TextColor = getContrastingColor(currentRoundState.team2.color);
+
+        document.querySelector(".overviewContainer .team1").style.color = team1TextColor;
+        document.querySelector(".overviewContainer .team2").style.color = team2TextColor;
+        
+    }
 
     for (var i = 0; i < 10; i++) {
 
@@ -797,13 +820,13 @@ function teamFoul(team) {
 function challenge(teamNumber) {
 
     appeal();
-    
+
     var challengeErroneousInformation = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.challenge").classList.contains("checked");
     var rebuttalErroneousInformation = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.rebuttal").classList.contains("checked");
-    
+
     // Execute challenge action
     window[challengeAction.functionName](...challengeAction.arguments);
-    
+
     // If the challenge contained erroneous information, deduct ten points
     if (challengeErroneousInformation) {
 
@@ -817,7 +840,7 @@ function challenge(teamNumber) {
         currentRoundState["team" + ((teamNumber == 1) ? 2 : 1)].score -= 10;
 
     }
-    
+
     refreshChallengeAndAppealButtons("disable");
     redrawScoreboard();
 
@@ -888,6 +911,33 @@ function refreshChallengeAndAppealButtons(toggleTo) {
 
 }
 
+function getContrastingColor(hexCode) {
+    
+    // If a leading # is provided, remove it
+	if (hexCode.slice(0, 1) === '#') {
+		hexCode = hexCode.slice(1);
+	}
+
+	// If a three-character hexcode, make six-character
+	if (hexCode.length === 3) {
+		hexCode = hexCode.split('').map(function (hex) {
+			return hex + hex;
+		}).join('');
+	}
+
+	// Convert to RGB value
+	var r = parseInt(hexCode.substr(0,2),16);
+	var g = parseInt(hexCode.substr(2,2),16);
+	var b = parseInt(hexCode.substr(4,2),16);
+
+	// Get YIQ ratio
+	var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
+	// Check contrast
+	return (yiq >= 128) ? '#000000' : '#ffffff';
+    
+}
+
 // Populate all the quizzer cards
 for (var i = 0; i < 10; i++) {
 
@@ -928,10 +978,10 @@ window.addEventListener("keydown", function (e) {
         e.ctrlKey &&
         e.code == "KeyP"
     ) {
-        
+
         var teamNameInputs = document.querySelectorAll(".teamNameInput");
         var quizzerNameInputs = document.querySelectorAll(".quizzerNameInput");
-        
+
         teamNameInputs[0].value = "Team A";
         quizzerNameInputs[0].value = "A1";
         quizzerNameInputs[1].value = "A2";
@@ -943,7 +993,7 @@ window.addEventListener("keydown", function (e) {
         quizzerNameInputs[6].value = "B2";
         quizzerNameInputs[7].value = "B3";
         quizzerNameInputs[8].value = "B4";
-        
+
     }
 });
 
@@ -952,7 +1002,7 @@ window.addEventListener("load", function () {
     var recalledRoundState = localStorage.getItem("currentRoundState");
     var recalledPreviousRoundState = localStorage.getItem("previousRoundState");
     var recalledChallengeAction = localStorage.getItem("challengeAction");
-    
+
     if (recalledPreviousRoundState) {
         previousRoundState = JSON.parse(recalledPreviousRoundState);
         challengeAction = JSON.parse(recalledChallengeAction);
@@ -993,6 +1043,12 @@ window.addEventListener("load", function () {
     });
     rebuttalErroneousInformationCheckbox.addEventListener("click", function () {
         rebuttalErroneousInformationCheckbox.classList.toggle("checked");
+    });
+    
+    // Set up setup screen checkbox event listener
+    var useTeamColorsCheckbox = document.querySelector(".setupContainer .useTeamColorsCheckbox");
+    useTeamColorsCheckbox.addEventListener("click", function () {
+        useTeamColorsCheckbox.classList.toggle("checked");
     });
 
     // Enable :active CSS on mobile Safari
