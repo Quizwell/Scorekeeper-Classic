@@ -51,8 +51,10 @@ body {
     padding-right: env(safe-area-inset-right);
     padding-bottom: env(safe-area-inset-bottom);
     width: 100vw;
+    
     -webkit-user-select: none;
     user-select: none;
+    cursor: default;
     
     /* To prevent a delay after tapping on iOS */
     touch-action: manipulation;
@@ -94,7 +96,7 @@ input[type="text"] {
 
 .welcomeContainer > p, .webClipPromptContainer > p {
     
-    margin: 0 0 0 25px;
+    margin: 0 25px;
     font-size: 22px;
     
 }
@@ -425,6 +427,7 @@ button.fullWidthButton:active {
     position: absolute;
     top: 85px;
     left: 25px;
+    width: calc(100% - 50px);
     font-size: 20px;
 
 }
