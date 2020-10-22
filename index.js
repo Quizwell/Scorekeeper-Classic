@@ -178,24 +178,10 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
                     currentRoundState["team" + teamNumber].score -= 10;
                 }
 
-                // If the challenge contained erroneous information, deduct ten points
-                if (document.querySelector(".confirmationDialog .erroneousInformationCheckbox.challenge").classList.contains("checked")) {
-
-                    currentRoundState["team" + teamNumber].score -= 10;
-
-                }
-
-                // If the rebuttal contained erroneous information, deduct ten points from the opposite team's score.
-                if (document.querySelector(".confirmationDialog .erroneousInformationCheckbox.rebuttal").classList.contains("checked")) {
-
-                    currentRoundState["team" + ((teamNumber == 1) ? 2 : 1)].score -= 10;
-
-                }
-
                 redrawScoreboard();
             };
             button2Function = function () {
-                challenge();
+                challenge(teamNumber);
             };
             challengeErroneousInformationCheckbox.classList.remove("hidden");
             rebuttalErroneousInformationCheckbox.classList.remove("hidden");
@@ -808,13 +794,29 @@ function teamFoul(team) {
 
 }
 
-function challenge() {
+function challenge(teamNumber) {
 
     appeal();
     
+    var challengeErroneousInformation = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.challenge").classList.contains("checked");
+    var rebuttalErroneousInformation = document.querySelector(".confirmationDialog .erroneousInformationCheckbox.rebuttal").classList.contains("checked");
+    
     // Execute challenge action
     window[challengeAction.functionName](...challengeAction.arguments);
-    // If the challenge action asks us to, hide the confirmation dialog as well
+    
+    // If the challenge contained erroneous information, deduct ten points
+    if (challengeErroneousInformation) {
+
+        currentRoundState["team" + teamNumber].score -= 10;
+
+    }
+
+    // If the rebuttal contained erroneous information, deduct ten points from the opposite team's score.
+    if (rebuttalErroneousInformation) {
+
+        currentRoundState["team" + ((teamNumber == 1) ? 2 : 1)].score -= 10;
+
+    }
     
     refreshChallengeAndAppealButtons("disable");
     redrawScoreboard();
