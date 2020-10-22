@@ -133,7 +133,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
         case "jump":
             var quizzerName = currentRoundState[numbers.teamPropertyName][numbers.quizzerPropertyName].name
 
-            subtitle = "Jump - Team " + teamNumber;
+            subtitle = "Jump - " + currentRoundState[numbers.teamPropertyName].name;
             title = quizzerName;
             button1Text = "Correct";
             button2Text = "Error";
@@ -148,7 +148,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
         case "bonus":
             var quizzerName = currentRoundState[numbers.teamPropertyName][numbers.quizzerPropertyName].name
 
-            subtitle = "Bonus - Team " + teamNumber;
+            subtitle = "Bonus - " + currentRoundState[numbers.teamPropertyName].name;
             title = quizzerName;
             button1Text = "Correct";
             button2Text = "Error";
@@ -165,7 +165,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
             document.querySelector(".confirmationDialog .closeButton").classList.add("hidden");
             break;
         case "challenge":
-            subtitle = "Team " + teamNumber
+            subtitle = currentRoundState["team" + teamNumber].name;
             title = "Challenge";
             button1Text = "Overruled";
             button2Text = "Accepted";
@@ -187,7 +187,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
             rebuttalErroneousInformationCheckbox.classList.remove("hidden");
             break;
         case "appeal":
-            subtitle = "Team " + teamNumber
+            subtitle = currentRoundState["team" + teamNumber].name;
             title = "Appeal";
             button1Text = "Overruled";
             button2Text = "Accepted";
@@ -217,7 +217,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
             break;
         case "scoreAdjustment":
             subtitle = "Score Adjustment";
-            title = "Team " + teamNumber;
+            title = currentRoundState[numbers.teamPropertyName].name;
             button1Text = "Remove 10 Points";
             button2Text = "Add 10 Points";
             button1Function = function () {
