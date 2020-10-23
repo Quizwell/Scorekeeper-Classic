@@ -5,6 +5,9 @@
 
     <title>Scorekeeper</title>
 
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://use.typekit.net/pmi2lxk.css">
+
     <meta name="apple-mobile-web-app-title" content="Scorekeeper">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -19,12 +22,9 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://use.typekit.net/pmi2lxk.css">
-
 </head>
 
-<body>
+<body class="preload">
 
     <div class="welcomeContainer">
         <img class="header" src="Header.svg">
@@ -50,42 +50,44 @@
             , then tap <span>Add to Home Screen</span>.
         </p>
 
-        <button class="fullWidthButton" onclick="hideWebClipPromptScreen()">Start Round</button>
+        <button class="fullWidthButton hidden" onclick="hideWebClipPromptScreen()">Start Round</button>
 
     </div>
 
-    <div class="setupContainer hidden">
+    <div class="setupContainer hiddenRight">
 
-        <h2>Team 1</h2>
-        <input type="color" value="#FC5D4D" name="team1Color" class="teamColorInput">
-        <input class="teamNameInput" name="team1" type="text" placeholder="Team Name">
-        <input class="quizzerNameInput" name="quizzer1" type="text" placeholder="Quizzer 1">
-        <input class="quizzerNameInput" name="quizzer2" type="text" placeholder="Quizzer 2">
-        <input class="quizzerNameInput" name="quizzer3" type="text" placeholder="Quizzer 3">
-        <input class="quizzerNameInput" name="quizzer4" type="text" placeholder="Quizzer 4">
-        <input class="quizzerNameInput" name="quizzer5" type="text" placeholder="Quizzer 5">
+        <form>
+            <h2>Team 1</h2>
+            <input type="color" value="#FC5D4D" name="team1Color" class="teamColorInput">
+            <input class="teamNameInput" name="team1" type="text" placeholder="Team Name">
+            <input class="quizzerNameInput" name="quizzer1" type="text" placeholder="Quizzer 1">
+            <input class="quizzerNameInput" name="quizzer2" type="text" placeholder="Quizzer 2">
+            <input class="quizzerNameInput" name="quizzer3" type="text" placeholder="Quizzer 3">
+            <input class="quizzerNameInput" name="quizzer4" type="text" placeholder="Quizzer 4">
+            <input class="quizzerNameInput" name="quizzer5" type="text" placeholder="Quizzer 5">
 
-        <h2>Team 2</h2>
-        <input type="color" value="#0096FF" name="team2Color" class="teamColorInput">
-        <input class="teamNameInput" name="team2" type="text" placeholder="Team Name">
-        <input class="quizzerNameInput" name="quizzer6" type="text" placeholder="Quizzer 1">
-        <input class="quizzerNameInput" name="quizzer7" type="text" placeholder="Quizzer 2">
-        <input class="quizzerNameInput" name="quizzer8" type="text" placeholder="Quizzer 3">
-        <input class="quizzerNameInput" name="quizzer9" type="text" placeholder="Quizzer 4">
-        <input class="quizzerNameInput" name="quizzer10" type="text" placeholder="Quizzer 5">
-        
-        <div class="useTeamColorsCheckbox checked">
-            <div class="checkbox">
-                <div></div>
+            <h2>Team 2</h2>
+            <input type="color" value="#0096FF" name="team2Color" class="teamColorInput">
+            <input class="teamNameInput" name="team2" type="text" placeholder="Team Name">
+            <input class="quizzerNameInput" name="quizzer6" type="text" placeholder="Quizzer 1">
+            <input class="quizzerNameInput" name="quizzer7" type="text" placeholder="Quizzer 2">
+            <input class="quizzerNameInput" name="quizzer8" type="text" placeholder="Quizzer 3">
+            <input class="quizzerNameInput" name="quizzer9" type="text" placeholder="Quizzer 4">
+            <input class="quizzerNameInput" name="quizzer10" type="text" placeholder="Quizzer 5">
+
+            <div class="useTeamColorsCheckbox checked">
+                <div class="checkbox">
+                    <div></div>
+                </div>
+                <p>Use colors for teams</p>
             </div>
-            <p>Use colors for teams</p>
-        </div>
+        </form>
 
-        <button class="fullWidthButton" onclick="finishSetup()">Done</button>
+        <button class="fullWidthButton hidden" onclick="finishSetup()">Done</button>
 
     </div>
 
-    <div class="mainContainer hidden">
+    <div class="mainContainer">
 
         <div class="overviewContainer">
 

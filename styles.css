@@ -38,6 +38,12 @@ html, body {
     position: absolute;
 }
 
+.preload * {
+    
+    transition: none !important;
+    
+}
+
 body {
 
     margin: 0;
@@ -80,6 +86,19 @@ input[type="text"] {
 
 }
 
+.welcomeContainer {
+    
+    transform: none;
+    box-shadow: 0 0 10px var(--primary-shadow-color);
+    transition: all 0.6s ease;
+    z-index: 4;
+    background-color: var(--page-background-color);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    
+}
+
 .welcomeContainer img.header {
     
     width: 100vw;
@@ -100,6 +119,25 @@ input[type="text"] {
     
     margin: 0 25px;
     font-size: 22px;
+    
+}
+
+.webClipPromptContainer {
+    
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--page-background-color);
+    z-index: 5;
+    transform: none;
+    transition: all 0.6s ease;
+    
+}
+
+.webClipPromptContainer.hidden {
+    
+    transform: translateX(calc(100vw + 10px));
+    display: block !important;
     
 }
 
@@ -159,7 +197,7 @@ button.fullWidthButton {
     bottom: 5px;
     bottom: calc(5px + env(safe-area-inset-bottom));
     left: 5px;
-    width: calc(100% - 10px);
+    width: calc(100vw - 10px);
     height: 50px;
     border-radius: 10px;
     border: none;
@@ -180,11 +218,44 @@ button.fullWidthButton:active {
 
 }
 
+button.fullWidthButton.hidden {
+    
+    opacity: 0;
+    display: block !important;
+    
+}
+
 .setupContainer {
-
-    padding-left: 20px;
+    
+    box-shadow: 0 0 10px var(--primary-shadow-color);
+    transition: all 0.6s ease;
+    z-index: 6;
+    background-color: var(--page-background-color);
+    width: 100vw;
+    height: 100vh;
     position: fixed;
+    padding-left: 20px;
+    
+}
 
+.setupContainer form {
+    
+    height: calc(100vh - 60px);
+    overflow: scroll;
+    
+}
+
+.setupContainer.hiddenRight {
+    
+    transform: translateX(calc(100vw + 10px));
+    
+}
+
+.setupContainer.hidden {
+    
+    transform: translateY(calc(-100vh - 10px));
+    display: block !important;
+    
 }
 
 .setupContainer h2 {
@@ -621,21 +692,10 @@ button.fullWidthButton:active {
 
 }
 
-.welcomeContainer {
-    
-    position: fixed;
-    
-}
-
-.webClipPromptContainer {
-    
-    position: fixed;
-    
-}
-
 .mainContainer {
     
     position: fixed;
+    z-index: 3;
     
 }
 

@@ -57,24 +57,39 @@ function getNumbersFromID(quizzerID) {
 
 function hideWelcomeScreen() {
 
-    document.querySelector(".welcomeContainer").classList.add("hidden");
     if ((window.navigator.userAgent.match(/iP(ad|hone)/i)) && !(window.navigator.userAgent.match(/CriOS/i)) && !window.navigator.standalone) {
 
         document.querySelector(".webClipPromptContainer").classList.remove("hidden");
+        setTimeout(function () {
+            document.querySelector(".webClipPromptContainer button.fullWidthButton").classList.remove("hidden");
+        }, 600);
 
     } else {
 
-        document.querySelector(".setupContainer").classList.remove("hidden");
+        document.querySelector(".setupContainer").classList.remove("hiddenRight");
+        setTimeout(function () {
+            document.querySelector(".setupContainer button.fullWidthButton").classList.remove("hidden");
+        }, 600);
 
     }
+    
+    setTimeout(function () {
 
+        document.querySelector(".welcomeContainer").classList.add("hidden");
+
+    }, 600);
 
 }
 
 function hideWebClipPromptScreen() {
-
-    document.querySelector(".webClipPromptContainer").classList.add("hidden");
-    document.querySelector(".setupContainer").classList.remove("hidden");
+    document.querySelector(".setupContainer").classList.remove("hiddenRight");
+    
+    setTimeout(function () {
+        
+        document.querySelector(".webClipPromptContainer").classList.add("hidden");
+        document.querySelector(".setupContainer button.fullWidthButton").classList.remove("hidden");
+        
+    }, 600);
 
 }
 
@@ -363,7 +378,6 @@ function finishSetup() {
     redrawScoreboard();
 
     document.querySelector(".setupContainer").classList.add("hidden");
-    document.querySelector(".mainContainer").classList.remove("hidden");
 
 }
 
@@ -1058,5 +1072,8 @@ window.addEventListener("load", function () {
 
     // Enable :active CSS on mobile Safari
     document.addEventListener("touchstart", function () {}, true);
+    
+    // Activate CSS transitions again
+    document.body.classList.remove("preload");
 
 });
