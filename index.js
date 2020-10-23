@@ -260,7 +260,9 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
                 hideConfirmationDialog();
 
                 setTimeout(function () {
-                    localStorage.clear();
+                    localStorage.removeItem("currentRoundState");
+                    localStorage.removeItem("previousRoundState");
+                    localStorage.removeItem("challengeAction");
                     window.location.reload();
                 }, 300);
             };
@@ -378,6 +380,9 @@ function finishSetup() {
     redrawScoreboard();
 
     document.querySelector(".setupContainer").classList.add("hidden");
+    
+    // Remember that the user has used the app before
+    localStorage.setItem("userHasUsedAppPreviously", "true");
 
 }
 
@@ -988,6 +993,16 @@ for (var i = 0; i < 10; i++) {
 
     }
 
+}
+
+if (localStorage.getItem("userHasUsedAppPreviously") === "true") {
+    
+    var header = document.querySelector(".welcomeContainer h1");
+    var text = document.querySelector(".welcomeContainer p");
+    var button = document.querySelector(".welcomeContainer button");
+    
+    text.textContent = "Tap Next to start scorekeeping a round.";
+    
 }
 
 // If the user holds down Shift, Option, and Control, autofill the setup screen with default values. (This is a feature to make it easier to debug and test the app)
