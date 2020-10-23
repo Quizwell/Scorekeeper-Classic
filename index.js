@@ -96,7 +96,6 @@ function showSelectionScreen(mode, teamNumber) {
         return;
     }
 
-    document.querySelector(".overviewContainer").classList.add("hidden");
     document.querySelector(".team" + teamNumber + "SelectionScreen").classList.remove("hidden");
 
 }
@@ -105,7 +104,6 @@ function hideSelectionScreen(teamNumber) {
 
     selectMode = null;
 
-    document.querySelector(".overviewContainer").classList.remove("hidden");
     document.querySelector(".team" + teamNumber + "SelectionScreen").classList.add("hidden");
 
 }
@@ -293,9 +291,9 @@ function finishSetup() {
     var team2QuizzerInputsHaveValue = false;
     for (var i = 0; i < quizzerInputs.length; i++) {
         if (quizzerInputs[i].value) {
-            if (i <= 5) {
+            if (i < 5) {
                 team1QuizzerInputsHaveValue = true;
-            } else if (i >= 6) {
+            } else if (i >= 5) {
                 team2QuizzerInputsHaveValue = true;
             }
         }
@@ -941,6 +939,8 @@ function getContrastingColor(hexCode) {
 // Populate all the quizzer cards
 for (var i = 0; i < 10; i++) {
 
+    var quizzerID = i + 1;
+    
     var card = document.createElement("div");
     card.classList.add("quizzerCard");
     card.classList.add("quizzer" + (i + 1) + "Card");
@@ -952,11 +952,16 @@ for (var i = 0; i < 10; i++) {
             selectedQuizzer(quizzerID);
 
         };
-    })(i + 1)
+    })(quizzerID)
 
+    var cardSeatNumberLabel = document.createElement("p");
+    cardSeatNumberLabel.textContent = "#" + ((quizzerID <= 5) ? quizzerID : (quizzerID - 5));
+    cardSeatNumberLabel.classList.add("cardSeatNumberLabel");
+    
     var cardLabel = document.createElement("p");
     cardLabel.classList.add("cardLabel");
 
+    card.appendChild(cardSeatNumberLabel);
     card.appendChild(cardLabel);
 
     if (i < 5) {

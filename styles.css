@@ -5,6 +5,7 @@
     --content-background-color: #eeeeee;
     --primary-text-color: #000000;
     --secondary-text-color: #555555;
+    --ternary-text-color: #757575;
     --contrast-text-color: #ffffff;
     --primary-shadow-color: #dddddd;
     --primary-button-color: #52A7FA;
@@ -21,7 +22,8 @@
         --page-background-color: #000000;
         --content-background-color: #222222;
         --primary-text-color: #ffffff;
-        --secondary-text-color: #555555;
+        --secondary-text-color: #C0C0C0;
+        --ternary-text-color: #A0A0A0;
         --contrast-text-color: #000000;
         --primary-shadow-color: #222222;
         --primary-button-color: #3C78FB;
@@ -269,11 +271,22 @@ button.fullWidthButton:active {
     opacity: 0.5;
 }
 
+.quizzerCard .cardSeatNumberLabel {
+    
+    margin: 0;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translate(0, -50%);
+    color: var(--ternary-text-color);
+    
+}
+
 .quizzerCard .cardLabel {
 
     margin: 0;
     position: absolute;
-    left: 25px;
+    left: 50px;
     top: 50%;
     transform: translate(0, -50%);
 
@@ -287,6 +300,12 @@ button.fullWidthButton:active {
     top: 50%;
     transform: translate(0, -50%);
 
+}
+
+.overviewContainer {
+    
+    z-index: 1;
+    
 }
 
 .overviewContainer > div.team1,
@@ -517,6 +536,26 @@ button.fullWidthButton:active {
 
     transition: opacity 0.2s ease;
 
+}
+
+.selectionScreen {
+    
+    transform: none;
+    box-shadow: 0 0 10px var(--primary-shadow-color);
+    transition: all 0.5s ease;
+    z-index: 2;
+    background-color: var(--page-background-color);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    
+}
+
+.selectionScreen.hidden {
+    
+    transform: translateX(calc(100vw + 10px));
+    display: block !important;
+    
 }
 
 .selectionScreen button {
