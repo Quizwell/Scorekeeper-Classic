@@ -27,7 +27,10 @@
 <body class="preload">
 
     <div class="welcomeContainer">
-        <img class="header" src="Header.svg">
+        <picture>
+            <source srcset="HeaderDark.svg" media="(prefers-color-scheme: dark)">
+            <img class="header" src="Header.svg">
+        </picture>
         <h1>Welcome to<br><span style="color: var(--primary-button-color)">Scorekeeper</span></h1>
         <p>Scorekeeper allows you to keep score of quiz rounds from your phone.</p>
         <button class="fullWidthButton" onclick="hideWelcomeScreen()">Next</button>
