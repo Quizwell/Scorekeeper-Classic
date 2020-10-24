@@ -974,7 +974,7 @@ for (var i = 0; i < 10; i++) {
     })(quizzerID)
 
     var cardSeatNumberLabel = document.createElement("p");
-    cardSeatNumberLabel.textContent = "#" + ((quizzerID <= 5) ? quizzerID : (quizzerID - 5));
+    cardSeatNumberLabel.textContent = (quizzerID <= 5) ? quizzerID : (quizzerID - 5);
     cardSeatNumberLabel.classList.add("cardSeatNumberLabel");
     
     var cardLabel = document.createElement("p");
