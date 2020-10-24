@@ -1,5 +1,5 @@
 :root {
-    
+
     /* Light mode variable definitions */
     --page-background-color: #ffffff;
     --content-background-color: #eeeeee;
@@ -34,14 +34,39 @@
 
 }
 
-html, body {
+@font-face {
+
+    font-family: omnes-pro;
+    font-weight: 400;
+    src: url(omnes-pro-light.otf);
+
+}
+
+@font-face {
+
+    font-family: omnes-pro;
+    font-weight: 500;
+    src: url(omnes-pro-regular.otf);
+
+}
+
+@font-face {
+
+    font-family: omnes-pro;
+    font-weight: 700;
+    src: url(omnes-pro-semibold.otf);
+
+}
+
+html,
+body {
     position: absolute;
 }
 
 .preload * {
-    
+
     transition: none !important;
-    
+
 }
 
 body {
@@ -50,7 +75,7 @@ body {
     overflow: hidden;
     color: var(--primary-text-color);
     background-color: var(--page-background-color);
-    font-family: omnes-pro, sans-serif;
+    font-family: omnes-pro, system-ui, sans-serif;
     font-weight: 700;
     height: 100vh;
     height: -webkit-fill-available;
@@ -59,14 +84,14 @@ body {
     padding-right: env(safe-area-inset-right);
     padding-bottom: env(safe-area-inset-bottom);
     width: 100vw;
-    
+
     -webkit-user-select: none;
     user-select: none;
     cursor: default;
-    
+
     /* To prevent a delay after tapping on iOS */
     touch-action: manipulation;
-    
+
     /* Prevent gray box touch highlight on iOS */
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
@@ -75,7 +100,7 @@ body {
 input[type="text"] {
     -webkit-user-select: element;
     user-select: element;
-    
+
     /* To prevent Safari on iOS zooming in when the input field is focused */
     font-size: 16px;
 }
@@ -87,7 +112,7 @@ input[type="text"] {
 }
 
 .welcomeContainer {
-    
+
     transform: none;
     box-shadow: 0 0 10px var(--primary-shadow-color);
     transition: all 0.6s ease;
@@ -96,34 +121,36 @@ input[type="text"] {
     width: 100vw;
     height: 100vh;
     position: fixed;
-    
+
 }
 
 .welcomeContainer img.header {
-    
+
     width: 100vw;
     height: 40vh;
     object-fit: cover;
-    
+
 }
 
-.welcomeContainer h1, .webClipPromptContainer h1 {
-    
+.welcomeContainer h1,
+.webClipPromptContainer h1 {
+
     font-size: 40px;
     line-height: 1em;
     margin: 25px;
-    
+
 }
 
-.welcomeContainer > p, .webClipPromptContainer > p {
-    
+.welcomeContainer > p,
+.webClipPromptContainer > p {
+
     margin: 0 25px;
     font-size: 22px;
-    
+
 }
 
 .webClipPromptContainer {
-    
+
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -131,26 +158,26 @@ input[type="text"] {
     z-index: 5;
     transform: none;
     transition: all 0.6s ease;
-    
+
 }
 
 .webClipPromptContainer.hidden {
-    
+
     transform: translateX(calc(100vw + 10px));
     display: block !important;
-    
+
 }
 
 .webClipPromptContainer div.header {
-    
+
     width: 100vw;
     height: 40vh;
     background-color: var(--content-background-color);
-    
+
 }
 
 .webClipPromptContainer div.header img {
-    
+
     position: absolute;
     top: 20vh;
     left: 50%;
@@ -158,37 +185,37 @@ input[type="text"] {
     width: 75px;
     height: 75px;
     border-radius: 15px;
-    
+
 }
 
 .webClipPromptContainer div.header p {
-    
+
     position: absolute;
     top: calc(20vh + 30px);
     left: 50%;
     transform: translate(-50%, 0);
     font-size: 15px;
     font-family: system-ui;
-    font-weight: 500;
-    
+    font-weight: normal;
+
 }
 
 .webClipPromptContainer p img {
-    
+
     margin-left: 4px;
     height: 20px;
     width: auto;
-    
+
 }
 
 .webClipPromptContainer p span {
-    
+
     background-color: var(--content-background-color);
     padding: 2px 5px 2px 5px;
     border-radius: 5px;
     font-family: system-ui;
-    font-weight: 500;
-    
+    font-weight: normal;
+
 }
 
 button.fullWidthButton {
@@ -219,14 +246,14 @@ button.fullWidthButton:active {
 }
 
 button.fullWidthButton.hidden {
-    
+
     opacity: 0;
     display: block !important;
-    
+
 }
 
 .setupContainer {
-    
+
     box-shadow: 0 0 10px var(--primary-shadow-color);
     transition: all 0.6s ease;
     z-index: 6;
@@ -235,27 +262,27 @@ button.fullWidthButton.hidden {
     height: 100vh;
     position: fixed;
     padding-left: 20px;
-    
+
 }
 
 .setupContainer form {
-    
+
     height: calc(100vh - 60px);
     overflow: scroll;
-    
+
 }
 
 .setupContainer.hiddenRight {
-    
+
     transform: translateX(calc(100vw + 10px));
-    
+
 }
 
 .setupContainer.hidden {
-    
+
     transform: translateY(calc(-100vh - 10px));
     display: block !important;
-    
+
 }
 
 .setupContainer h2 {
@@ -266,7 +293,7 @@ button.fullWidthButton.hidden {
 }
 
 .setupContainer input.teamColorInput {
-    
+
     display: inline-block;
     margin-left: 15px;
     background-color: var(--input-background-color);
@@ -275,7 +302,7 @@ button.fullWidthButton.hidden {
     border-radius: 5px;
     box-shadow: 0 0 2px var(--primary-shadow-color);
     box-sizing: border-box;
-    
+
 }
 
 .setupContainer input.teamNameInput,
@@ -284,7 +311,7 @@ button.fullWidthButton.hidden {
     display: block;
     margin-top: 5px;
     width: calc(100vw - 50px);
-    
+
     background-color: var(--input-background-color);
     border: 0.5px solid var(--input-border-color);
     padding: 5px;
@@ -297,10 +324,10 @@ button.fullWidthButton.hidden {
 }
 
 .setupContainer input.teamNameInput {
-    
+
     font-size: 20px;
     height: 30px;
-    
+
 }
 
 .quizzerCard {
@@ -322,18 +349,23 @@ button.fullWidthButton.hidden {
 .quizzerCard:nth-child(3) {
     top: 40px;
 }
+
 .quizzerCard:nth-child(4) {
     top: 100px;
 }
+
 .quizzerCard:nth-child(5) {
     top: 150px;
 }
+
 .quizzerCard:nth-child(6) {
     top: 200px;
 }
+
 .quizzerCard:nth-child(7) {
     top: 250px;
 }
+
 .quizzerCard:nth-child(8) {
     top: 300px;
 }
@@ -343,14 +375,14 @@ button.fullWidthButton.hidden {
 }
 
 .quizzerCard .cardSeatNumberLabel {
-    
+
     margin: 0;
     position: absolute;
     left: 15px;
     top: 50%;
     transform: translate(0, -50%);
     color: var(--ternary-text-color);
-    
+
 }
 
 .quizzerCard .cardLabel {
@@ -374,9 +406,9 @@ button.fullWidthButton.hidden {
 }
 
 .overviewContainer {
-    
+
     z-index: 1;
-    
+
 }
 
 .overviewContainer > div.team1,
@@ -512,9 +544,9 @@ button.fullWidthButton.hidden {
 }
 
 .confirmationDialog .closeButton:active {
-    
+
     opacity: 0.5;
-    
+
 }
 
 .confirmationDialog .closeButton p {
@@ -576,9 +608,9 @@ button.fullWidthButton.hidden {
 }
 
 .confirmationDialog button:active {
-    
+
     opacity: 0.5;
-    
+
 }
 
 .confirmationDialog button:nth-of-type(1) {
@@ -610,7 +642,7 @@ button.fullWidthButton.hidden {
 }
 
 .selectionScreen {
-    
+
     transform: none;
     box-shadow: 0 0 10px var(--primary-shadow-color);
     transition: all 0.5s ease;
@@ -619,14 +651,14 @@ button.fullWidthButton.hidden {
     width: 100vw;
     height: 100vh;
     position: fixed;
-    
+
 }
 
 .selectionScreen.hidden {
-    
+
     transform: translateX(calc(100vw + 10px));
     display: block !important;
-    
+
 }
 
 .selectionScreen button {
@@ -646,9 +678,9 @@ button.fullWidthButton.hidden {
 }
 
 .selectionScreen button:active {
-    
+
     opacity: 0.5;
-    
+
 }
 
 .selectionScreen button p {
@@ -676,9 +708,9 @@ button.fullWidthButton.hidden {
 }
 
 .endRoundButton:active {
-    
+
     opacity: 0.5;
-    
+
 }
 
 .endRoundButton p {
@@ -693,40 +725,41 @@ button.fullWidthButton.hidden {
 }
 
 .mainContainer {
-    
+
     position: fixed;
     z-index: 3;
-    
+
 }
 
 .confirmationDialog .erroneousInformationCheckbox {
-    
+
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
     width: fit-content;
-    
+
 }
 
 .confirmationDialog .erroneousInformationCheckbox:nth-of-type(2) {
     bottom: 120px;
 }
+
 .confirmationDialog .erroneousInformationCheckbox:nth-of-type(3) {
     bottom: 85px;
 }
 
 .confirmationDialog .erroneousInformationCheckbox .checkbox {
-    
+
     width: 25px;
     height: 25px;
     background-color: var(--page-background-color);
     display: inline-block;
     border-radius: 7.5px;
-    
+
 }
 
 .confirmationDialog .erroneousInformationCheckbox .checkbox div {
-    
+
     opacity: 0;
     width: calc(100% - 10px);
     height: calc(100% - 10px);
@@ -734,22 +767,23 @@ button.fullWidthButton.hidden {
     border-radius: 5px;
     background-color: var(--primary-text-color);
     transition: all 0.15s ease;
-    
+
 }
+
 .confirmationDialog .erroneousInformationCheckbox.checked .checkbox div {
-    
+
     opacity: 1;
-    
+
 }
 
 .confirmationDialog .erroneousInformationCheckbox p {
-    
+
     margin: 0;
     display: inline-block;
     position: relative;
     bottom: 7.5px;
     margin-left: 7.5px;
-    
+
 }
 
 .setupContainer .useTeamColorsCheckbox {
@@ -757,17 +791,17 @@ button.fullWidthButton.hidden {
 }
 
 .setupContainer .useTeamColorsCheckbox .checkbox {
-    
+
     width: 25px;
     height: 25px;
     background-color: var(--content-background-color);
     display: inline-block;
     border-radius: 7.5px;
-    
+
 }
 
 .setupContainer .useTeamColorsCheckbox .checkbox div {
-    
+
     opacity: 0;
     width: calc(100% - 10px);
     height: calc(100% - 10px);
@@ -775,20 +809,21 @@ button.fullWidthButton.hidden {
     border-radius: 5px;
     background-color: var(--primary-text-color);
     transition: all 0.15s ease;
-    
+
 }
+
 .setupContainer .useTeamColorsCheckbox.checked .checkbox div {
-    
+
     opacity: 1;
-    
+
 }
 
 .setupContainer .useTeamColorsCheckbox p {
-    
+
     margin: 0;
     display: inline-block;
     position: relative;
     bottom: 7.5px;
     margin-left: 7.5px;
-    
+
 }
