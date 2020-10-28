@@ -1,18 +1,18 @@
 var SERVICE_WORKER_VERSION = 1;
 var CACHE_NAME = 'my-site-cache-v1';
 var urlsToCache = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/index.js',
-    '/apple-touch-icon.png',
-    '/Header.svg',
-    '/HeaderDark.svg',
-    '/ShareIcon.svg',
-    '/ShareIconDark.svg',
-    '/omnes-pro-light.otf',
-    '/omnes-pro-regular.otf',
-    '/omnes-pro-semibold.otf',
+    '/Scorekeeper',
+    '/Scorekeeper/index.html',
+    '/Scorekeeper/styles.css',
+    '/Scorekeeper/index.js',
+    '/Scorekeeper/apple-touch-icon.png',
+    '/Scorekeeper/Header.svg',
+    '/Scorekeeper/HeaderDark.svg',
+    '/Scorekeeper/ShareIcon.svg',
+    '/Scorekeeper/ShareIconDark.svg',
+    '/Scorekeeper/omnes-pro-light.otf',
+    '/Scorekeeper/omnes-pro-regular.otf',
+    '/Scorekeeper/omnes-pro-semibold.otf',
     
 ];
 

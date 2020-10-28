@@ -3,17 +3,17 @@
     "name": "Scorekeeper",
     "icons": [
         {
-            "src": "/android-chrome-192x192.png",
+            "src": "android-chrome-192x192.png",
             "type": "image/png",
             "sizes": "192x192"
     },
         {
-            "src": "/android-chrome-512x512.png",
+            "src": "android-chrome-512x512.png",
             "type": "image/png",
             "sizes": "512x512"
     }
   ],
-    "start_url": "/index.html",
+    "start_url": "/Scorekeeper/index.html",
     "background_color": "#ffffff",
     "display": "standalone",
     "scope": "/",
