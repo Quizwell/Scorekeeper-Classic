@@ -268,8 +268,8 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
             };
             break;
         case "bugReport":
-            subtitle = "Bug Report"
-            title = "Report a problem";
+            subtitle = "Report a problem"
+            title = "Bug Report";
             document.querySelector(".confirmationDialog > p").textContent = "Found a bug? Is there a feature missing? Send us a bug report.";
             button1Text = "Cancel";
             button2Text = "Send Bug Report";

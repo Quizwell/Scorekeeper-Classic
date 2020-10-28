@@ -1,4 +1,3 @@
-var SERVICE_WORKER_VERSION = 1;
 var CACHE_NAME = 'my-site-cache-v1';
 var urlsToCache = [
     '/Scorekeeper',
@@ -10,6 +9,8 @@ var urlsToCache = [
     '/Scorekeeper/HeaderDark.svg',
     '/Scorekeeper/ShareIcon.svg',
     '/Scorekeeper/ShareIconDark.svg',
+    '/Scorekeeper/BugReportIcon.svg',
+    '/Scorekeeper/BugReportIconDark.svg',
     '/Scorekeeper/omnes-pro-light.otf',
     '/Scorekeeper/omnes-pro-regular.otf',
     '/Scorekeeper/omnes-pro-semibold.otf',
