@@ -584,7 +584,7 @@ button.fullWidthButton.hidden {
 
     margin: 0;
     position: absolute;
-    top: 40px;
+    top: 45px;
     left: 25px;
     font-size: 50px;
 
@@ -718,9 +718,41 @@ button.fullWidthButton.hidden {
     font-size: 20px;
     margin: 0;
     position: absolute;
-    top: 42.5%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+}
+
+.bugReportButton {
+
+    position: fixed;
+    top: 10px;
+    left: 75px;
+    height: 25px;
+    width: 35px;
+    border: none;
+    background-color: var(--content-background-color);
+    color: var(--primary-text-color);
+    border-radius: 10px;
+
+}
+
+.bugReportButton:active {
+
+    opacity: 0.5;
+
+}
+
+.bugReportButton img {
+
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
 
 }
 

@@ -267,6 +267,23 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
                 }, 300);
             };
             break;
+        case "bugReport":
+            subtitle = "Bug Report"
+            title = "Report a problem";
+            document.querySelector(".confirmationDialog > p").textContent = "Found a bug? Is there a feature missing? Send us a bug report.";
+            button1Text = "Cancel";
+            button2Text = "Send Bug Report";
+            button1Function = function () {
+                hideConfirmationDialog();
+            };
+            button2Function = function () {
+                hideConfirmationDialog();
+
+                setTimeout(function () {
+                    window.location.href = "mailto:wf426bxd5d@privaterelay.appleid.com?subject=Scorekeeper%3A%20Bug%20Report&body=Enter%20any%20details%20relating%20to%20your%20bug%20or%20feature%20request%20here%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%2D%2D%2DPlease%20do%20not%20write%20below%20this%20line%2D%2D%2D%0D%0A%0D%0AcurrentRoundState%3A%20" + JSON.stringify(currentRoundState) + "%0D%0A%0D%0ApreviousRoundState%3A%20" + JSON.stringify(previousRoundState) + "%0D%0A%0D%0AchallengeAction%3A%20" + JSON.stringify(challengeAction);
+                }, 300);
+            };
+            break;
 
     }
 
