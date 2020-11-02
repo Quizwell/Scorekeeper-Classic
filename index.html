@@ -94,7 +94,10 @@
         <div class="overviewContainer">
 
             <div class="endRoundButton" onclick="showConfirmationDialog('endRound')">
-                <p>&times;</p>
+                <picture>
+                    <source srcset="CloseIconDark.svg" media="(prefers-color-scheme: dark)">
+                    <img src="CloseIcon.svg">
+                </picture>
             </div>
             
             <div class="bugReportButton" onclick="showConfirmationDialog('bugReport')">
@@ -182,7 +185,10 @@
 
         <div class="confirmationDialog">
             <div class="closeButton" onclick="hideConfirmationDialog()">
-                <p>&times;</p>
+                <picture>
+                    <source srcset="CloseIconDark.svg" media="(prefers-color-scheme: dark)">
+                    <img src="CloseIcon.svg">
+                </picture>
             </div>
             <h2>Subtitle</h2>
             <h1>Title</h1>
