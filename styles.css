@@ -34,6 +34,13 @@
 
 }
 
+@media (prefers-reduced-motion) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
 @font-face {
 
     font-family: omnes-pro;
