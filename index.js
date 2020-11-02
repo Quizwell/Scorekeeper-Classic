@@ -72,7 +72,7 @@ function hideWelcomeScreen() {
         }, 600);
 
     }
-    
+
     setTimeout(function () {
 
         document.querySelector(".welcomeContainer").classList.add("hidden");
@@ -83,12 +83,12 @@ function hideWelcomeScreen() {
 
 function hideWebClipPromptScreen() {
     document.querySelector(".setupContainer").classList.remove("hiddenRight");
-    
+
     setTimeout(function () {
-        
+
         document.querySelector(".webClipPromptContainer").classList.add("hidden");
         document.querySelector(".setupContainer button.fullWidthButton").classList.remove("hidden");
-        
+
     }, 600);
 
 }
@@ -348,7 +348,7 @@ function finishSetup() {
 
     currentRoundState.team1.color = teamColorInputs[0].value;
     currentRoundState.team2.color = teamColorInputs[1].value;
-    
+
     currentRoundState.useTeamColors = document.querySelector(".setupContainer .useTeamColorsCheckbox").classList.contains("checked");
 
     for (var i = 0; i < quizzerInputs.length; i++) {
@@ -397,7 +397,7 @@ function finishSetup() {
     redrawScoreboard();
 
     document.querySelector(".setupContainer").classList.add("hidden");
-    
+
     // Remember that the user has used the app before
     localStorage.setItem("userHasUsedAppPreviously", "true");
 
@@ -417,9 +417,9 @@ function redrawScoreboard() {
 
     document.querySelector(".overviewContainer .team1 .teamName").textContent = currentRoundState.team1.name;
     document.querySelector(".overviewContainer .team2 .teamName").textContent = currentRoundState.team2.name;
-    
+
     if (currentRoundState.useTeamColors) {
-        
+
         document.querySelector(".overviewContainer .team1").style.backgroundColor = currentRoundState.team1.color;
         document.querySelector(".overviewContainer .team2").style.backgroundColor = currentRoundState.team2.color;
 
@@ -429,7 +429,7 @@ function redrawScoreboard() {
 
         document.querySelector(".overviewContainer .team1").style.color = team1TextColor;
         document.querySelector(".overviewContainer .team2").style.color = team2TextColor;
-        
+
     }
 
     for (var i = 0; i < 10; i++) {
@@ -946,37 +946,37 @@ function refreshChallengeAndAppealButtons(toggleTo) {
 }
 
 function getContrastingColor(hexCode) {
-    
+
     // If a leading # is provided, remove it
-	if (hexCode.slice(0, 1) === '#') {
-		hexCode = hexCode.slice(1);
-	}
+    if (hexCode.slice(0, 1) === '#') {
+        hexCode = hexCode.slice(1);
+    }
 
-	// If a three-character hexcode, make six-character
-	if (hexCode.length === 3) {
-		hexCode = hexCode.split('').map(function (hex) {
-			return hex + hex;
-		}).join('');
-	}
+    // If a three-character hexcode, make six-character
+    if (hexCode.length === 3) {
+        hexCode = hexCode.split('').map(function (hex) {
+            return hex + hex;
+        }).join('');
+    }
 
-	// Convert to RGB value
-	var r = parseInt(hexCode.substr(0,2),16);
-	var g = parseInt(hexCode.substr(2,2),16);
-	var b = parseInt(hexCode.substr(4,2),16);
+    // Convert to RGB value
+    var r = parseInt(hexCode.substr(0, 2), 16);
+    var g = parseInt(hexCode.substr(2, 2), 16);
+    var b = parseInt(hexCode.substr(4, 2), 16);
 
-	// Get YIQ ratio
-	var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    // Get YIQ ratio
+    var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
 
-	// Check contrast
-	return (yiq >= 128) ? '#000000' : '#ffffff';
-    
+    // Check contrast
+    return (yiq >= 128) ? '#000000' : '#ffffff';
+
 }
 
 // Populate all the quizzer cards
 for (var i = 0; i < 10; i++) {
 
     var quizzerID = i + 1;
-    
+
     var card = document.createElement("div");
     card.classList.add("quizzerCard");
     card.classList.add("quizzer" + (i + 1) + "Card");
@@ -993,7 +993,7 @@ for (var i = 0; i < 10; i++) {
     var cardSeatNumberLabel = document.createElement("p");
     cardSeatNumberLabel.textContent = (quizzerID <= 5) ? quizzerID : (quizzerID - 5);
     cardSeatNumberLabel.classList.add("cardSeatNumberLabel");
-    
+
     var cardLabel = document.createElement("p");
     cardLabel.classList.add("cardLabel");
 
@@ -1013,14 +1013,24 @@ for (var i = 0; i < 10; i++) {
 }
 
 if (localStorage.getItem("userHasUsedAppPreviously") === "true") {
-    
+
     var header = document.querySelector(".welcomeContainer h1");
     var text = document.querySelector(".welcomeContainer p");
     var button = document.querySelector(".welcomeContainer button");
-    
+
     text.textContent = "Tap Next to start scorekeeping a round.";
-    
+
 }
+
+// When the window is being resized, don't let other screens transition and remain in view when they're not supposed to be.
+var resizeTimer;
+window.addEventListener("resize", () => {
+    document.body.classList.add("no-transition");
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        document.body.classList.remove("no-transition");
+    }, 200);
+});
 
 // If the user holds down Shift, Option, and Control, autofill the setup screen with default values. (This is a feature to make it easier to debug and test the app)
 window.addEventListener("keydown", function (e) {
@@ -1095,7 +1105,7 @@ window.addEventListener("load", function () {
     rebuttalErroneousInformationCheckbox.addEventListener("click", function () {
         rebuttalErroneousInformationCheckbox.classList.toggle("checked");
     });
-    
+
     // Set up setup screen checkbox event listener
     var useTeamColorsCheckbox = document.querySelector(".setupContainer .useTeamColorsCheckbox");
     useTeamColorsCheckbox.addEventListener("click", function () {
@@ -1104,7 +1114,7 @@ window.addEventListener("load", function () {
 
     // Enable :active CSS on mobile Safari
     document.addEventListener("touchstart", function () {}, true);
-    
+
     // Activate CSS transitions again
     document.body.classList.remove("preload");
 
