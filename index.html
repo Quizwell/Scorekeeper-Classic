@@ -6,6 +6,7 @@
     <title>Scorekeeper</title>
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="media-queries.css">
 
     <meta name="apple-mobile-web-app-title" content="Scorekeeper">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,69 +26,75 @@
 
 <body class="preload">
 
-    <div class="welcomeContainer">
-        <picture>
-            <source srcset="HeaderDark.svg" media="(prefers-color-scheme: dark)">
-            <img class="header" src="Header.svg">
-        </picture>
-        <h1>Welcome to<br><span style="color: var(--primary-button-color)">Scorekeeper</span></h1>
-        <p>Scorekeeper allows you to scorekeep quiz rounds from your phone.</p>
-        <button class="fullWidthButton" onclick="hideWelcomeScreen()">Next</button>
-    </div>
+   <div class="welcomeScreensContainer">
+   
+        <div class="welcomeContainer">
+            <picture>
+                <source srcset="HeaderDark.svg" media="(prefers-color-scheme: dark)">
+                <img class="header" src="Header.svg">
+            </picture>
+            <h1>Welcome to<br><span style="color: var(--primary-button-color)">Scorekeeper</span></h1>
+            <p>Scorekeeper allows you to scorekeep quiz rounds from your phone.</p>
+            <button class="fullWidthButton" onclick="hideWelcomeScreen()">Next</button>
+        </div>
 
-    <div class="webClipPromptContainer hidden">
+        <div class="webClipPromptContainer hidden">
 
-        <div class="header">
+            <div class="header">
 
-            <img src="apple-touch-icon.png">
-            <p>Scorekeeper</p>
+                <img src="apple-touch-icon.png">
+                <p>Scorekeeper</p>
+
+            </div>
+            <h1>Add Scorekeeper to your Home Screen</h1>
+            <p>You can add Scorekeeper as an app on your Home Screen. Tap
+                <picture>
+                    <source srcset="ShareIconDark.svg" media="(prefers-color-scheme: dark)">
+                    <img src="ShareIcon.svg">
+                </picture>
+                , then tap <span>Add to Home Screen</span>.
+            </p>
+
+            <button class="fullWidthButton hidden" onclick="hideWebClipPromptScreen()">Setup Round</button>
 
         </div>
-        <h1>Add Scorekeeper to your Home Screen</h1>
-        <p>You can add Scorekeeper as an app on your Home Screen. Tap
-            <picture>
-                <source srcset="ShareIconDark.svg" media="(prefers-color-scheme: dark)">
-                <img src="ShareIcon.svg">
-            </picture>
-            , then tap <span>Add to Home Screen</span>.
-        </p>
 
-        <button class="fullWidthButton hidden" onclick="hideWebClipPromptScreen()">Setup Round</button>
+        <div class="setupContainer hiddenRight">
 
-    </div>
+            <form>
+                <h2>Team 1</h2>
+                <input type="color" value="#FC5D4D" name="team1Color" class="teamColorInput">
+                <input class="teamNameInput" name="team1" type="text" placeholder="Team Name">
+                <input class="quizzerNameInput" name="quizzer1" type="text" placeholder="Quizzer 1">
+                <input class="quizzerNameInput" name="quizzer2" type="text" placeholder="Quizzer 2">
+                <input class="quizzerNameInput" name="quizzer3" type="text" placeholder="Quizzer 3">
+                <input class="quizzerNameInput" name="quizzer4" type="text" placeholder="Quizzer 4">
+                <input class="quizzerNameInput" name="quizzer5" type="text" placeholder="Quizzer 5">
 
-    <div class="setupContainer hiddenRight">
+                <h2>Team 2</h2>
+                <input type="color" value="#0096FF" name="team2Color" class="teamColorInput">
+                <input class="teamNameInput" name="team2" type="text" placeholder="Team Name">
+                <input class="quizzerNameInput" name="quizzer6" type="text" placeholder="Quizzer 1">
+                <input class="quizzerNameInput" name="quizzer7" type="text" placeholder="Quizzer 2">
+                <input class="quizzerNameInput" name="quizzer8" type="text" placeholder="Quizzer 3">
+                <input class="quizzerNameInput" name="quizzer9" type="text" placeholder="Quizzer 4">
+                <input class="quizzerNameInput" name="quizzer10" type="text" placeholder="Quizzer 5">
 
-        <form>
-            <h2>Team 1</h2>
-            <input type="color" value="#FC5D4D" name="team1Color" class="teamColorInput">
-            <input class="teamNameInput" name="team1" type="text" placeholder="Team Name">
-            <input class="quizzerNameInput" name="quizzer1" type="text" placeholder="Quizzer 1">
-            <input class="quizzerNameInput" name="quizzer2" type="text" placeholder="Quizzer 2">
-            <input class="quizzerNameInput" name="quizzer3" type="text" placeholder="Quizzer 3">
-            <input class="quizzerNameInput" name="quizzer4" type="text" placeholder="Quizzer 4">
-            <input class="quizzerNameInput" name="quizzer5" type="text" placeholder="Quizzer 5">
-
-            <h2>Team 2</h2>
-            <input type="color" value="#0096FF" name="team2Color" class="teamColorInput">
-            <input class="teamNameInput" name="team2" type="text" placeholder="Team Name">
-            <input class="quizzerNameInput" name="quizzer6" type="text" placeholder="Quizzer 1">
-            <input class="quizzerNameInput" name="quizzer7" type="text" placeholder="Quizzer 2">
-            <input class="quizzerNameInput" name="quizzer8" type="text" placeholder="Quizzer 3">
-            <input class="quizzerNameInput" name="quizzer9" type="text" placeholder="Quizzer 4">
-            <input class="quizzerNameInput" name="quizzer10" type="text" placeholder="Quizzer 5">
-
-            <div class="useTeamColorsCheckbox checked">
-                <div class="checkbox">
-                    <div></div>
+                <div class="useTeamColorsCheckbox checked">
+                    <div class="checkbox">
+                        <div></div>
+                    </div>
+                    <p>Use colors for teams</p>
                 </div>
-                <p>Use colors for teams</p>
-            </div>
-        </form>
+            </form>
 
-        <button class="fullWidthButton hidden" onclick="finishSetup()">Done</button>
+            <button class="fullWidthButton hidden" onclick="finishSetup()">Done</button>
 
+        </div>
+    
     </div>
+    
+    <div class="welcomeScreensOverlay"></div>
 
     <div class="mainContainer">
 
@@ -113,10 +120,17 @@
                 <p class="teamName">Team 1</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(1)">0</h1>
                 <div class="teamStatusContainer"></div>
+                
+                <div class="quizzerCardsContainer"></div>
+                
                 <div class="actionsContainer">
                     <div onclick="showSelectionScreen('jump', 1)">
                         <img src="">
                         <p>Jump</p>
+                    </div>
+                    <div onclick="showNoJumpPrompt()">
+                        <img src="">
+                        <p>No Jump</p>
                     </div>
                     <div onclick="showSelectionScreen('foul', 1)">
                         <img src="">
@@ -137,10 +151,17 @@
                 <p class="teamName">Team 2</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(2)">0</h1>
                 <div class="teamStatusContainer"></div>
+                
+                <div class="quizzerCardsContainer"></div>
+                
                 <div class="actionsContainer">
                     <div onclick="showSelectionScreen('jump', 2)">
                         <img src="">
                         <p>Jump</p>
+                    </div>
+                    <div onclick="showNoJumpPrompt()">
+                        <img src="">
+                        <p>No Jump</p>
                     </div>
                     <div onclick="showSelectionScreen('foul', 2)">
                         <img src="">

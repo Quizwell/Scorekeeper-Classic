@@ -3,6 +3,7 @@ var urlsToCache = [
     '/Scorekeeper',
     '/Scorekeeper/index.html',
     '/Scorekeeper/styles.css',
+    '/Scorekeeper/media-queries.css',
     '/Scorekeeper/index.js',
     '/Scorekeeper/apple-touch-icon.png',
     '/Scorekeeper/Header.svg',

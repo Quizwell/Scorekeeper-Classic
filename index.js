@@ -296,7 +296,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
     document.querySelector(".confirmationDialog button:nth-of-type(2)").onclick = button2Function;
 
     // Show the confirmation dialog element and the overlay
-    document.querySelector(".confirmationDialog").style.transform = "translate(0, 0)";
+    document.querySelector(".confirmationDialog").style.transform = "translate(-50%, 0)";
     document.querySelector(".overlay").style.display = "block";
     requestAnimationFrame(function () {
         document.querySelector(".overlay").style.opacity = 0.25;
@@ -307,7 +307,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
 function hideConfirmationDialog() {
 
     // Hide the confirmation dialog element and the overlay
-    document.querySelector(".confirmationDialog").style.transform = "translate(0, 125%)";
+    document.querySelector(".confirmationDialog").style.transform = "translate(-50%, 125%)";
     document.querySelector(".overlay").style.opacity = 0;
     setTimeout(function () {
         document.querySelector(".overlay").style.display = "none";
@@ -388,15 +388,34 @@ function finishSetup() {
             fouls: 0
         };
 
-        document.querySelector(".quizzer" + quizzerID + "Card").classList.remove("hidden");
-        document.querySelector(".quizzer" + quizzerID + "Card .cardLabel").textContent = currentInput.value;
+        document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card").classList.remove("hidden");
+        document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card .cardLabel").textContent = currentInput.value;
+        
+        document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card").classList.remove("hidden");
+        document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card .cardLabel").textContent = currentInput.value;
 
     }
 
     // Initial draw of the scoreboard
     redrawScoreboard();
 
-    document.querySelector(".setupContainer").classList.add("hidden");
+    if (window.matchMedia("only screen and (min-width:900px)").matches) {
+        
+        document.querySelector(".welcomeScreensContainer").style.opacity = 0;
+        document.querySelector(".welcomeScreensOverlay").style.opacity = 0;
+
+        setTimeout(function () {
+
+            document.querySelector(".welcomeScreensContainer").classList.add("hidden");
+            document.querySelector(".welcomeScreensOverlay").classList.add("hidden");
+
+        }, 200);
+        
+    } else {
+        
+        document.querySelector(".setupContainer").classList.add("hidden");
+        
+    }
 
     // Remember that the user has used the app before
     localStorage.setItem("userHasUsedAppPreviously", "true");
@@ -440,8 +459,12 @@ function redrawScoreboard() {
 
         var currentQuizzer = currentRoundState[numbers.teamPropertyName][numbers.quizzerPropertyName];
 
-        var quizzerSelectionElement = document.querySelector(".quizzer" + quizzerID + "Card");
-        var quizzerSelectionElementLabel = document.querySelector(".quizzer" + quizzerID + "Card p.cardLabel");
+        var quizzerSelectionElement = document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card");
+        var quizzerSelectionElementLabel = document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card p.cardLabel");
+        
+        var quizzerSelectionElementDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card");
+        var quizzerSelectionElementLabelDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card p.cardLabel");
+        var quizzerSelectionElementScoreDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card p.cardScore");
 
         // If this quizzer doesn't exist, don't update him on the scoreboard
         if (currentQuizzer.name === null) {
@@ -461,6 +484,9 @@ function redrawScoreboard() {
 
                 quizzerSelectionElement.classList.add("disabled");
                 quizzerSelectionElement.onclick = null;
+                
+                quizzerSelectionElementDesktop.classList.add("disabled");
+                quizzerSelectionElementDesktop.onclick = null;
 
                 var disabledReason;
                 if (currentQuizzer.correct == 4) {
@@ -472,6 +498,7 @@ function redrawScoreboard() {
                 }
 
                 quizzerSelectionElementLabel.textContent += " - " + disabledReason;
+                quizzerSelectionElementLabelDesktop.textContent += " - " + disabledReason;
 
             }
 
@@ -480,11 +507,21 @@ function redrawScoreboard() {
         } else if (currentQuizzer.enabled && quizzerSelectionElement.classList.contains("disabled")) {
 
             quizzerSelectionElement.classList.remove("disabled");
-            quizzerSelectionElement.onclick = function () {
-                selectedQuizzer(quizzerID);
-            };
+            (function (quizzerID) {
+                quizzerSelectionElement.onclick = function () {
+                    selectedQuizzer(quizzerID);
+                };
+            })(quizzerID)
+            
+            quizzerSelectionElementDesktop.classList.remove("disabled");
+            (function (quizzerID) {
+                quizzerSelectionElementDesktop.onclick = function () {
+                    showConfirmationDialog("jump", (quizzerID <= 5) ? 1 : 2, quizzerID);
+                };
+            })(quizzerID)
 
             quizzerSelectionElementLabel.textContent = currentQuizzer.name;
+            quizzerSelectionElementLabelDesktop.textContent = currentQuizzer.name;
 
             quizzerStatusStringElement.style.opacity = 1;
 
@@ -492,7 +529,9 @@ function redrawScoreboard() {
 
         overviewScreenTeamStatusContainer.appendChild(quizzerStatusStringElement);
         overviewScreenTeamStatusContainer.appendChild(document.createElement("br"));
-
+        
+        var quizzerStatusStringDesktop = currentQuizzer.correct + "/" + currentQuizzer.incorrect;
+        quizzerSelectionElementScoreDesktop.textContent = quizzerStatusStringDesktop;
 
     }
 
@@ -972,14 +1011,14 @@ function getContrastingColor(hexCode) {
 
 }
 
-// Populate all the quizzer cards
+// Populate all the quizzer cards on the selection screen
 for (var i = 0; i < 10; i++) {
 
     var quizzerID = i + 1;
 
     var card = document.createElement("div");
     card.classList.add("quizzerCard");
-    card.classList.add("quizzer" + (i + 1) + "Card");
+    card.classList.add("quizzer" + quizzerID + "Card");
     card.classList.add("hidden");
     // Using IIFE to prevent variables being passed by reference in a closure
     (function (quizzerID) {
@@ -1007,6 +1046,55 @@ for (var i = 0; i < 10; i++) {
     } else {
 
         document.querySelector(".team2SelectionScreen").appendChild(card);
+
+    }
+
+}
+
+// Populate all the quizzer cards on the team overview containers (for desktop)
+for (var i = 0; i < 10; i++) {
+
+    var quizzerID = i + 1;
+
+    var card = document.createElement("div");
+    card.classList.add("quizzerCard");
+    card.classList.add("quizzer" + quizzerID + "Card");
+    card.classList.add("hidden");
+    // Using IIFE to prevent variables being passed by reference in a closure
+    (function (quizzerID) {
+        card.onclick = function () {
+
+            showConfirmationDialog("jump", (quizzerID <= 5) ? 1 : 2, quizzerID);
+
+        };
+    })(quizzerID)
+
+    var cardSeatNumberLabel = document.createElement("p");
+    cardSeatNumberLabel.textContent = (quizzerID <= 5) ? quizzerID : (quizzerID - 5);
+    cardSeatNumberLabel.classList.add("cardSeatNumberLabel");
+
+    var cardLabel = document.createElement("p");
+    cardLabel.classList.add("cardLabel");
+    
+    var cardScore = document.createElement("p");
+    cardScore.classList.add("cardScore");
+    
+    var jumpLabel = document.createElement("p");
+    jumpLabel.textContent = "Click to Jump";
+    jumpLabel.classList.add("jumpLabel");
+
+    card.appendChild(cardSeatNumberLabel);
+    card.appendChild(cardLabel);
+    card.appendChild(jumpLabel);
+    card.appendChild(cardScore);
+
+    if (i < 5) {
+
+        document.querySelector(".overviewContainer .team1 .quizzerCardsContainer").appendChild(card);
+
+    } else {
+
+        document.querySelector(".overviewContainer .team2 .quizzerCardsContainer").appendChild(card);
 
     }
 
@@ -1064,7 +1152,12 @@ window.addEventListener("load", function () {
     var recalledPreviousRoundState = localStorage.getItem("previousRoundState");
     var recalledChallengeAction = localStorage.getItem("challengeAction");
 
-    if (recalledPreviousRoundState) {
+    if (
+        (recalledPreviousRoundState ||
+        recalledChallengeAction) &&
+        ((recalledPreviousRoundState !== "null") &&
+        (recalledChallengeAction !== "null"))
+    ) {
         previousRoundState = JSON.parse(recalledPreviousRoundState);
         challengeAction = JSON.parse(recalledChallengeAction);
         refreshChallengeAndAppealButtons("enable");
@@ -1082,17 +1175,31 @@ window.addEventListener("load", function () {
             var currentQuizzer = currentRoundState[numbers.teamPropertyName][numbers.quizzerPropertyName]
 
             if (currentQuizzer.name !== null) {
-                document.querySelector(".quizzer" + i + "Card").classList.remove("hidden");
-                document.querySelector(".quizzer" + i + "Card .cardLabel").textContent = currentQuizzer.name;
+                document.querySelector(".selectionScreen .quizzer" + i + "Card").classList.remove("hidden");
+                document.querySelector(".selectionScreen .quizzer" + i + "Card .cardLabel").textContent = currentQuizzer.name;
+                
+                document.querySelector(".quizzerCardsContainer .quizzer" + i + "Card").classList.remove("hidden");
+                document.querySelector(".quizzerCardsContainer .quizzer" + i + "Card .cardLabel").textContent = currentQuizzer.name;
             }
 
         }
 
         // Initial draw of the scoreboard
         redrawScoreboard();
+        
+        if (window.matchMedia("only screen and (min-width:900px)").matches) {
 
-        document.querySelector(".welcomeContainer").classList.add("hidden");
-        document.querySelector(".mainContainer").classList.remove("hidden");
+            document.querySelector(".welcomeScreensContainer").classList.add("hidden");
+            document.querySelector(".welcomeScreensOverlay").classList.add("hidden");
+
+        } else {
+
+            document.querySelector(".welcomeScreensContainer").classList.add("hidden");
+            document.querySelector(".welcomeScreensOverlay").classList.add("hidden");
+            document.querySelector(".welcomeContainer").classList.add("hidden");
+            document.querySelector(".mainContainer").classList.remove("hidden");
+
+        }
 
     }
 

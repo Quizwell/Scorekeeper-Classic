@@ -177,7 +177,7 @@ input[type="text"] {
 
 .webClipPromptContainer.hidden {
 
-    transform: translateX(calc(100vw + 10px));
+    transform: translateX(calc(100% + 10px));
     display: block !important;
 
 }
@@ -250,6 +250,8 @@ button.fullWidthButton {
     font-weight: 700;
 
     transition: opacity 0.1s ease;
+    
+    cursor: pointer;
 
 }
 
@@ -281,20 +283,20 @@ button.fullWidthButton.hidden {
 
 .setupContainer form {
 
-    height: calc(100vh - 60px);
+    height: calc(100% - 60px);
     overflow: scroll;
 
 }
 
 .setupContainer.hiddenRight {
 
-    transform: translateX(calc(100vw + 10px));
+    transform: translateX(calc(100% + 10px));
 
 }
 
 .setupContainer.hidden {
 
-    transform: translateY(calc(-100vh - 10px));
+    transform: translateY(calc(-100% - 10px));
     display: block !important;
 
 }
@@ -324,7 +326,7 @@ button.fullWidthButton.hidden {
 
     display: block;
     margin-top: 5px;
-    width: calc(100vw - 50px);
+    width: calc(100% - 50px);
 
     background-color: var(--input-background-color);
     border: 0.5px solid var(--input-border-color);
@@ -344,7 +346,7 @@ button.fullWidthButton.hidden {
 
 }
 
-.quizzerCard {
+.selectionScreen .quizzerCard {
 
     background-color: var(--content-background-color);
     width: calc(100% - 20px);
@@ -353,34 +355,36 @@ button.fullWidthButton.hidden {
     margin: 10px;
     position: fixed;
     top: 35px;
+    
+    cursor: pointer;
 
 }
 
-.quizzerCard:active {
+.selectionScreen .quizzerCard:active {
     opacity: 0.5;
 }
 
-.quizzerCard:nth-child(3) {
+.selectionScreen .quizzerCard:nth-child(3) {
     top: 40px;
 }
 
-.quizzerCard:nth-child(4) {
+.selectionScreen .quizzerCard:nth-child(4) {
     top: 100px;
 }
 
-.quizzerCard:nth-child(5) {
+.selectionScreen .quizzerCard:nth-child(5) {
     top: 150px;
 }
 
-.quizzerCard:nth-child(6) {
+.selectionScreen .quizzerCard:nth-child(6) {
     top: 200px;
 }
 
-.quizzerCard:nth-child(7) {
+.selectionScreen .quizzerCard:nth-child(7) {
     top: 250px;
 }
 
-.quizzerCard:nth-child(8) {
+.selectionScreen .quizzerCard:nth-child(8) {
     top: 300px;
 }
 
@@ -388,7 +392,7 @@ button.fullWidthButton.hidden {
     opacity: 0.5;
 }
 
-.quizzerCard .cardSeatNumberLabel {
+.selectionScreen .quizzerCard .cardSeatNumberLabel {
 
     margin: 0;
     position: absolute;
@@ -399,7 +403,7 @@ button.fullWidthButton.hidden {
 
 }
 
-.quizzerCard .cardLabel {
+.selectionScreen .quizzerCard .cardLabel {
 
     margin: 0;
     position: absolute;
@@ -409,20 +413,14 @@ button.fullWidthButton.hidden {
 
 }
 
-.quizzerCard .cardScore {
-
-    margin: 0;
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translate(0, -50%);
-
-}
-
 .overviewContainer {
 
     z-index: 1;
 
+}
+
+.questionNumber {
+    cursor: pointer;
 }
 
 .overviewContainer > div.team1,
@@ -436,6 +434,12 @@ button.fullWidthButton.hidden {
     position: fixed;
     overflow: hidden;
 
+}
+
+.overviewContainer .quizzerCardsContainer {
+    
+    display: none;
+    
 }
 
 .overviewContainer > div.team1 {
@@ -462,6 +466,8 @@ button.fullWidthButton.hidden {
     top: 40px;
     left: 25px;
     margin: 0;
+    
+    cursor: pointer;
 
 }
 
@@ -492,7 +498,13 @@ button.fullWidthButton.hidden {
     margin-bottom: 5px;
     position: relative;
     transition: opacity 0.1s ease;
+    
+    cursor: pointer;
 
+}
+
+.overviewContainer div.actionsContainer div:nth-child(2) {
+    display: none;
 }
 
 .overviewContainer div.actionsContainer div:active {
@@ -533,14 +545,14 @@ button.fullWidthButton.hidden {
     position: fixed;
     bottom: 10px;
     bottom: calc(10px + env(safe-area-inset-bottom));
-    left: 10px;
+    left: 50%;
     width: calc(100% - 20px);
     height: 300px;
     box-shadow: 0 0 5px var(--primary-shadow-color);
     border-radius: 20px;
     z-index: 3;
+    transform: translate(-50%, 125%);
 
-    transform: translate(0, 125%);
     transition: transform 0.3s ease;
 
 }
@@ -554,6 +566,8 @@ button.fullWidthButton.hidden {
     height: 35px;
     border-radius: 50%;
     background-color: var(--page-background-color);
+    
+    cursor: pointer;
 
 }
 
@@ -619,6 +633,8 @@ button.fullWidthButton.hidden {
     font-family: inherit;
     font-weight: 700;
     line-height: 95%;
+    
+    cursor: pointer;
 
 }
 
@@ -671,7 +687,7 @@ button.fullWidthButton.hidden {
 
 .selectionScreen.hidden {
 
-    transform: translateX(calc(100vw + 10px));
+    transform: translateX(calc(100% + 10px));
     display: block !important;
 
 }
@@ -689,6 +705,8 @@ button.fullWidthButton.hidden {
     border-radius: 10px;
     font-family: inherit;
     font-weight: 700;
+    
+    cursor: pointer;
 
 }
 
@@ -719,6 +737,8 @@ button.fullWidthButton.hidden {
     background-color: var(--content-background-color);
     color: var(--primary-text-color);
     border-radius: 10px;
+    
+    cursor: pointer;
 
 }
 
@@ -751,6 +771,8 @@ button.fullWidthButton.hidden {
     background-color: var(--content-background-color);
     color: var(--primary-text-color);
     border-radius: 10px;
+    
+    cursor: pointer;
 
 }
 
@@ -803,6 +825,8 @@ button.fullWidthButton.hidden {
     background-color: var(--page-background-color);
     display: inline-block;
     border-radius: 7.5px;
+    
+    cursor: pointer;
 
 }
 
@@ -845,6 +869,8 @@ button.fullWidthButton.hidden {
     background-color: var(--content-background-color);
     display: inline-block;
     border-radius: 7.5px;
+    
+    cursor: pointer;
 
 }
 
@@ -875,3 +901,5 @@ button.fullWidthButton.hidden {
     margin-left: 7.5px;
 
 }
+
+
