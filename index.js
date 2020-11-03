@@ -933,10 +933,10 @@ function appeal(teamNumber) {
 function refreshChallengeAndAppealButtons(toggleTo) {
 
     function enableButtons() {
-        var team1Challenge = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(3)");
-        var team1Appeal = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)");
-        var team2Challenge = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(3)");
-        var team2Appeal = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(4)");
+        var team1Challenge = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)");
+        var team1Appeal = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(5)");
+        var team2Challenge = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(4)");
+        var team2Appeal = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(5)");
 
         team1Challenge.classList.remove("disabled");
         team1Appeal.classList.remove("disabled");
@@ -958,10 +958,10 @@ function refreshChallengeAndAppealButtons(toggleTo) {
     }
 
     function disableButtons() {
-        var team1Challenge = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(3)");
-        var team1Appeal = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)");
-        var team2Challenge = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(3)");
-        var team2Appeal = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(4)");
+        var team1Challenge = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)");
+        var team1Appeal = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(5)");
+        var team2Challenge = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(4)");
+        var team2Appeal = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(5)");
 
         team1Challenge.classList.add("disabled");
         team1Appeal.classList.add("disabled");
@@ -978,7 +978,7 @@ function refreshChallengeAndAppealButtons(toggleTo) {
         enableButtons();
     } else if (toggleTo === "disable") {
         disableButtons();
-    } else if (document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(3)").classList.contains("disabled")) {
+    } else if (document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)").classList.contains("disabled")) {
         enableButtons();
     }
 
