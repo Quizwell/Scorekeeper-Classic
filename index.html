@@ -8,6 +8,20 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="media-queries.css">
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1MKJK2SJPC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-1MKJK2SJPC');
+
+    </script>
+
     <meta name="apple-mobile-web-app-title" content="Scorekeeper">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -26,8 +40,8 @@
 
 <body class="preload">
 
-   <div class="welcomeScreensContainer">
-   
+    <div class="welcomeScreensContainer">
+
         <div class="welcomeContainer">
             <picture>
                 <source srcset="HeaderDark.svg" media="(prefers-color-scheme: dark)">
@@ -91,9 +105,9 @@
             <button class="fullWidthButton hidden" onclick="finishSetup()">Done</button>
 
         </div>
-    
+
     </div>
-    
+
     <div class="welcomeScreensOverlay"></div>
 
     <div class="mainContainer">
@@ -106,7 +120,7 @@
                     <img src="CloseIcon.svg">
                 </picture>
             </div>
-            
+
             <div class="bugReportButton" onclick="showConfirmationDialog('bugReport')">
                 <picture>
                     <source srcset="BugReportIconDark.svg" media="(prefers-color-scheme: dark)">
@@ -120,9 +134,9 @@
                 <p class="teamName">Team 1</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(1)">0</h1>
                 <div class="teamStatusContainer"></div>
-                
+
                 <div class="quizzerCardsContainer"></div>
-                
+
                 <div class="actionsContainer">
                     <div onclick="showSelectionScreen('jump', 1)">
                         <img src="">
@@ -151,9 +165,9 @@
                 <p class="teamName">Team 2</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(2)">0</h1>
                 <div class="teamStatusContainer"></div>
-                
+
                 <div class="quizzerCardsContainer"></div>
-                
+
                 <div class="actionsContainer">
                     <div onclick="showSelectionScreen('jump', 2)">
                         <img src="">
