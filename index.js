@@ -439,8 +439,8 @@ function redrawScoreboard() {
 
     if (currentRoundState.useTeamColors) {
 
-        document.querySelector(".overviewContainer .team1").style.backgroundColor = currentRoundState.team1.color;
-        document.querySelector(".overviewContainer .team2").style.backgroundColor = currentRoundState.team2.color;
+        document.querySelector(".overviewContainer .team1").style.background = currentRoundState.team1.color;
+        document.querySelector(".overviewContainer .team2").style.background = currentRoundState.team2.color;
 
         // Get the constasting color for the team background
         var team1TextColor = getContrastingColor(currentRoundState.team1.color);

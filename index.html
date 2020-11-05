@@ -25,7 +25,7 @@
     <meta name="apple-mobile-web-app-title" content="Scorekeeper">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#74bcbd">
+<!--    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#74bcbd">-->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
@@ -47,7 +47,10 @@
                 <source srcset="HeaderDark.svg" media="(prefers-color-scheme: dark)">
                 <img class="header" src="Header.svg">
             </picture>
-            <h1>Welcome to<br><span style="color: var(--primary-button-color)">Scorekeeper</span></h1>
+            <div>
+                <img src="apple-touch-icon.png">
+                <h1>Scorekeeper</h1>
+            </div>
             <p>Scorekeeper allows you to scorekeep quiz rounds from your phone.</p>
             <button class="fullWidthButton" onclick="hideWelcomeScreen()">Next</button>
         </div>
