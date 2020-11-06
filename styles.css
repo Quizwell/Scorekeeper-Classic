@@ -166,10 +166,11 @@ input[type="text"] {
 .welcomeContainer div {
 
     width: 100%;
-    height: 120px;
+    height: 130px;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 
 }
 
@@ -949,4 +950,52 @@ button.fullWidthButton.hidden {
     bottom: 7.5px;
     margin-left: 7.5px;
 
+}
+
+.bannerNotification {
+    
+    position: fixed;
+    left: 50%;
+    top: 15px;
+    transform: translate(-50%, 0);
+    z-index: 10;
+    border-radius: 32.5px;
+    width: 250px;
+    height: 65px;
+    
+    background-color: var(--page-background-color);
+    box-shadow: 0 0 10px var(--primary-shadow-color);
+    
+    transition: transform 0.3s ease;
+    
+}
+
+.bannerNotification.hidden {
+    
+    display: block !important;
+    transform: translate(-50%, -100px);
+    
+}
+
+.bannerNotification .title {
+    
+    font-size: 20px;
+    width: calc(100% - 10px);
+    text-align: center;
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin: 0;
+    
+}
+
+.bannerNotification .subtitle {
+    
+    color: var(--ternary-text-color);
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    
 }

@@ -390,7 +390,7 @@ function finishSetup() {
 
         document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card").classList.remove("hidden");
         document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card .cardLabel").textContent = currentInput.value;
-        
+
         document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card").classList.remove("hidden");
         document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card .cardLabel").textContent = currentInput.value;
 
@@ -400,7 +400,7 @@ function finishSetup() {
     redrawScoreboard();
 
     if (window.matchMedia("only screen and (min-width:900px)").matches) {
-        
+
         document.querySelector(".welcomeScreensContainer").style.opacity = 0;
         document.querySelector(".welcomeScreensOverlay").style.opacity = 0;
 
@@ -410,11 +410,11 @@ function finishSetup() {
             document.querySelector(".welcomeScreensOverlay").classList.add("hidden");
 
         }, 200);
-        
+
     } else {
-        
+
         document.querySelector(".setupContainer").classList.add("hidden");
-        
+
     }
 
     // Remember that the user has used the app before
@@ -461,7 +461,7 @@ function redrawScoreboard() {
 
         var quizzerSelectionElement = document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card");
         var quizzerSelectionElementLabel = document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card p.cardLabel");
-        
+
         var quizzerSelectionElementDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card");
         var quizzerSelectionElementLabelDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card p.cardLabel");
         var quizzerSelectionElementScoreDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card p.cardScore");
@@ -484,7 +484,7 @@ function redrawScoreboard() {
 
                 quizzerSelectionElement.classList.add("disabled");
                 quizzerSelectionElement.onclick = null;
-                
+
                 quizzerSelectionElementDesktop.classList.add("disabled");
                 quizzerSelectionElementDesktop.onclick = null;
 
@@ -512,7 +512,7 @@ function redrawScoreboard() {
                     selectedQuizzer(quizzerID);
                 };
             })(quizzerID)
-            
+
             quizzerSelectionElementDesktop.classList.remove("disabled");
             (function (quizzerID) {
                 quizzerSelectionElementDesktop.onclick = function () {
@@ -529,7 +529,7 @@ function redrawScoreboard() {
 
         overviewScreenTeamStatusContainer.appendChild(quizzerStatusStringElement);
         overviewScreenTeamStatusContainer.appendChild(document.createElement("br"));
-        
+
         var quizzerStatusStringDesktop = currentQuizzer.correct + "/" + currentQuizzer.incorrect;
         quizzerSelectionElementScoreDesktop.textContent = quizzerStatusStringDesktop;
 
@@ -706,15 +706,22 @@ function correct(quizzerID) {
 
             currentRoundState[numbers.teamPropertyName].score += 10;
 
+            var numberText;
+            switch (currentRoundState[numbers.teamPropertyName].uniqueJumps) {
+                case 3:
+                    numberText = "3rd";
+                    break;
+                case 4:
+                    numberText = "4th";
+                    break;
+                case 5:
+                    numberText = "5th";
+                    break;
+            }
+
+            bannerNotificationManager.showMessage(numberText + " Person Bonus", "+10 Points");
+
         }
-
-    }
-
-    // Add 10 points to the individual and team scores if the quizzer quizzed out without error
-    if ((get("correct") == 4) && (get("incorrect") == 0)) {
-
-        add("score", 10);
-        currentRoundState[numbers.teamPropertyName].score += 10;
 
     }
 
@@ -722,6 +729,20 @@ function correct(quizzerID) {
     if (get("correct") == 4) {
 
         set("enabled", false);
+
+        if (get("incorrect") == 0) {
+
+            // Add 10 points to the individual and team scores if the quizzer quizzed out without error
+            add("score", 10);
+            currentRoundState[numbers.teamPropertyName].score += 10;
+
+            bannerNotificationManager.showMessage("Quiz Out without Error", "+10 Points");
+
+        } else {
+
+            bannerNotificationManager.showMessage("Quiz Out", "4 Correct");
+
+        }
 
     }
 
@@ -783,15 +804,21 @@ function incorrect(quizzerID, dontRefreshButtons) {
         set("enabled", false);
         currentRoundState[numbers.teamPropertyName].score -= 10;
 
+        bannerNotificationManager.showMessage("Error Out", "-10 Points");
+
     } else if (currentRoundState[numbers.teamPropertyName].errors >= 5) {
 
         // Or if this is the fifth or more team error
         currentRoundState[numbers.teamPropertyName].score -= 10;
 
+        bannerNotificationManager.showMessage("5+ Team Errors", "-10 Points");
+
     } else if (currentRoundState.question >= 16) {
 
         // Or if error deductions are in effect
         currentRoundState[numbers.teamPropertyName].score -= 10;
+
+        bannerNotificationManager.showMessage("Error Deduction", "-10 Points");
 
     }
 
@@ -861,6 +888,8 @@ function foul(quizzerID) {
     if (currentRoundState[numbers.teamPropertyName].fouls >= 2) {
 
         currentRoundState[numbers.teamPropertyName].score -= 10;
+        
+        bannerNotificationManager.showMessage("Foul Deduction", "-10 Points");
 
     }
 
@@ -868,6 +897,8 @@ function foul(quizzerID) {
     if (get("fouls") == 3) {
 
         set("enabled", false);
+        
+        bannerNotificationManager.showMessage("Foul Out", "3 Fouls");
 
     }
 
@@ -883,6 +914,8 @@ function teamFoul(team) {
     if (currentRoundState[team].fouls >= 2) {
 
         currentRoundState[team].score -= 10;
+        
+        bannerNotificationManager.showMessage("Foul Deduction", "-10 Points");
 
     }
 
@@ -1011,6 +1044,57 @@ function getContrastingColor(hexCode) {
 
 }
 
+const bannerNotificationManager = {
+
+    queue: [],
+    isRendering: false,
+
+    timer: function (ms) {
+        return new Promise(res => setTimeout(res, ms));
+    },
+
+    notificationElement: document.querySelector(".bannerNotification"),
+    titleElement: document.querySelector(".bannerNotification .title"),
+    subtitleElement: document.querySelector(".bannerNotification .subtitle"),
+
+    showMessage: function (title, subtitle) {
+
+        this.queue.push({
+            title: title,
+            subtitle: subtitle
+        });
+        if (!this.isRendering) {
+            this.render();
+        }
+
+    },
+
+    render: async function () {
+
+        this.isRendering = true;
+
+        while (this.queue[0]) {
+
+            var currentItem = this.queue[0];
+
+            this.titleElement.textContent = currentItem.title;
+            this.subtitleElement.textContent = currentItem.subtitle;
+
+            this.notificationElement.classList.remove("hidden");
+
+            this.queue.shift();
+
+            await this.timer(2000);
+
+        }
+
+        this.notificationElement.classList.add("hidden");
+        this.isRendering = false;
+
+    }
+
+}
+
 // Populate all the quizzer cards on the selection screen
 for (var i = 0; i < 10; i++) {
 
@@ -1075,10 +1159,10 @@ for (var i = 0; i < 10; i++) {
 
     var cardLabel = document.createElement("p");
     cardLabel.classList.add("cardLabel");
-    
+
     var cardScore = document.createElement("p");
     cardScore.classList.add("cardScore");
-    
+
     var jumpLabel = document.createElement("p");
     jumpLabel.textContent = "Click to Jump";
     jumpLabel.classList.add("jumpLabel");
@@ -1154,9 +1238,9 @@ window.addEventListener("load", function () {
 
     if (
         (recalledPreviousRoundState ||
-        recalledChallengeAction) &&
+            recalledChallengeAction) &&
         ((recalledPreviousRoundState !== "null") &&
-        (recalledChallengeAction !== "null"))
+            (recalledChallengeAction !== "null"))
     ) {
         previousRoundState = JSON.parse(recalledPreviousRoundState);
         challengeAction = JSON.parse(recalledChallengeAction);
@@ -1177,7 +1261,7 @@ window.addEventListener("load", function () {
             if (currentQuizzer.name !== null) {
                 document.querySelector(".selectionScreen .quizzer" + i + "Card").classList.remove("hidden");
                 document.querySelector(".selectionScreen .quizzer" + i + "Card .cardLabel").textContent = currentQuizzer.name;
-                
+
                 document.querySelector(".quizzerCardsContainer .quizzer" + i + "Card").classList.remove("hidden");
                 document.querySelector(".quizzerCardsContainer .quizzer" + i + "Card .cardLabel").textContent = currentQuizzer.name;
             }
@@ -1186,7 +1270,7 @@ window.addEventListener("load", function () {
 
         // Initial draw of the scoreboard
         redrawScoreboard();
-        
+
         if (window.matchMedia("only screen and (min-width:900px)").matches) {
 
             document.querySelector(".welcomeScreensContainer").classList.add("hidden");
