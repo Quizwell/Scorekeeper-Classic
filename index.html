@@ -25,7 +25,7 @@
     <meta name="apple-mobile-web-app-title" content="Scorekeeper">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<!--    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#74bcbd">-->
+    <!--    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#74bcbd">-->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
@@ -114,7 +114,7 @@
     <div class="welcomeScreensOverlay"></div>
 
     <div class="mainContainer">
-        
+
         <div class="bannerNotification hidden">
             <h2 class="title">Title</h2>
             <p class="subtitle">Subtitle</p>
@@ -128,7 +128,14 @@
                     <img src="CloseIcon.svg">
                 </picture>
             </div>
-
+            
+            <div class="printButton" onclick="printScoresheet()">
+                <picture>
+                    <source srcset="PrintIconDark.svg" media="(prefers-color-scheme: dark)">
+                    <img src="PrintIcon.svg">
+                </picture>
+            </div>
+            
             <div class="bugReportButton" onclick="showConfirmationDialog('bugReport')">
                 <picture>
                     <source srcset="BugReportIconDark.svg" media="(prefers-color-scheme: dark)">
@@ -250,6 +257,393 @@
             </div>
             <button>Correct</button>
             <button>Incorrect</button>
+        </div>
+
+    </div>
+
+    <div class="scoresheetContainer">
+
+        <!--
+        
+            Table Dimensions: 23x14
+            
+            1: Team 1, 1...20, OT
+            2: Quizzer 1
+            3: Quizzer 2
+            4: Quizzer 3
+            5: Quizzer 4
+            6: Quizzer 5
+            7: Team 1 Running Total
+            
+            8: Team 2, 1...20, OT
+            9: Quizzer 6
+            10: Quizzer 7
+            11: Quizzer 8
+            12: Quizzer 9
+            13: Quizzer 10
+            14: Team 2 Running Total
+        
+        -->
+        
+        <div class="scoresheetWrapper">
+            <h1 class="scoresheetTitle">Team 1 vs. Team 2</h1>
+            <table class="scoresheet">
+                <tbody>
+                    <tr class="team1Header teamHeader">
+                        <td class="teamName">Team 1</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>10</td>
+                        <td>11</td>
+                        <td>12</td>
+                        <td>13</td>
+                        <td>14</td>
+                        <td>15</td>
+                        <td>16</td>
+                        <td>17</td>
+                        <td>18</td>
+                        <td>19</td>
+                        <td>20</td>
+                        <td>OT</td>
+                        <td>Totals:</td>
+                    </tr>
+                    <tr class="quizzer1">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="quizzer2">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="quizzer3">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="quizzer4">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="quizzer5">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="team1RunningTotal runningTotal">
+                        <td class="foulCell">Fouls: 0</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><br></td>
+                        <td><br></td>
+                        <td><br></td>
+                        <td>FINAL</td>
+                    </tr>
+
+                    <tr class="team2Header teamHeader">
+                        <td class="teamName">Team 2</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>10</td>
+                        <td>11</td>
+                        <td>12</td>
+                        <td>13</td>
+                        <td>14</td>
+                        <td>15</td>
+                        <td>16</td>
+                        <td>17</td>
+                        <td>18</td>
+                        <td>19</td>
+                        <td>20</td>
+                        <td>OT</td>
+                        <td>Totals:</td>
+                    </tr>
+                    <tr class="quizzer6">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="quizzer7">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="quizzer8">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="quizzer9">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="quizzer10">
+                        <td class="quizzerNameCell">Quizzer Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="team2RunningTotal runningTotal">
+                        <td class="foulCell">Fouls: 0</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>FINAL</td>
+                    </tr>
+                <tbody>
+            </table>
+            <p class="generatedBy">Scoresheet generated by Scorekeeper</p>
+            <p class="url">cadehunter.github.io/Scorekeeper</p>
         </div>
 
     </div>

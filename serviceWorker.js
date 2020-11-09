@@ -1,4 +1,4 @@
-var CACHE_NAME = 'my-site-cache-v1';
+var CACHE_NAME = 'scorekeeper-cache-v1';
 var urlsToCache = [
     '/Scorekeeper',
     '/Scorekeeper/index.html',
@@ -10,8 +10,12 @@ var urlsToCache = [
     '/Scorekeeper/HeaderDark.svg',
     '/Scorekeeper/ShareIcon.svg',
     '/Scorekeeper/ShareIconDark.svg',
+    '/Scorekeeper/CloseIcon.svg',
+    '/Scorekeeper/CloseIconDark.svg',
     '/Scorekeeper/BugReportIcon.svg',
     '/Scorekeeper/BugReportIconDark.svg',
+    '/Scorekeeper/PrintIcon.svg',
+    '/Scorekeeper/PrintIconDark.svg',
     '/Scorekeeper/omnes-pro-light.otf',
     '/Scorekeeper/omnes-pro-regular.otf',
     '/Scorekeeper/omnes-pro-semibold.otf',

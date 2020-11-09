@@ -24,6 +24,9 @@ var currentRoundState = {
 };
 var previousRoundState = null;
 var challengeAction = null;
+var scoresheetData = {
+    questions: []
+};
 
 var selectMode = null;
 
@@ -174,6 +177,10 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
             };
             button2Function = function () {
                 hideConfirmationDialog();
+
+                scoresheetData.questions[currentRoundState.question - 1].bonusQuizzerID = quizzerID;
+                scoresheetData.questions[currentRoundState.question - 1].bonusEvent = "incorrect";
+
                 refreshChallengeAndAppealButtons("enable");
                 incrementQuestion();
                 redrawScoreboard();
@@ -225,6 +232,13 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
             };
             button2Function = function () {
                 hideConfirmationDialog();
+
+                if (currentRoundState.question <= 20) {
+                    scoresheetData.questions[currentRoundState.question - 1] = {
+                        event: "noJump"
+                    }
+                }
+
                 savePreviousRoundState();
                 incrementQuestion();
                 redrawScoreboard();
@@ -263,6 +277,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
                     localStorage.removeItem("currentRoundState");
                     localStorage.removeItem("previousRoundState");
                     localStorage.removeItem("challengeAction");
+                    localStorage.removeItem("scoresheetData");
                     window.location.reload();
                 }, 300);
             };
@@ -544,7 +559,10 @@ function redrawScoreboard() {
 
     } else if (currentRoundState.question > 20) {
 
-        if (currentRoundState.team1.score === currentRoundState.team2.score) {
+        if (
+            (currentRoundState.team1.score == currentRoundState.team2.score) &&
+            !currentRoundState.team1.hasWonTiebreaker && !currentRoundState.team2.hasWonTiebreaker
+        ) {
 
             // Keep going - the round continues with tiebreaker questions until the score is no longer tied.
 
@@ -573,7 +591,10 @@ function redrawScoreboard() {
 
             }
 
-        } else {
+        } else if (currentRoundState.team1.hasWonTiebreaker || currentRoundState.team2.hasWonTiebreaker) {
+
+            // One team won the tiebreaker
+            var winningTeamNumber = currentRoundState.team1.hasWonTiebreaker ? 1 : 2;
 
             var team1Buttons = document.querySelectorAll(".overviewContainer .team1 .actionsContainer div");
             var team2Buttons = document.querySelectorAll(".overviewContainer .team2 .actionsContainer div");
@@ -583,18 +604,247 @@ function redrawScoreboard() {
                 team2Buttons[i].classList.add("disabled");
                 team2Buttons[i].onclick = null;
             }
+            
+            document.querySelector(".overviewContainer .team1 .quizzerCardsContainer").style.pointerEvents = "none";
+            document.querySelector(".overviewContainer .team2 .quizzerCardsContainer").style.pointerEvents = "none";
 
             document.querySelector(".overviewContainer .screenTitle").textContent = "End of Round";
             document.querySelector(".overviewContainer .screenTitle").onclick = null;
+
+            bannerNotificationManager.showMessage("End of Round", "Team " + winningTeamNumber + " wins");
+
+        } else {
+
+            // One team won without a tiebreaker
+            var winningTeamNumber = (currentRoundState.team1.score > currentRoundState.team2.score) ? 1 : 2;
+
+            var team1Buttons = document.querySelectorAll(".overviewContainer .team1 .actionsContainer div");
+            var team2Buttons = document.querySelectorAll(".overviewContainer .team2 .actionsContainer div");
+            for (var i = 0; i < 4; i++) {
+                team1Buttons[i].classList.add("disabled");
+                team1Buttons[i].onclick = null;
+                team2Buttons[i].classList.add("disabled");
+                team2Buttons[i].onclick = null;
+            }
+            
+            document.querySelector(".overviewContainer .team1 .quizzerCardsContainer").style.pointerEvents = "none";
+            document.querySelector(".overviewContainer .team2 .quizzerCardsContainer").style.pointerEvents = "none";
+
+            document.querySelector(".overviewContainer .screenTitle").textContent = "End of Round";
+            document.querySelector(".overviewContainer .screenTitle").onclick = null;
+
+            bannerNotificationManager.showMessage("End of Round", "Team " + winningTeamNumber + " wins");
 
         }
 
     }
 
+    scoresheet.redraw();
+
     // Save states and challenge action to localStorage
     localStorage.setItem("currentRoundState", JSON.stringify(currentRoundState));
     localStorage.setItem("previousRoundState", JSON.stringify(previousRoundState));
     localStorage.setItem("challengeAction", JSON.stringify(challengeAction));
+    localStorage.setItem("scoresheetData", JSON.stringify(scoresheetData));
+
+}
+
+var scoresheet = {
+
+    tableTitle: document.querySelector(".scoresheetContainer h1"),
+
+    team1NameCell: document.querySelector(".scoresheet .team1Header .teamName"),
+    team2NameCell: document.querySelector(".scoresheet .team2Header .teamName"),
+
+    team1FoulsCell: document.querySelector(".scoresheet .team1RunningTotal td"),
+    team2FoulsCell: document.querySelector(".scoresheet .team2RunningTotal td"),
+
+    team1QuizzerRows: [
+        document.querySelector(".scoresheet .quizzer1").children,
+        document.querySelector(".scoresheet .quizzer2").children,
+        document.querySelector(".scoresheet .quizzer3").children,
+        document.querySelector(".scoresheet .quizzer4").children,
+        document.querySelector(".scoresheet .quizzer5").children,
+    ],
+    team2QuizzerRows: [
+        document.querySelector(".scoresheet .quizzer6").children,
+        document.querySelector(".scoresheet .quizzer7").children,
+        document.querySelector(".scoresheet .quizzer8").children,
+        document.querySelector(".scoresheet .quizzer9").children,
+        document.querySelector(".scoresheet .quizzer10").children,
+    ],
+
+    team1TotalsCells: [
+        document.querySelector(".scoresheet .quizzer1 td:last-child"),
+        document.querySelector(".scoresheet .quizzer2 td:last-child"),
+        document.querySelector(".scoresheet .quizzer3 td:last-child"),
+        document.querySelector(".scoresheet .quizzer4 td:last-child"),
+        document.querySelector(".scoresheet .quizzer5 td:last-child"),
+        document.querySelector(".scoresheet .team1RunningTotal td:last-child")
+    ],
+    team2TotalsCells: [
+        document.querySelector(".scoresheet .quizzer6 td:last-child"),
+        document.querySelector(".scoresheet .quizzer7 td:last-child"),
+        document.querySelector(".scoresheet .quizzer8 td:last-child"),
+        document.querySelector(".scoresheet .quizzer9 td:last-child"),
+        document.querySelector(".scoresheet .quizzer10 td:last-child"),
+        document.querySelector(".scoresheet .team2RunningTotal td:last-child")
+    ],
+
+    team1RunningTotalRow: document.querySelectorAll(".scoresheet .team1RunningTotal td"),
+    team2RunningTotalRow: document.querySelectorAll(".scoresheet .team2RunningTotal td"),
+
+    getQuizzerRow: function (id) {
+
+        var teamNumber = (id <= 5) ? 1 : 2;
+        var quizzerNumber = (id <= 5) ? id : (id - 5);
+        var quizzerIndex = quizzerNumber - 1;
+
+        return this["team" + teamNumber + "QuizzerRows"][quizzerIndex];
+
+    },
+
+    redraw: function () {
+
+        this.clear();
+
+        // Set the table title
+        this.tableTitle.textContent = currentRoundState.team1.name + " vs. " + currentRoundState.team2.name;
+
+        // Set the team names
+        this.team1NameCell.textContent = currentRoundState.team1.name;
+        this.team2NameCell.textContent = currentRoundState.team2.name;
+
+        // Set the quizzer names
+        for (var i = 0; i < this.team1QuizzerRows.length; i++) {
+            this.team1QuizzerRows[i][0].textContent = currentRoundState.team1["quizzer" + (i + 1)].name;
+        }
+        for (var i = 0; i < this.team2QuizzerRows.length; i++) {
+            this.team2QuizzerRows[i][0].textContent = currentRoundState.team2["quizzer" + (i + 1)].name;
+        }
+
+        // Set the foul values
+        this.team1FoulsCell.textContent = "Fouls: " + currentRoundState.team1.fouls;
+        this.team2FoulsCell.textContent = "Fouls: " + currentRoundState.team2.fouls;
+
+        // Fill in each question
+        for (var i = 0; i < scoresheetData.questions.length; i++) {
+
+            var currentQuestion = scoresheetData.questions[i];
+
+            if ((i + 1) <= 20) {
+                this.team1RunningTotalRow[i + 1].textContent = currentQuestion.team1Score;
+                this.team2RunningTotalRow[i + 1].textContent = currentQuestion.team2Score;
+            } else {
+                this.team1RunningTotalRow[i + 1].textContent = this.team1RunningTotalRow[i].textContent;
+                this.team2RunningTotalRow[i + 1].textContent = this.team2RunningTotalRow[i].textContent;
+            }
+
+            if (currentQuestion.event == "noJump") {
+                continue;
+            }
+
+            var quizzerRow = this.getQuizzerRow(currentQuestion.quizzerID);
+
+            var text;
+            switch (currentQuestion.event) {
+                case "correct":
+                    text = "20";
+                    break;
+                case "incorrect":
+                case "tiebreakerIncorrect":
+                    text = "E";
+                    break;
+                case "tiebreakerCorrect":
+                    text = "C";
+                    break;
+            }
+
+            quizzerRow[i + 1].textContent = text;
+
+            if (currentQuestion.bonusEvent) {
+
+                var bonusQuizzerRow = this.getQuizzerRow(currentQuestion.bonusQuizzerID);
+                var bonusText;
+                switch (currentQuestion.bonusEvent) {
+                    case "correct":
+                        bonusText = "B";
+                        break;
+                    case "incorrect":
+                        bonusText = "-";
+                        break;
+                }
+
+                bonusQuizzerRow[i + 1].textContent = bonusText;
+
+            }
+
+        }
+
+        // Set final scores for each team
+        this.team1RunningTotalRow[this.team1RunningTotalRow.length - 1].textContent = currentRoundState.team1.score;
+        this.team2RunningTotalRow[this.team2RunningTotalRow.length - 1].textContent = currentRoundState.team2.score;
+
+        // Set final scores for each quizzer
+        for (var i = 0; i < this.team1QuizzerRows.length; i++) {
+            this.team1QuizzerRows[i][this.team1RunningTotalRow.length - 1].textContent = currentRoundState.team1["quizzer" + (i + 1)].score;
+        }
+        for (var i = 0; i < this.team2QuizzerRows.length; i++) {
+            this.team2QuizzerRows[i][this.team2RunningTotalRow.length - 1].textContent = currentRoundState.team2["quizzer" + (i + 1)].score;
+        }
+
+    },
+
+    clear: function () {
+
+        this.tableTitle.textContent = "";
+
+        this.team1NameCell.textContent = "";
+        this.team2NameCell.textContent = "";
+
+        for (var i = 0; i < this.team1QuizzerRows.length; i++) {
+
+            for (var ii = 0; ii < this.team1QuizzerRows[i].length; ii++) {
+
+                this.team1QuizzerRows[i][ii].textContent = "";
+
+            }
+
+        }
+
+        for (var i = 0; i < this.team2QuizzerRows.length; i++) {
+
+            for (var ii = 0; ii < this.team2QuizzerRows[i].length; ii++) {
+
+                this.team2QuizzerRows[i][ii].textContent = "";
+
+            }
+
+        }
+
+        for (var i = 0; i < this.team1TotalsCells.length; i++) {
+
+            this.team1TotalsCells[i].textContent = "";
+
+        }
+        for (var i = 0; i < this.team2TotalsCells.length; i++) {
+
+            this.team2TotalsCells[i].textContent = "";
+
+        }
+
+        for (var i = 0; i < this.team1RunningTotalRow.length; i++) {
+
+            this.team1RunningTotalRow[i].textContent = "";
+
+        }
+        for (var i = 0; i < this.team2RunningTotalRow.length; i++) {
+
+            this.team2RunningTotalRow[i].textContent = "";
+
+        }
+
+    }
 
 }
 
@@ -641,6 +891,10 @@ function savePreviousRoundState() {
 
 function incrementQuestion() {
 
+    if (currentRoundState.question <= 20) {
+        scoresheetData.questions[currentRoundState.question - 1].team1Score = currentRoundState.team1.score;
+        scoresheetData.questions[currentRoundState.question - 1].team2Score = currentRoundState.team2.score;
+    }
     currentRoundState.question++;
 
 }
@@ -653,7 +907,7 @@ function showScoreAdjustment(teamNumber) {
 
 function showNoJumpPrompt() {
 
-    showConfirmationDialog("noJump")
+    showConfirmationDialog("noJump");
 
 }
 
@@ -692,58 +946,76 @@ function correct(quizzerID) {
     }
 
     add("correct", 1);
-    add("score", 20);
 
-    currentRoundState[numbers.teamPropertyName].score += 20;
+    if (currentRoundState.question <= 20) {
 
-    // If this is the quizzer's first correct answer, add 1 to the team's uniqueJumps property
-    if (get("correct") == 1) {
+        add("score", 20);
 
-        currentRoundState[numbers.teamPropertyName].uniqueJumps++;
+        currentRoundState[numbers.teamPropertyName].score += 20;
 
-        // Then, if there are three or more jumps, add a n-person bonus
-        if (currentRoundState[numbers.teamPropertyName].uniqueJumps >= 3) {
+        // If this is the quizzer's first correct answer, add 1 to the team's uniqueJumps property
+        if (get("correct") == 1) {
 
-            currentRoundState[numbers.teamPropertyName].score += 10;
+            currentRoundState[numbers.teamPropertyName].uniqueJumps++;
 
-            var numberText;
-            switch (currentRoundState[numbers.teamPropertyName].uniqueJumps) {
-                case 3:
-                    numberText = "3rd";
-                    break;
-                case 4:
-                    numberText = "4th";
-                    break;
-                case 5:
-                    numberText = "5th";
-                    break;
+            // Then, if there are three or more jumps, add a n-person bonus
+            if (currentRoundState[numbers.teamPropertyName].uniqueJumps >= 3) {
+
+                currentRoundState[numbers.teamPropertyName].score += 10;
+
+                var numberText;
+                switch (currentRoundState[numbers.teamPropertyName].uniqueJumps) {
+                    case 3:
+                        numberText = "3rd";
+                        break;
+                    case 4:
+                        numberText = "4th";
+                        break;
+                    case 5:
+                        numberText = "5th";
+                        break;
+                }
+
+                bannerNotificationManager.showMessage(numberText + " Person Bonus", "+10 Points");
+
             }
 
-            bannerNotificationManager.showMessage(numberText + " Person Bonus", "+10 Points");
+        }
+
+        // Disable the quizzer if they quizzed out
+        if (get("correct") == 4) {
+
+            set("enabled", false);
+
+            if (get("incorrect") == 0) {
+
+                // Add 10 points to the individual and team scores if the quizzer quizzed out without error
+                add("score", 10);
+                currentRoundState[numbers.teamPropertyName].score += 10;
+
+                bannerNotificationManager.showMessage("Quiz Out without Error", "+10 Points");
+
+            } else {
+
+                bannerNotificationManager.showMessage("Quiz Out", "4 Correct");
+
+            }
 
         }
 
     }
 
-    // Disable the quizzer if they quizzed out
-    if (get("correct") == 4) {
-
-        set("enabled", false);
-
-        if (get("incorrect") == 0) {
-
-            // Add 10 points to the individual and team scores if the quizzer quizzed out without error
-            add("score", 10);
-            currentRoundState[numbers.teamPropertyName].score += 10;
-
-            bannerNotificationManager.showMessage("Quiz Out without Error", "+10 Points");
-
-        } else {
-
-            bannerNotificationManager.showMessage("Quiz Out", "4 Correct");
-
+    if (currentRoundState.question <= 20) {
+        scoresheetData.questions[currentRoundState.question - 1] = {
+            quizzerID: quizzerID,
+            event: "correct",
         }
-
+    } else {
+        scoresheetData.questions[20] = {
+            quizzerID: quizzerID,
+            event: "tiebreakerCorrect",
+        }
+        currentRoundState[numbers.teamPropertyName].hasWonTiebreaker = true;
     }
 
     incrementQuestion();
@@ -789,52 +1061,81 @@ function incorrect(quizzerID, dontRefreshButtons) {
     add("incorrect", 1);
     currentRoundState[numbers.teamPropertyName].errors++;
 
-    // If this is this quizzer's third error, disable him
-    if (get("incorrect") == 3) {
+    if (currentRoundState.question <= 20) {
 
-        set("enabled", false);
+        // If this is this quizzer's third error, disable him
+        if (get("incorrect") == 3) {
+
+            set("enabled", false);
+
+        }
+
+        // Remove ten points if...
+        if (get("incorrect") == 3) {
+
+            // The quizzer has errored out
+            subtract("score", 10);
+            set("enabled", false);
+            currentRoundState[numbers.teamPropertyName].score -= 10;
+
+            bannerNotificationManager.showMessage("Error Out", "-10 Points");
+
+        } else if (currentRoundState[numbers.teamPropertyName].errors >= 5) {
+
+            // Or if this is the fifth or more team error
+            currentRoundState[numbers.teamPropertyName].score -= 10;
+
+            bannerNotificationManager.showMessage("5+ Team Errors", "-10 Points");
+
+        } else if (currentRoundState.question >= 16) {
+
+            // Or if error deductions are in effect
+            currentRoundState[numbers.teamPropertyName].score -= 10;
+
+            bannerNotificationManager.showMessage("Error Deduction", "-10 Points");
+
+        }
+
+        scoresheetData.questions[currentRoundState.question - 1] = {
+            quizzerID: quizzerID,
+            event: "incorrect",
+        }
+
+    } else {
+
+        scoresheetData.questions[20] = {
+            quizzerID: quizzerID,
+            event: "tiebreakerIncorrect",
+        }
+        currentRoundState[(numbers.teamNumber == 1) ? "team2" : "team1"].hasWonTiebreaker = true;
 
     }
-
-    // Remove ten points if...
-    if (get("incorrect") == 3) {
-
-        // The quizzer has errored out
-        subtract("score", 10);
-        set("enabled", false);
-        currentRoundState[numbers.teamPropertyName].score -= 10;
-
-        bannerNotificationManager.showMessage("Error Out", "-10 Points");
-
-    } else if (currentRoundState[numbers.teamPropertyName].errors >= 5) {
-
-        // Or if this is the fifth or more team error
-        currentRoundState[numbers.teamPropertyName].score -= 10;
-
-        bannerNotificationManager.showMessage("5+ Team Errors", "-10 Points");
-
-    } else if (currentRoundState.question >= 16) {
-
-        // Or if error deductions are in effect
-        currentRoundState[numbers.teamPropertyName].score -= 10;
-
-        bannerNotificationManager.showMessage("Error Deduction", "-10 Points");
-
-    }
-
-    redrawScoreboard();
 
     // Check to see if the bonus quizzer is enabled. If so, give him the bonus
-    var bonusQuizzerID = (quizzerID <= 5) ? (quizzerID + 5) : (quizzerID - 5);
+    var bonusQuizzerID = getBonusQuizzer(quizzerID);
     var bonusQuizzerNumbers = getNumbersFromID(bonusQuizzerID);
-    if (currentRoundState[bonusQuizzerNumbers.teamPropertyName][bonusQuizzerNumbers.quizzerPropertyName].enabled) {
+    if (
+        currentRoundState[bonusQuizzerNumbers.teamPropertyName][bonusQuizzerNumbers.quizzerPropertyName].enabled &&
+        (currentRoundState.question <= 20)
+    ) {
+
+        redrawScoreboard();
         showConfirmationDialog("bonus", bonusQuizzerNumbers.teamNumber, bonusQuizzerID, dontRefreshButtons);
+
     } else {
+
         hideConfirmationDialog();
         incrementQuestion();
         refreshChallengeAndAppealButtons("enabled");
         redrawScoreboard();
+
     }
+
+}
+
+function getBonusQuizzer(quizzerID) {
+
+    return (quizzerID <= 5) ? (quizzerID + 5) : (quizzerID - 5)
 
 }
 
@@ -843,6 +1144,9 @@ function bonus(quizzerID, dontRefreshButtons) {
     var numbers = getNumbersFromID(quizzerID);
 
     currentRoundState[numbers.teamPropertyName].score += 10;
+
+    scoresheetData.questions[currentRoundState.question - 1].bonusQuizzerID = quizzerID;
+    scoresheetData.questions[currentRoundState.question - 1].bonusEvent = "correct";
 
     incrementQuestion();
     if (!dontRefreshButtons) {
@@ -888,7 +1192,7 @@ function foul(quizzerID) {
     if (currentRoundState[numbers.teamPropertyName].fouls >= 2) {
 
         currentRoundState[numbers.teamPropertyName].score -= 10;
-        
+
         bannerNotificationManager.showMessage("Foul Deduction", "-10 Points");
 
     }
@@ -897,7 +1201,7 @@ function foul(quizzerID) {
     if (get("fouls") == 3) {
 
         set("enabled", false);
-        
+
         bannerNotificationManager.showMessage("Foul Out", "3 Fouls");
 
     }
@@ -914,7 +1218,7 @@ function teamFoul(team) {
     if (currentRoundState[team].fouls >= 2) {
 
         currentRoundState[team].score -= 10;
-        
+
         bannerNotificationManager.showMessage("Foul Deduction", "-10 Points");
 
     }
@@ -937,6 +1241,7 @@ function challenge(teamNumber) {
     if (challengeErroneousInformation) {
 
         currentRoundState["team" + teamNumber].score -= 10;
+        bannerNotificationManager.showMessage("Erroneous Challenge", "-10 Points");
 
     }
 
@@ -944,6 +1249,7 @@ function challenge(teamNumber) {
     if (rebuttalErroneousInformation) {
 
         currentRoundState["team" + ((teamNumber == 1) ? 2 : 1)].score -= 10;
+        bannerNotificationManager.showMessage("Erroneous Rebuttal", "-10 Points");
 
     }
 
@@ -957,6 +1263,37 @@ function appeal(teamNumber) {
     currentRoundState = previousRoundState;
     previousRoundState = null;
 
+    scoresheetData.questions.pop();
+
+    // Re-enable UI buttons that may have been disabled if the round had ended
+    var team1Buttons = document.querySelectorAll(".overviewContainer .team1 .actionsContainer div");
+    var team2Buttons = document.querySelectorAll(".overviewContainer .team2 .actionsContainer div");
+    for (var i = 0; i < 4; i++) {
+        team1Buttons[i].classList.remove("disabled");
+        team2Buttons[i].classList.remove("disabled");
+    }
+    
+    team1Buttons[0].onclick = function () {
+        showSelectionScreen("jump", 1);
+    }
+    team1Buttons[1].onclick = showNoJumpPrompt;
+    team1Buttons[2].onclick = function () {
+        showSelectionScreen("foul", 1);
+    }
+    
+    team2Buttons[0].onclick = function () {
+        showSelectionScreen("jump", 2);
+    }
+    team2Buttons[1].onclick = showNoJumpPrompt;
+    team2Buttons[2].onclick = function () {
+        showSelectionScreen("foul", 2);
+    }
+    
+    document.querySelector(".overviewContainer .team1 .quizzerCardsContainer").style.pointerEvents = "auto";
+    document.querySelector(".overviewContainer .team2 .quizzerCardsContainer").style.pointerEvents = "auto";
+    
+    document.querySelector(".overviewContainer .screenTitle").onclick = showNoJumpPrompt;
+    
     refreshChallengeAndAppealButtons("disable");
 
     redrawScoreboard();
@@ -1093,6 +1430,24 @@ const bannerNotificationManager = {
 
     }
 
+}
+
+function printScoresheet() {
+    
+    var scoresheetWrapper = document.querySelector(".scoresheetContainer .scoresheetWrapper");
+    
+    if (window.innerWidth < window.innerHeight) {
+        
+        scoresheetWrapper.style.transform = "translate(-50%, -50%) rotate(90deg) scale(0.7)";
+        
+    } else {
+        
+        scoresheetWrapper.style.transform = "translate(-50%, -50%)";
+        
+    }
+    
+    window.print();
+    
 }
 
 // Populate all the quizzer cards on the selection screen
@@ -1235,6 +1590,7 @@ window.addEventListener("load", function () {
     var recalledRoundState = localStorage.getItem("currentRoundState");
     var recalledPreviousRoundState = localStorage.getItem("previousRoundState");
     var recalledChallengeAction = localStorage.getItem("challengeAction");
+    var recalledScoresheetData = localStorage.getItem("scoresheetData");
 
     if (
         (recalledPreviousRoundState ||
@@ -1245,6 +1601,12 @@ window.addEventListener("load", function () {
         previousRoundState = JSON.parse(recalledPreviousRoundState);
         challengeAction = JSON.parse(recalledChallengeAction);
         refreshChallengeAndAppealButtons("enable");
+    }
+
+    if (recalledScoresheetData) {
+
+        scoresheetData = JSON.parse(recalledScoresheetData);
+
     }
 
     if (recalledRoundState) {
@@ -1312,7 +1674,7 @@ window.addEventListener("load", function () {
 });
 
 // Register Service Worker
-if ('serviceWorker' in navigator) {
+/*if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('serviceWorker.js')
         .then(function (registration) {
             console.log('Registration successful, scope is:', registration.scope);
@@ -1320,4 +1682,4 @@ if ('serviceWorker' in navigator) {
         .catch(function (error) {
             console.log('Service worker registration failed, error:', error);
         });
-}
+}*/

@@ -248,3 +248,22 @@
     }
     
 }
+
+@media print {
+    
+    .welcomeScreensContainer,
+    .welcomeScreensOverlay,
+    .mainContainer {
+        
+        display: none;
+        
+    }
+    
+    .scoresheetContainer {
+        
+        display: block;
+        background-color: white;
+        
+    }
+    
+}
