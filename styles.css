@@ -584,7 +584,7 @@ button.fullWidthButton.hidden {
 
     position: fixed;
     margin: 0;
-    top: 10px;
+    top: 15px;
     right: 25px;
 
 }
@@ -724,7 +724,6 @@ button.fullWidthButton.hidden {
 
 .selectionScreen {
 
-    transform: none;
     box-shadow: 0 0 10px var(--primary-shadow-color);
     transition: transform 0.5s ease;
     z-index: 2;
@@ -732,12 +731,15 @@ button.fullWidthButton.hidden {
     width: 100vw;
     height: 100vh;
     position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 
 }
 
 .selectionScreen.hidden {
 
-    transform: translateX(calc(100% + 10px));
+    transform: translate(calc(100% + 10px), -50%);
     display: block !important;
 
 }
@@ -1118,5 +1120,23 @@ td:last-child {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    
+}
+
+.selectionScreenOverlay {
+    
+    opacity: 0.2;
+    background-color: var(--overlay-color);
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    transition: opacity 0.3s ease;
+    
+}
+
+.selectionScreenOverlay.transparent {
+    
+    opacity: 0;
     
 }

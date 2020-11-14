@@ -115,6 +115,11 @@ function showSelectionScreen(mode, teamNumber) {
     }
 
     document.querySelector(".team" + teamNumber + "SelectionScreen").classList.remove("hidden");
+    
+    document.querySelector(".selectionScreenOverlay").classList.remove("hidden");
+    requestAnimationFrame(function () {
+        document.querySelector(".selectionScreenOverlay").classList.remove("transparent");
+    });
 
 }
 
@@ -123,6 +128,11 @@ function hideSelectionScreen(teamNumber) {
     selectMode = null;
 
     document.querySelector(".team" + teamNumber + "SelectionScreen").classList.add("hidden");
+    
+    document.querySelector(".selectionScreenOverlay").classList.add("transparent");
+    setTimeout(function () {
+        document.querySelector(".selectionScreenOverlay").classList.add("hidden");
+    }, 300);
 
 }
 
