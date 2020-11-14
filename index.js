@@ -1434,6 +1434,12 @@ const bannerNotificationManager = {
 
 function printScoresheet() {
     
+    window.print();
+    
+}
+
+function prepareScoresheetForPrint () {
+    
     var scoresheetWrapper = document.querySelector(".scoresheetContainer .scoresheetWrapper");
     
     if (window.innerWidth < window.innerHeight) {
@@ -1446,9 +1452,9 @@ function printScoresheet() {
         
     }
     
-    window.print();
-    
 }
+
+window.addEventListener("beforeprint", prepareScoresheetForPrint)
 
 // Populate all the quizzer cards on the selection screen
 for (var i = 0; i < 10; i++) {
