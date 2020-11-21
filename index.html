@@ -103,12 +103,21 @@
                 <input class="quizzerNameInput" name="quizzer9" type="text" placeholder="Quizzer 4">
                 <input class="quizzerNameInput" name="quizzer10" type="text" placeholder="Quizzer 5">
 
-                <div class="useTeamColorsCheckbox checked">
+                <div class="useTeamColorsCheckbox checkboxContainer checked">
                     <div class="checkbox">
                         <div></div>
                     </div>
                     <p>Use colors for teams</p>
                 </div>
+                
+                <div class="allowFivePersonQuizzingCheckbox checkboxContainer">
+                    <div class="checkbox">
+                        <div></div>
+                    </div>
+                    <p>Allow five seated quizzers</p>
+                </div>
+                <p class="checkboxDescription">Disables substitutions and allows all five quizzers on each team to jump at once.</p>
+                
             </form>
 
             <button class="fullWidthButton hidden" onclick="finishSetup()">Done</button>
@@ -118,13 +127,13 @@
     </div>
 
     <div class="welcomeScreensOverlay"></div>
+    
+    <div class="bannerNotification hidden">
+        <h2 class="title">Title</h2>
+        <p class="subtitle">Subtitle</p>
+    </div>
 
     <div class="mainContainer">
-
-        <div class="bannerNotification hidden">
-            <h2 class="title">Title</h2>
-            <p class="subtitle">Subtitle</p>
-        </div>
 
         <div class="overviewContainer">
 
@@ -155,30 +164,34 @@
                 <p class="teamName">Team 1</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(1)">0</h1>
                 <div class="teamStatusContainer"></div>
+                
+                <div class="moreOptionsButton" onclick="showTeamOptionsMenu(1)">
+                    <picture>
+                        <source srcset="OptionsIconDark.svg" media="(prefers-color-scheme: dark)">
+                        <img src="OptionsIcon.svg">
+                    </picture>
+                </div>
 
                 <div class="quizzerCardsContainer"></div>
 
                 <div class="actionsContainer">
                     <div onclick="showSelectionScreen('jump', 1)">
-                        <img src="">
                         <p>Jump</p>
                     </div>
                     <div onclick="showNoJumpPrompt()">
-                        <img src="">
                         <p>No Jump</p>
                     </div>
                     <div onclick="showSelectionScreen('foul', 1)">
-                        <img src="">
                         <p>Foul</p>
                     </div>
+<!--
                     <div class="disabled">
-                        <img src="">
                         <p>Challenge</p>
                     </div>
                     <div class="disabled">
-                        <img src="">
                         <p>Appeal</p>
                     </div>
+-->
                 </div>
             </div>
 
@@ -186,33 +199,55 @@
                 <p class="teamName">Team 2</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(2)">0</h1>
                 <div class="teamStatusContainer"></div>
+                
+                <div class="moreOptionsButton" onclick="showTeamOptionsMenu(2)">
+                    <picture>
+                        <source srcset="OptionsIconDark.svg" media="(prefers-color-scheme: dark)">
+                        <img src="OptionsIcon.svg">
+                    </picture>
+                </div>
 
                 <div class="quizzerCardsContainer"></div>
 
                 <div class="actionsContainer">
                     <div onclick="showSelectionScreen('jump', 2)">
-                        <img src="">
                         <p>Jump</p>
                     </div>
                     <div onclick="showNoJumpPrompt()">
-                        <img src="">
                         <p>No Jump</p>
                     </div>
                     <div onclick="showSelectionScreen('foul', 2)">
-                        <img src="">
                         <p>Foul</p>
                     </div>
+<!--
                     <div class="disabled">
-                        <img src="">
                         <p>Challenge</p>
                     </div>
                     <div class="disabled">
-                        <img src="">
                         <p>Appeal</p>
                     </div>
+-->
                 </div>
             </div>
 
+        </div>
+        
+        <div class="optionsMenu hidden">
+           
+            <div>
+                <p>Substitution</p>
+            </div>
+            <div class="disabled">
+                <p>Challenge</p>
+            </div>
+            <div class="disabled">
+                <p>Appeal</p>
+            </div>
+            
+            <div class="cancelButton" onclick="hideTeamOptionsMenu()">
+                <p>Cancel</p>
+            </div>
+            
         </div>
         
         <div class="selectionScreenOverlay hidden transparent"></div>
@@ -251,13 +286,13 @@
             <h2>Subtitle</h2>
             <h1>Title</h1>
             <p></p>
-            <div class="erroneousInformationCheckbox challenge">
+            <div class="erroneousInformationCheckbox checkboxContainer challenge">
                 <div class="checkbox">
                     <div></div>
                 </div>
                 <p>Erroneous Information in Challenge</p>
             </div>
-            <div class="erroneousInformationCheckbox rebuttal">
+            <div class="erroneousInformationCheckbox checkboxContainer rebuttal">
                 <div class="checkbox">
                     <div></div>
                 </div>

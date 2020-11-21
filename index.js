@@ -9,6 +9,7 @@ var currentRoundState = {
         errors: 0,
         uniqueJumps: 0,
         overturnedChallenges: 0,
+        seatOrder: [1, 2, 3, 4, 5]
     },
     team2: {
         name: null,
@@ -18,8 +19,11 @@ var currentRoundState = {
         errors: 0,
         uniqueJumps: 0,
         overturnedChallenges: 0,
+        seatOrder: [1, 2, 3, 4, 5]
     },
     useTeamColors: true,
+    allowFiveSeatedQuizzers: false,
+    challengeAndAppealEnabled: false,
 
 };
 var previousRoundState = null;
@@ -99,23 +103,46 @@ function hideWebClipPromptScreen() {
 function showSelectionScreen(mode, teamNumber) {
 
     selectMode = mode;
+    
+    var otherButton = document.querySelector(".team" + teamNumber + "SelectionScreen .miscellaneousCard");
+    var otherButtonLabel = document.querySelector(".team" + teamNumber + "SelectionScreen .miscellaneousCard p.cardLabel");
+    
+    var subbedOutQuizzerCard = document.querySelector(".team" + teamNumber + "SelectionScreen .quizzerCard:last-child");
+    
+    otherButton.classList.remove("inactive");
+    
+    if (!currentRoundState.allowFiveSeatedQuizzers) {
+        subbedOutQuizzerCard.classList.add("hidden");
+    }
 
     if (mode === "jump") {
 
-        document.querySelector(".team" + teamNumber + "SelectionScreen .miscellaneousCard p.cardLabel").textContent = "No Jump";
+        otherButtonLabel.textContent = "No Jump";
         document.querySelector(".team" + teamNumber + "SelectionScreen p.screenTitle").textContent = "Jump";
 
     } else if (mode === "foul") {
 
-        document.querySelector(".team" + teamNumber + "SelectionScreen .miscellaneousCard p.cardLabel").textContent = "Team Foul";
+        otherButtonLabel.textContent = "Team Foul";
         document.querySelector(".team" + teamNumber + "SelectionScreen p.screenTitle").textContent = "Foul";
+        
+        // Show subbed out quizzer
+        subbedOutQuizzerCard.classList.remove("hidden");
+
+    } else if (mode === "substitution") {
+
+        var subbedOutQuizzerNumber = currentRoundState["team" + teamNumber].seatOrder[4];
+        
+        otherButtonLabel.textContent = currentRoundState["team" + teamNumber]["quizzer" + subbedOutQuizzerNumber].name + " (Subbed out)";
+        otherButton.classList.add("inactive");
+        
+        document.querySelector(".team" + teamNumber + "SelectionScreen p.screenTitle").textContent = "Substitution";
 
     } else {
         return;
     }
 
     document.querySelector(".team" + teamNumber + "SelectionScreen").classList.remove("hidden");
-    
+
     document.querySelector(".selectionScreenOverlay").classList.remove("hidden");
     requestAnimationFrame(function () {
         document.querySelector(".selectionScreenOverlay").classList.remove("transparent");
@@ -128,7 +155,7 @@ function hideSelectionScreen(teamNumber) {
     selectMode = null;
 
     document.querySelector(".team" + teamNumber + "SelectionScreen").classList.add("hidden");
-    
+
     document.querySelector(".selectionScreenOverlay").classList.add("transparent");
     setTimeout(function () {
         document.querySelector(".selectionScreenOverlay").classList.add("hidden");
@@ -361,10 +388,17 @@ function finishSetup() {
     // If the user hasn't entered enough information, don't let them continue.
     if (
         !teamInputs[0].value ||
-        !teamInputs[1].value ||
+        !teamInputs[1].value
+    ) {
+        bannerNotificationManager.showMessage("Can't Start Round", "Each team must have a name");
+        return;
+    }
+    
+    if (
         !team1QuizzerInputsHaveValue ||
         !team2QuizzerInputsHaveValue
     ) {
+        bannerNotificationManager.showMessage("Can't Start Round", "Each team must have quizzers");
         return;
     }
 
@@ -375,6 +409,7 @@ function finishSetup() {
     currentRoundState.team2.color = teamColorInputs[1].value;
 
     currentRoundState.useTeamColors = document.querySelector(".setupContainer .useTeamColorsCheckbox").classList.contains("checked");
+    currentRoundState.allowFiveSeatedQuizzers = document.querySelector(".setupContainer .allowFivePersonQuizzingCheckbox").classList.contains("checked");
 
     for (var i = 0; i < quizzerInputs.length; i++) {
 
@@ -614,7 +649,7 @@ function redrawScoreboard() {
                 team2Buttons[i].classList.add("disabled");
                 team2Buttons[i].onclick = null;
             }
-            
+
             document.querySelector(".overviewContainer .team1 .quizzerCardsContainer").style.pointerEvents = "none";
             document.querySelector(".overviewContainer .team2 .quizzerCardsContainer").style.pointerEvents = "none";
 
@@ -636,7 +671,7 @@ function redrawScoreboard() {
                 team2Buttons[i].classList.add("disabled");
                 team2Buttons[i].onclick = null;
             }
-            
+
             document.querySelector(".overviewContainer .team1 .quizzerCardsContainer").style.pointerEvents = "none";
             document.querySelector(".overviewContainer .team2 .quizzerCardsContainer").style.pointerEvents = "none";
 
@@ -648,8 +683,15 @@ function redrawScoreboard() {
         }
 
     }
+    
+    if (currentRoundState.allowFiveSeatedQuizzers) {
+
+        document.querySelector(".optionsMenu div:first-child").classList.add("hidden");
+    
+    }
 
     scoresheet.redraw();
+    redrawSeatOrder();
 
     // Save states and challenge action to localStorage
     localStorage.setItem("currentRoundState", JSON.stringify(currentRoundState));
@@ -657,6 +699,100 @@ function redrawScoreboard() {
     localStorage.setItem("challengeAction", JSON.stringify(challengeAction));
     localStorage.setItem("scoresheetData", JSON.stringify(scoresheetData));
 
+}
+
+function redrawSeatOrder() {
+    
+    // Redraw selection screen cards
+    
+    var team1QuizzerSelectionCards = document.querySelectorAll(".team1SelectionScreen .quizzerCard");
+    var team1QuizzerSelectionCardSeatLabels = document.querySelectorAll(".team1SelectionScreen .quizzerCard .cardSeatNumberLabel");
+    var team1QuizzerSelectionCardLabels = document.querySelectorAll(".team1SelectionScreen .quizzerCard .cardLabel");
+    
+    for (var i = 0; i < 5; i++) {
+        
+        var currentQuizzerNumber = currentRoundState.team1.seatOrder[i];
+        
+        //team1QuizzerSelectionCardSeatLabels[i].textContent = currentQuizzerNumber;
+        team1QuizzerSelectionCardLabels[i + 1].textContent = currentRoundState.team1["quizzer" + currentQuizzerNumber].name;
+        (function (currentQuizzerNumber) {
+            team1QuizzerSelectionCards[i + 1].onclick = function () {
+                selectedQuizzer(currentQuizzerNumber);
+            }
+        })(currentQuizzerNumber)
+        
+    }
+    
+    var team2QuizzerSelectionCards = document.querySelectorAll(".team2SelectionScreen .quizzerCard");
+    var team2QuizzerSelectionCardSeatLabels = document.querySelectorAll(".team2SelectionScreen .quizzerCard .cardSeatNumberLabel");
+    var team2QuizzerSelectionCardLabels = document.querySelectorAll(".team2SelectionScreen .quizzerCard .cardLabel");
+    
+    for (var i = 0; i < 5; i++) {
+        
+        var currentQuizzerNumber = currentRoundState.team2.seatOrder[i];
+        
+        //team2QuizzerSelectionCardSeatLabels[i].textContent = currentQuizzerNumber;
+        team2QuizzerSelectionCardLabels[i + 1].textContent = currentRoundState.team2["quizzer" + currentQuizzerNumber].name;
+        (function (currentQuizzerNumber) {
+            team2QuizzerSelectionCards[i + 1].onclick = function () {
+                selectedQuizzer(currentQuizzerNumber + 5);
+            }
+        })(currentQuizzerNumber)
+        
+    }
+    
+    // Redraw scoreboard quizzer cards (for desktop)
+    
+    var team1OverviewQuizzerCards = document.querySelectorAll(".overviewContainer .team1 .quizzerCardsContainer .quizzerCard");
+    var team1OverviewQuizzerCardSeatLabels = document.querySelectorAll(".overviewContainer .team1 .quizzerCardsContainer .quizzerCard .cardSeatNumberLabel");
+    var team1OverviewQuizzerCardLabels = document.querySelectorAll(".overviewContainer .team1 .quizzerCardsContainer .quizzerCard .cardLabel");
+    var team1OverviewQuizzerCardScores = document.querySelectorAll(".overviewContainer .team1 .quizzerCardsContainer .quizzerCard .cardScore");
+    for (var i = 0; i < 5; i++) {
+        
+        var currentQuizzerNumber = currentRoundState.team1.seatOrder[i];
+        var currentQuizzerScore = currentRoundState.team1["quizzer" + currentQuizzerNumber].correct + "/" + currentRoundState.team1["quizzer" + currentQuizzerNumber].incorrect;
+        
+        //team1OverviewQuizzerCardSeatLabels[i].textContent = currentQuizzerNumber;
+        team1OverviewQuizzerCardLabels[i].textContent = currentRoundState.team1["quizzer" + currentQuizzerNumber].name;
+        team1OverviewQuizzerCardScores[i].textContent = currentQuizzerScore;
+        (function (currentQuizzerNumber) {
+            team1OverviewQuizzerCards[i].onclick = function () {
+                showConfirmationDialog("jump", 1, currentQuizzerNumber);
+            }
+        })(currentQuizzerNumber)
+        
+    }
+    // Disable seat 5
+    if (!currentRoundState.allowFiveSeatedQuizzers) {
+        team1OverviewQuizzerCards[4].classList.add("disabled");
+        team1OverviewQuizzerCards[4].style.pointerEvents = "none";
+    }
+    
+    var team2OverviewQuizzerCards = document.querySelectorAll(".overviewContainer .team2 .quizzerCardsContainer .quizzerCard");
+    var team2OverviewQuizzerCardSeatLabels = document.querySelectorAll(".overviewContainer .team2 .quizzerCardsContainer .quizzerCard .cardSeatNumberLabel");
+    var team2OverviewQuizzerCardLabels = document.querySelectorAll(".overviewContainer .team2 .quizzerCardsContainer .quizzerCard .cardLabel");
+    var team2OverviewQuizzerCardScores = document.querySelectorAll(".overviewContainer .team2 .quizzerCardsContainer .quizzerCard .cardScore");
+    for (var i = 0; i < 5; i++) {
+        
+        var currentQuizzerNumber = currentRoundState.team2.seatOrder[i];
+        var currentQuizzerScore = currentRoundState.team2["quizzer" + currentQuizzerNumber].correct + "/" + currentRoundState.team2["quizzer" + currentQuizzerNumber].incorrect;
+        
+        //team2OverviewQuizzerCardSeatLabels[i].textContent = currentQuizzerNumber;
+        team2OverviewQuizzerCardLabels[i].textContent = currentRoundState.team2["quizzer" + currentQuizzerNumber].name;
+        team2OverviewQuizzerCardScores[i].textContent = currentQuizzerScore;
+        (function (currentQuizzerNumber) {
+            team2OverviewQuizzerCards[i].onclick = function () {
+                showConfirmationDialog("jump", 2, (currentQuizzerNumber + 5));
+            }
+        })(currentQuizzerNumber)
+        
+    }
+    // Disable seat 5
+    if (!currentRoundState.allowFiveSeatedQuizzers) {
+        team2OverviewQuizzerCards[4].classList.add("disabled");
+        team2OverviewQuizzerCards[4].style.pointerEvents = "none";
+    }
+    
 }
 
 var scoresheet = {
@@ -874,6 +1010,8 @@ function selectedQuizzer(quizzerID) {
             showConfirmationDialog("jump", (quizzerID <= 5) ? 1 : 2, quizzerID);
         } else if (selectMode === "foul") {
             foul(quizzerID);
+        } else if (selectMode === "substitution") {
+            substitution(quizzerID);
         }
 
     }
@@ -1145,7 +1283,13 @@ function incorrect(quizzerID, dontRefreshButtons) {
 
 function getBonusQuizzer(quizzerID) {
 
-    return (quizzerID <= 5) ? (quizzerID + 5) : (quizzerID - 5)
+    var numbers = getNumbersFromID(quizzerID);
+    var bonusQuizzerSeatIndex = currentRoundState[numbers.teamPropertyName].seatOrder.indexOf(numbers.quizzerNumber);
+    
+    var oppositeTeamNumber = (numbers.teamNumber == 1) ? 2 : 1;
+    var bonusQuizzerNumber = currentRoundState["team" + oppositeTeamNumber].seatOrder[bonusQuizzerSeatIndex];
+    var bonusQuizzerID = (oppositeTeamNumber == 1) ? bonusQuizzerNumber : (bonusQuizzerNumber + 5);
+    return bonusQuizzerID;
 
 }
 
@@ -1278,11 +1422,11 @@ function appeal(teamNumber) {
     // Re-enable UI buttons that may have been disabled if the round had ended
     var team1Buttons = document.querySelectorAll(".overviewContainer .team1 .actionsContainer div");
     var team2Buttons = document.querySelectorAll(".overviewContainer .team2 .actionsContainer div");
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < team1Buttons.length; i++) {
         team1Buttons[i].classList.remove("disabled");
         team2Buttons[i].classList.remove("disabled");
     }
-    
+
     team1Buttons[0].onclick = function () {
         showSelectionScreen("jump", 1);
     }
@@ -1290,7 +1434,7 @@ function appeal(teamNumber) {
     team1Buttons[2].onclick = function () {
         showSelectionScreen("foul", 1);
     }
-    
+
     team2Buttons[0].onclick = function () {
         showSelectionScreen("jump", 2);
     }
@@ -1298,60 +1442,41 @@ function appeal(teamNumber) {
     team2Buttons[2].onclick = function () {
         showSelectionScreen("foul", 2);
     }
-    
+
     document.querySelector(".overviewContainer .team1 .quizzerCardsContainer").style.pointerEvents = "auto";
     document.querySelector(".overviewContainer .team2 .quizzerCardsContainer").style.pointerEvents = "auto";
-    
+
     document.querySelector(".overviewContainer .screenTitle").onclick = showNoJumpPrompt;
-    
+
     refreshChallengeAndAppealButtons("disable");
 
     redrawScoreboard();
 
 }
 
+function substitution(quizzerID) {
+    
+    var numbers = getNumbersFromID(quizzerID);
+    var teamObject = currentRoundState[numbers.teamPropertyName];
+    
+    var selectedQuizzerIndex = teamObject.seatOrder.indexOf(numbers.quizzerNumber);
+    var temp = teamObject.seatOrder[selectedQuizzerIndex];
+    teamObject.seatOrder[selectedQuizzerIndex] = teamObject.seatOrder[4];
+    teamObject.seatOrder[4] = temp;
+    
+    redrawSeatOrder();
+    localStorage.setItem("currentRoundState", JSON.stringify(currentRoundState));
+    
+}
+
 function refreshChallengeAndAppealButtons(toggleTo) {
 
     function enableButtons() {
-        var team1Challenge = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)");
-        var team1Appeal = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(5)");
-        var team2Challenge = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(4)");
-        var team2Appeal = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(5)");
-
-        team1Challenge.classList.remove("disabled");
-        team1Appeal.classList.remove("disabled");
-        team2Challenge.classList.remove("disabled");
-        team2Appeal.classList.remove("disabled");
-
-        team1Challenge.onclick = function () {
-            showConfirmationDialog("challenge", 1);
-        };
-        team1Appeal.onclick = function () {
-            showConfirmationDialog("appeal", 1);
-        };
-        team2Challenge.onclick = function () {
-            showConfirmationDialog("challenge", 2);
-        };
-        team2Appeal.onclick = function () {
-            showConfirmationDialog("appeal", 2);
-        };
+        currentRoundState.challengeAndAppealEnabled = true;
     }
 
     function disableButtons() {
-        var team1Challenge = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)");
-        var team1Appeal = document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(5)");
-        var team2Challenge = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(4)");
-        var team2Appeal = document.querySelector(".overviewContainer .team2 div.actionsContainer div:nth-child(5)");
-
-        team1Challenge.classList.add("disabled");
-        team1Appeal.classList.add("disabled");
-        team2Challenge.classList.add("disabled");
-        team2Appeal.classList.add("disabled");
-
-        team1Challenge.onclick = null;
-        team1Appeal.onclick = null;
-        team2Challenge.onclick = null;
-        team2Appeal.onclick = null;
+        currentRoundState.challengeAndAppealEnabled = false;
     }
 
     if (toggleTo === "enable") {
@@ -1360,6 +1485,54 @@ function refreshChallengeAndAppealButtons(toggleTo) {
         disableButtons();
     } else if (document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)").classList.contains("disabled")) {
         enableButtons();
+    }
+
+}
+
+function showTeamOptionsMenu(teamNumber) {
+
+    var optionsMenu = document.querySelector(".optionsMenu");
+
+    optionsMenu.children[0].onclick = function () {
+        hideTeamOptionsMenu();
+        showSelectionScreen("substitution", teamNumber);
+    };
+    
+    if (currentRoundState.challengeAndAppealEnabled) {
+        optionsMenu.children[1].onclick = function () {
+            hideTeamOptionsMenu(true);
+            showConfirmationDialog("challenge", teamNumber);
+        };
+        optionsMenu.children[2].onclick = function () {
+            hideTeamOptionsMenu(true);
+            showConfirmationDialog("appeal", teamNumber);
+        };
+        optionsMenu.children[1].classList.remove("disabled");
+        optionsMenu.children[2].classList.remove("disabled");
+    } else {
+        optionsMenu.children[1].onclick = null;
+        optionsMenu.children[2].onclick = null;
+        optionsMenu.children[1].classList.add("disabled");
+        optionsMenu.children[2].classList.add("disabled");
+    }
+
+    optionsMenu.classList.remove("hidden");
+    document.querySelector(".overlay").style.display = "block";
+    requestAnimationFrame(function () {
+        document.querySelector(".overlay").style.opacity = 0.25;
+    });
+
+}
+
+function hideTeamOptionsMenu(preserveOverlay) {
+
+    document.querySelector(".optionsMenu").classList.add("hidden");
+
+    if (!preserveOverlay) {
+        document.querySelector(".overlay").style.opacity = 0;
+        setTimeout(function () {
+            document.querySelector(".overlay").style.display = "none";
+        }, 200);
     }
 
 }
@@ -1443,25 +1616,25 @@ const bannerNotificationManager = {
 }
 
 function printScoresheet() {
-    
+
     window.print();
-    
+
 }
 
-function prepareScoresheetForPrint () {
-    
+function prepareScoresheetForPrint() {
+
     var scoresheetWrapper = document.querySelector(".scoresheetContainer .scoresheetWrapper");
-    
+
     if (window.innerWidth < window.innerHeight) {
-        
+
         scoresheetWrapper.style.transform = "translate(-50%, -50%) rotate(90deg) scale(0.7)";
-        
+
     } else {
-        
+
         scoresheetWrapper.style.transform = "translate(-50%, -50%)";
-        
+
     }
-    
+
 }
 
 window.addEventListener("beforeprint", prepareScoresheetForPrint)
@@ -1679,6 +1852,11 @@ window.addEventListener("load", function () {
     var useTeamColorsCheckbox = document.querySelector(".setupContainer .useTeamColorsCheckbox");
     useTeamColorsCheckbox.addEventListener("click", function () {
         useTeamColorsCheckbox.classList.toggle("checked");
+    });
+    
+    var allowFivePersonQuizzingCheckbox = document.querySelector(".setupContainer .allowFivePersonQuizzingCheckbox");
+    allowFivePersonQuizzingCheckbox.addEventListener("click", function () {
+        allowFivePersonQuizzingCheckbox.classList.toggle("checked");
     });
 
     // Enable :active CSS on mobile Safari
