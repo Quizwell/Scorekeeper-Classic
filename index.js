@@ -126,7 +126,9 @@ function showSelectionScreen(mode, teamNumber) {
         document.querySelector(".team" + teamNumber + "SelectionScreen p.screenTitle").textContent = "Foul";
 
         // Show subbed out quizzer
-        subbedOutQuizzerCard.classList.remove("hidden");
+        if (currentRoundState["team" + teamNumber].quizzer5.name) {
+            subbedOutQuizzerCard.classList.remove("hidden");
+        }
 
     } else if (mode === "substitution") {
 
@@ -1544,6 +1546,12 @@ function refreshChallengeAndAppealButtons(toggleTo) {
 }
 
 function showTeamOptionsMenu(teamNumber) {
+    
+    if (currentRoundState["team" + teamNumber].quizzer5.name) {
+        document.querySelector(".optionsMenu div:nth-child(2)").classList.remove("hidden");
+    } else {
+        document.querySelector(".optionsMenu div:nth-child(2)").classList.add("hidden");
+    }
 
     var optionsMenu = document.querySelector(".optionsMenu");
 
