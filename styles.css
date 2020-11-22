@@ -846,7 +846,7 @@ button.fullWidthButton.hidden {
 
 }
 
-.printButton {
+.exportButton {
 
     position: fixed;
     top: 10px;
@@ -862,13 +862,13 @@ button.fullWidthButton.hidden {
 
 }
 
-.printButton:active {
+.exportButton:active {
 
     opacity: 0.5;
 
 }
 
-.printButton img {
+.exportButton img {
 
     margin: 0;
     position: absolute;
@@ -1051,13 +1051,15 @@ button.fullWidthButton.hidden {
 
 .scoresheetContainer {
     
-    display: none;
     width: 100%;
     height: 100%;
     position: fixed;
     top: 0;
     left: 0;
     padding: 25px;
+    background-color: white;
+    color: black;
+    z-index: 100;
     
 }
 
@@ -1133,6 +1135,7 @@ td:last-child {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    padding: 15px;
     
 }
 
@@ -1180,7 +1183,7 @@ td:last-child {
     
 }
 
-.optionsMenu {
+.optionsMenu, .exportMenu {
     
     position: fixed;
     left: 50%;
@@ -1188,8 +1191,7 @@ td:last-child {
     bottom: calc(env(safe-area-inset-bottom) + 15px);
     transform: translate(-50%, 0);
     background-color: var(--content-background-color);
-    width: 75%;
-    max-width: 400px;
+    width: calc(100% - 60px);
     border-radius: 15px;
     box-shadow: 0 0 5px var(--primary-shadow-color);
     padding: 15px;
@@ -1199,7 +1201,14 @@ td:last-child {
     
 }
 
-.optionsMenu div {
+.optionsMenu .menuTitle, .exportMenu .menuTitle {
+    
+    margin: 0 0 12px 15px;
+    font-size: 18px;
+    
+}
+
+.optionsMenu div, .exportMenu div {
     
     height: 45px;
     background-color: var(--page-background-color);
@@ -1209,27 +1218,35 @@ td:last-child {
     
 }
 
-.optionsMenu div.disabled {
+.exportMenu div p span {
+    
+    color: var(--secondary-text-color);
+    margin-left: 5px;
+    
+}
+
+.optionsMenu div.disabled, .exportMenu div.disabled {
     
     opacity: 0.5;
     cursor: default;
     
 }
 
-.optionsMenu div.cancelButton {
+.optionsMenu div.cancelButton, .exportMenu div.cancelButton {
     
     margin-top: 20px;
     
 }
 
-.optionsMenu.hidden {
+.optionsMenu.hidden, .exportMenu.hidden {
     
     display: block !important;
     transform: translate(-50%, calc(100% + 15px));
+    transform: translate(-50%, calc(100% + 15px + env(safe-area-inset-bottom)));
     
 }
 
-.optionsMenu div p {
+.optionsMenu div p, .exportMenu div p {
     
     margin: 0 0 0 10px;
     vertical-align: center;

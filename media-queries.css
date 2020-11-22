@@ -265,6 +265,13 @@
 
     }
     
+    .optionsMenu, .exportMenu {
+        
+        width: 75%;
+        max-width: 400px;
+        
+    }
+    
 }
 
 @media print {
@@ -279,8 +286,7 @@
     
     .scoresheetContainer {
         
-        display: block;
-        background-color: white;
+        display: block !important;
         
     }
     

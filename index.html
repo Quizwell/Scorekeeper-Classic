@@ -23,6 +23,7 @@
         gtag('js', new Date());
 
         gtag('config', 'G-1MKJK2SJPC');
+
     </script>
 
     <meta name="apple-mobile-web-app-title" content="Scorekeeper">
@@ -109,7 +110,7 @@
                     </div>
                     <p>Use colors for teams</p>
                 </div>
-                
+
                 <div class="allowFivePersonQuizzingCheckbox checkboxContainer">
                     <div class="checkbox">
                         <div></div>
@@ -117,7 +118,7 @@
                     <p>Allow five seated quizzers</p>
                 </div>
                 <p class="checkboxDescription">Disables substitutions and allows all five quizzers on each team to jump at once.</p>
-                
+
             </form>
 
             <button class="fullWidthButton hidden" onclick="finishSetup()">Done</button>
@@ -127,7 +128,7 @@
     </div>
 
     <div class="welcomeScreensOverlay"></div>
-    
+
     <div class="bannerNotification hidden">
         <h2 class="title">Title</h2>
         <p class="subtitle">Subtitle</p>
@@ -144,10 +145,10 @@
                 </picture>
             </div>
 
-            <div class="printButton" onclick="printScoresheet()">
+            <div class="exportButton" onclick="showExportMenu()">
                 <picture>
-                    <source srcset="PrintIconDark.svg" media="(prefers-color-scheme: dark)">
-                    <img src="PrintIcon.svg">
+                    <source srcset="ExportIconDark.svg" media="(prefers-color-scheme: dark)">
+                    <img src="ExportIcon.svg">
                 </picture>
             </div>
 
@@ -164,7 +165,7 @@
                 <p class="teamName">Team 1</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(1)">0</h1>
                 <div class="teamStatusContainer"></div>
-                
+
                 <div class="moreOptionsButton" onclick="showTeamOptionsMenu(1)">
                     <picture>
                         <source srcset="OptionsIconDark.svg" media="(prefers-color-scheme: dark)">
@@ -184,7 +185,7 @@
                     <div onclick="showSelectionScreen('foul', 1)">
                         <p>Foul</p>
                     </div>
-<!--
+                    <!--
                     <div class="disabled">
                         <p>Challenge</p>
                     </div>
@@ -199,7 +200,7 @@
                 <p class="teamName">Team 2</p>
                 <h1 class="teamScore" onclick="showScoreAdjustment(2)">0</h1>
                 <div class="teamStatusContainer"></div>
-                
+
                 <div class="moreOptionsButton" onclick="showTeamOptionsMenu(2)">
                     <picture>
                         <source srcset="OptionsIconDark.svg" media="(prefers-color-scheme: dark)">
@@ -219,7 +220,7 @@
                     <div onclick="showSelectionScreen('foul', 2)">
                         <p>Foul</p>
                     </div>
-<!--
+                    <!--
                     <div class="disabled">
                         <p>Challenge</p>
                     </div>
@@ -231,9 +232,11 @@
             </div>
 
         </div>
-        
+
         <div class="optionsMenu hidden">
-           
+
+            <p class="menuTitle">Team Options</p>
+
             <div>
                 <p>Substitution</p>
             </div>
@@ -243,13 +246,33 @@
             <div class="disabled">
                 <p>Appeal</p>
             </div>
-            
+
             <div class="cancelButton" onclick="hideTeamOptionsMenu()">
                 <p>Cancel</p>
             </div>
-            
+
         </div>
-        
+
+        <div class="exportMenu hidden">
+
+            <p class="menuTitle">Export as:</p>
+
+            <div>
+                <p>PNG<span>(Default)</span></p>
+            </div>
+            <div>
+                <p>JPEG</p>
+            </div>
+            <div>
+                <p>CSV</p>
+            </div>
+
+            <div class="cancelButton" onclick="hideExportMenu()">
+                <p>Cancel</p>
+            </div>
+
+        </div>
+
         <div class="selectionScreenOverlay hidden transparent"></div>
 
         <div class="team1SelectionScreen selectionScreen hidden">
@@ -304,7 +327,7 @@
 
     </div>
 
-    <div class="scoresheetContainer">
+    <div class="scoresheetContainer hidden">
 
         <!--
         
@@ -691,6 +714,7 @@
 
     </div>
 
+    <script src="https://github.com/niklasvh/html2canvas/releases/download/v1.0.0-rc.7/html2canvas.min.js"></script>
     <script src="index.js"></script>
 
 </body>

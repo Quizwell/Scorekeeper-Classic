@@ -103,14 +103,14 @@ function hideWebClipPromptScreen() {
 function showSelectionScreen(mode, teamNumber) {
 
     selectMode = mode;
-    
+
     var otherButton = document.querySelector(".team" + teamNumber + "SelectionScreen .miscellaneousCard");
     var otherButtonLabel = document.querySelector(".team" + teamNumber + "SelectionScreen .miscellaneousCard p.cardLabel");
-    
+
     var subbedOutQuizzerCard = document.querySelector(".team" + teamNumber + "SelectionScreen .quizzerCard:last-child");
-    
+
     otherButton.classList.remove("inactive");
-    
+
     if (!currentRoundState.allowFiveSeatedQuizzers) {
         subbedOutQuizzerCard.classList.add("hidden");
     }
@@ -124,17 +124,17 @@ function showSelectionScreen(mode, teamNumber) {
 
         otherButtonLabel.textContent = "Team Foul";
         document.querySelector(".team" + teamNumber + "SelectionScreen p.screenTitle").textContent = "Foul";
-        
+
         // Show subbed out quizzer
         subbedOutQuizzerCard.classList.remove("hidden");
 
     } else if (mode === "substitution") {
 
         var subbedOutQuizzerNumber = currentRoundState["team" + teamNumber].seatOrder[4];
-        
+
         otherButtonLabel.textContent = currentRoundState["team" + teamNumber]["quizzer" + subbedOutQuizzerNumber].name + " (Subbed out)";
         otherButton.classList.add("inactive");
-        
+
         document.querySelector(".team" + teamNumber + "SelectionScreen p.screenTitle").textContent = "Substitution";
 
     } else {
@@ -393,7 +393,7 @@ function finishSetup() {
         bannerNotificationManager.showMessage("Can't Start Round", "Each team must have a name");
         return;
     }
-    
+
     if (
         !team1QuizzerInputsHaveValue ||
         !team2QuizzerInputsHaveValue
@@ -683,11 +683,11 @@ function redrawScoreboard() {
         }
 
     }
-    
+
     if (currentRoundState.allowFiveSeatedQuizzers) {
 
         document.querySelector(".optionsMenu div:first-child").classList.add("hidden");
-    
+
     }
 
     scoresheet.redraw();
@@ -702,17 +702,17 @@ function redrawScoreboard() {
 }
 
 function redrawSeatOrder() {
-    
+
     // Redraw selection screen cards
-    
+
     var team1QuizzerSelectionCards = document.querySelectorAll(".team1SelectionScreen .quizzerCard");
     var team1QuizzerSelectionCardSeatLabels = document.querySelectorAll(".team1SelectionScreen .quizzerCard .cardSeatNumberLabel");
     var team1QuizzerSelectionCardLabels = document.querySelectorAll(".team1SelectionScreen .quizzerCard .cardLabel");
-    
+
     for (var i = 0; i < 5; i++) {
-        
+
         var currentQuizzerNumber = currentRoundState.team1.seatOrder[i];
-        
+
         //team1QuizzerSelectionCardSeatLabels[i].textContent = currentQuizzerNumber;
         team1QuizzerSelectionCardLabels[i + 1].textContent = currentRoundState.team1["quizzer" + currentQuizzerNumber].name;
         (function (currentQuizzerNumber) {
@@ -720,17 +720,17 @@ function redrawSeatOrder() {
                 selectedQuizzer(currentQuizzerNumber);
             }
         })(currentQuizzerNumber)
-        
+
     }
-    
+
     var team2QuizzerSelectionCards = document.querySelectorAll(".team2SelectionScreen .quizzerCard");
     var team2QuizzerSelectionCardSeatLabels = document.querySelectorAll(".team2SelectionScreen .quizzerCard .cardSeatNumberLabel");
     var team2QuizzerSelectionCardLabels = document.querySelectorAll(".team2SelectionScreen .quizzerCard .cardLabel");
-    
+
     for (var i = 0; i < 5; i++) {
-        
+
         var currentQuizzerNumber = currentRoundState.team2.seatOrder[i];
-        
+
         //team2QuizzerSelectionCardSeatLabels[i].textContent = currentQuizzerNumber;
         team2QuizzerSelectionCardLabels[i + 1].textContent = currentRoundState.team2["quizzer" + currentQuizzerNumber].name;
         (function (currentQuizzerNumber) {
@@ -738,20 +738,20 @@ function redrawSeatOrder() {
                 selectedQuizzer(currentQuizzerNumber + 5);
             }
         })(currentQuizzerNumber)
-        
+
     }
-    
+
     // Redraw scoreboard quizzer cards (for desktop)
-    
+
     var team1OverviewQuizzerCards = document.querySelectorAll(".overviewContainer .team1 .quizzerCardsContainer .quizzerCard");
     var team1OverviewQuizzerCardSeatLabels = document.querySelectorAll(".overviewContainer .team1 .quizzerCardsContainer .quizzerCard .cardSeatNumberLabel");
     var team1OverviewQuizzerCardLabels = document.querySelectorAll(".overviewContainer .team1 .quizzerCardsContainer .quizzerCard .cardLabel");
     var team1OverviewQuizzerCardScores = document.querySelectorAll(".overviewContainer .team1 .quizzerCardsContainer .quizzerCard .cardScore");
     for (var i = 0; i < 5; i++) {
-        
+
         var currentQuizzerNumber = currentRoundState.team1.seatOrder[i];
         var currentQuizzerScore = currentRoundState.team1["quizzer" + currentQuizzerNumber].correct + "/" + currentRoundState.team1["quizzer" + currentQuizzerNumber].incorrect;
-        
+
         //team1OverviewQuizzerCardSeatLabels[i].textContent = currentQuizzerNumber;
         team1OverviewQuizzerCardLabels[i].textContent = currentRoundState.team1["quizzer" + currentQuizzerNumber].name;
         team1OverviewQuizzerCardScores[i].textContent = currentQuizzerScore;
@@ -760,23 +760,23 @@ function redrawSeatOrder() {
                 showConfirmationDialog("jump", 1, currentQuizzerNumber);
             }
         })(currentQuizzerNumber)
-        
+
     }
     // Disable seat 5
     if (!currentRoundState.allowFiveSeatedQuizzers) {
         team1OverviewQuizzerCards[4].classList.add("disabled");
         team1OverviewQuizzerCards[4].style.pointerEvents = "none";
     }
-    
+
     var team2OverviewQuizzerCards = document.querySelectorAll(".overviewContainer .team2 .quizzerCardsContainer .quizzerCard");
     var team2OverviewQuizzerCardSeatLabels = document.querySelectorAll(".overviewContainer .team2 .quizzerCardsContainer .quizzerCard .cardSeatNumberLabel");
     var team2OverviewQuizzerCardLabels = document.querySelectorAll(".overviewContainer .team2 .quizzerCardsContainer .quizzerCard .cardLabel");
     var team2OverviewQuizzerCardScores = document.querySelectorAll(".overviewContainer .team2 .quizzerCardsContainer .quizzerCard .cardScore");
     for (var i = 0; i < 5; i++) {
-        
+
         var currentQuizzerNumber = currentRoundState.team2.seatOrder[i];
         var currentQuizzerScore = currentRoundState.team2["quizzer" + currentQuizzerNumber].correct + "/" + currentRoundState.team2["quizzer" + currentQuizzerNumber].incorrect;
-        
+
         //team2OverviewQuizzerCardSeatLabels[i].textContent = currentQuizzerNumber;
         team2OverviewQuizzerCardLabels[i].textContent = currentRoundState.team2["quizzer" + currentQuizzerNumber].name;
         team2OverviewQuizzerCardScores[i].textContent = currentQuizzerScore;
@@ -785,14 +785,14 @@ function redrawSeatOrder() {
                 showConfirmationDialog("jump", 2, (currentQuizzerNumber + 5));
             }
         })(currentQuizzerNumber)
-        
+
     }
     // Disable seat 5
     if (!currentRoundState.allowFiveSeatedQuizzers) {
         team2OverviewQuizzerCards[4].classList.add("disabled");
         team2OverviewQuizzerCards[4].style.pointerEvents = "none";
     }
-    
+
 }
 
 var scoresheet = {
@@ -1285,7 +1285,7 @@ function getBonusQuizzer(quizzerID) {
 
     var numbers = getNumbersFromID(quizzerID);
     var bonusQuizzerSeatIndex = currentRoundState[numbers.teamPropertyName].seatOrder.indexOf(numbers.quizzerNumber);
-    
+
     var oppositeTeamNumber = (numbers.teamNumber == 1) ? 2 : 1;
     var bonusQuizzerNumber = currentRoundState["team" + oppositeTeamNumber].seatOrder[bonusQuizzerSeatIndex];
     var bonusQuizzerID = (oppositeTeamNumber == 1) ? bonusQuizzerNumber : (bonusQuizzerNumber + 5);
@@ -1455,18 +1455,18 @@ function appeal(teamNumber) {
 }
 
 function substitution(quizzerID) {
-    
+
     var numbers = getNumbersFromID(quizzerID);
     var teamObject = currentRoundState[numbers.teamPropertyName];
-    
+
     var selectedQuizzerIndex = teamObject.seatOrder.indexOf(numbers.quizzerNumber);
     var temp = teamObject.seatOrder[selectedQuizzerIndex];
     teamObject.seatOrder[selectedQuizzerIndex] = teamObject.seatOrder[4];
     teamObject.seatOrder[4] = temp;
-    
+
     redrawSeatOrder();
     localStorage.setItem("currentRoundState", JSON.stringify(currentRoundState));
-    
+
 }
 
 function refreshChallengeAndAppealButtons(toggleTo) {
@@ -1493,11 +1493,11 @@ function showTeamOptionsMenu(teamNumber) {
 
     var optionsMenu = document.querySelector(".optionsMenu");
 
-    optionsMenu.children[0].onclick = function () {
+    optionsMenu.children[1].onclick = function () {
         hideTeamOptionsMenu();
         showSelectionScreen("substitution", teamNumber);
     };
-    
+
     if (currentRoundState.challengeAndAppealEnabled) {
         optionsMenu.children[1].onclick = function () {
             hideTeamOptionsMenu(true);
@@ -1510,10 +1510,10 @@ function showTeamOptionsMenu(teamNumber) {
         optionsMenu.children[1].classList.remove("disabled");
         optionsMenu.children[2].classList.remove("disabled");
     } else {
-        optionsMenu.children[1].onclick = null;
         optionsMenu.children[2].onclick = null;
-        optionsMenu.children[1].classList.add("disabled");
+        optionsMenu.children[3].onclick = null;
         optionsMenu.children[2].classList.add("disabled");
+        optionsMenu.children[3].classList.add("disabled");
     }
 
     optionsMenu.classList.remove("hidden");
@@ -1535,6 +1535,77 @@ function hideTeamOptionsMenu(preserveOverlay) {
         }, 200);
     }
 
+}
+
+function showExportMenu(teamNumber) {
+
+    var exportMenu = document.querySelector(".exportMenu");
+
+    exportMenu.children[1].onclick = function () {
+        hideExportMenu(true);
+        exportScoresheet("PNG");
+    };
+
+    exportMenu.children[2].onclick = function () {
+        hideExportMenu(true);
+        exportScoresheet("JPEG");
+    };
+    
+    exportMenu.children[3].onclick = function () {
+        hideExportMenu();
+        exportScoresheet("CSV");
+    };
+
+    exportMenu.classList.remove("hidden");
+    document.querySelector(".overlay").style.display = "block";
+    requestAnimationFrame(function () {
+        document.querySelector(".overlay").style.opacity = 0.25;
+    });
+
+}
+
+function hideExportMenu(skipAnimation) {
+
+    if (!skipAnimation) {
+        document.querySelector(".exportMenu").classList.add("hidden");
+        document.querySelector(".overlay").style.opacity = 0;
+        setTimeout(function () {
+            document.querySelector(".overlay").style.display = "none";
+        }, 200);
+    } else {
+        document.querySelector(".overlay").style.display = "none";
+        document.querySelector(".overlay").style.opacity = 0;
+        document.querySelector(".exportMenu").classList.add("hidden");
+    }
+
+}
+
+function getScoresheetCSV() {
+    
+    var CSVString = (currentRoundState.team1.name + " vs " + currentRoundState.team2.name + "\n");
+    var scoresheetTable = document.querySelector(".scoresheetContainer .scoresheetWrapper table tbody");
+    
+    // Loop through each row of the scoresheet table
+    for (var r = 0; r < scoresheetTable.children.length; r++) {
+        
+        // Loop through each cell of each table row
+        for (var c = 0; c < scoresheetTable.children[r].children.length; c++) {
+            
+            var currentTableCell = scoresheetTable.children[r].children[c];
+            CSVString += currentTableCell.textContent.replace(/[\n\r]+|[\s]{2,}/g, ' ').trim();
+            if (c !== (scoresheetTable.children[r].children.length - 1)) {
+                CSVString += ",";
+            }
+            
+        }
+        CSVString += "\n";
+        
+    }
+    
+    CSVString += "Scoresheet generated by Scorekeeper (cadehunter.github.io/Scorekeeper)";
+    
+    return "data:text/csv;charset=utf-8," + encodeURI(CSVString);
+    
 }
 
 function getContrastingColor(hexCode) {
@@ -1615,9 +1686,60 @@ const bannerNotificationManager = {
 
 }
 
-function printScoresheet() {
+function exportScoresheet(exportType) {
+    
+    switch (exportType) {
+            
+        case "PNG":
+            document.querySelector(".scoresheetContainer").classList.remove("hidden");
 
-    window.print();
+            var scoresheetBoundingBox = document.querySelector(".scoresheetContainer .scoresheetWrapper").getBoundingClientRect();
+
+            html2canvas(document.querySelector(".scoresheetContainer .scoresheetWrapper"), {
+                width: scoresheetBoundingBox.width,
+                height: scoresheetBoundingBox.height
+            }).then(canvas => {
+                var img = canvas.toDataURL("image/png");
+
+                var link = document.createElement('a');
+                link.href = img.replace("image/png", "image/octet-stream");
+                link.download = "Scorekeeper Scoresheet - " + (currentRoundState.team1.name + " vs " + currentRoundState.team2.name) + ".png";
+                link.click();
+
+                document.querySelector(".scoresheetContainer").classList.add("hidden");
+
+            });
+            break;
+            
+        case "JPEG":
+            document.querySelector(".scoresheetContainer").classList.remove("hidden");
+
+            var scoresheetBoundingBox = document.querySelector(".scoresheetContainer .scoresheetWrapper").getBoundingClientRect();
+
+            html2canvas(document.querySelector(".scoresheetContainer .scoresheetWrapper"), {
+                width: scoresheetBoundingBox.width,
+                height: scoresheetBoundingBox.height
+            }).then(canvas => {
+                var img = canvas.toDataURL("image/jpeg");
+
+                var link = document.createElement('a');
+                link.href = img.replace("image/png", "image/octet-stream");
+                link.download = "Scorekeeper Scoresheet - " + (currentRoundState.team1.name + " vs " + currentRoundState.team2.name) + ".jpg";
+                link.click();
+
+                document.querySelector(".scoresheetContainer").classList.add("hidden");
+
+            });
+            break;
+            
+        case "CSV":
+            var link = document.createElement('a');
+            link.href = getScoresheetCSV();
+            link.download = "Scorekeeper Scoresheet - " + (currentRoundState.team1.name + " vs " + currentRoundState.team2.name) + ".csv";
+            link.click();
+            break;
+    }
+    
 
 }
 
@@ -1637,7 +1759,7 @@ function prepareScoresheetForPrint() {
 
 }
 
-window.addEventListener("beforeprint", prepareScoresheetForPrint)
+window.addEventListener("beforeprint", prepareScoresheetForPrint);
 
 // Populate all the quizzer cards on the selection screen
 for (var i = 0; i < 10; i++) {
@@ -1853,7 +1975,7 @@ window.addEventListener("load", function () {
     useTeamColorsCheckbox.addEventListener("click", function () {
         useTeamColorsCheckbox.classList.toggle("checked");
     });
-    
+
     var allowFivePersonQuizzingCheckbox = document.querySelector(".setupContainer .allowFivePersonQuizzingCheckbox");
     allowFivePersonQuizzingCheckbox.addEventListener("click", function () {
         allowFivePersonQuizzingCheckbox.classList.toggle("checked");
