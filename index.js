@@ -483,6 +483,60 @@ function finishSetup() {
 }
 
 function redrawScoreboard() {
+    
+    for (var i = 0; i < 5; i++) {
+        
+        var team1Quizzer = document.querySelector(".overviewContainer .team1 .quizzerCardsContainer .quizzer" + (i + 1) + "Card");
+        var team2Quizzer = document.querySelector(".overviewContainer .team2 .quizzerCardsContainer .quizzer" + (i + 6) + "Card");
+        
+        if (
+            team1Quizzer.classList.contains("hidden") &&
+            !team2Quizzer.classList.contains("hidden")
+        ) {
+            
+            team1Quizzer.classList.remove("hidden");
+            team1Quizzer.classList.add("invisible");
+            
+        } else if (
+            !team1Quizzer.classList.contains("hidden") &&
+            team2Quizzer.classList.contains("hidden")
+        ) {
+            
+            team2Quizzer.classList.remove("hidden");
+            team2Quizzer.classList.add("invisible");
+            
+        } else if (
+            team1Quizzer.classList.contains("hidden") && 
+            team2Quizzer.classList.contains("hidden")
+        ) {
+            
+            var futureQuizzersAvailable = false;
+            for (var ii = 0; ii < (5 - i); ii++) {
+                
+                var team1NextQuizzer = document.querySelector(".overviewContainer .team1 .quizzerCardsContainer .quizzer" + (i + ii + 1) + "Card");
+                var team2NextQuizzer = document.querySelector(".overviewContainer .team2 .quizzerCardsContainer .quizzer" + (i + ii + 6) + "Card");
+                
+                if (
+                    !team1NextQuizzer.classList.contains("hidden") ||
+                    !team2NextQuizzer.classList.contains("hidden")
+                ) {
+                    futureQuizzersAvailable = true;
+                }
+                
+            }
+            
+            if (futureQuizzersAvailable) {
+                
+                team1Quizzer.classList.remove("hidden");
+                team1Quizzer.classList.add("invisible");
+                team2Quizzer.classList.remove("hidden");
+                team2Quizzer.classList.add("invisible");
+                
+            }
+            
+        }
+        
+    }
 
     // Clear the team status containers
     var team1StatusContainer = document.querySelector(".overviewContainer .team1 .teamStatusContainer");

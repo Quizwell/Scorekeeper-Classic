@@ -176,6 +176,13 @@
         
     }
     
+    .overviewContainer .quizzerCardsContainer .quizzerCard.invisible {
+        
+        visibility: hidden;
+        pointer-events: none;
+        
+    }
+    
     .overviewContainer .quizzerCardsContainer .quizzerCard p {
         
         margin: 0;
