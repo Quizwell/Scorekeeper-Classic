@@ -13,6 +13,7 @@
     --input-border-color: #bbbbbb;
     --overlay-color: #000000;
 
+    --checkbox-tag-color: #66BC75;
     --theme-gradient: linear-gradient(70deg, #74BCBD 0%, #436F9E 20%, #836AC8 40%, #7D76D1 60%, #D88243 80%, #CF4F3D 100%);
 
 }
@@ -722,11 +723,10 @@ button.fullWidthButton.hidden {
 
 }
 
-.selectionScreen {
+.slideScreen {
 
     box-shadow: 0 0 10px var(--primary-shadow-color);
     transition: transform 0.5s ease;
-    z-index: 2;
     background-color: var(--page-background-color);
     width: 100vw;
     height: 100vh;
@@ -737,14 +737,26 @@ button.fullWidthButton.hidden {
 
 }
 
-.selectionScreen.hidden {
+.selectionScreen {
+    z-index: 3;
+}
+
+.questionTypeSelectionScreen {
+    z-index: 2;
+}
+
+.questionTypeOverviewScreen {
+    z-index: 3;
+}
+
+.slideScreen.hidden {
 
     transform: translate(calc(100% + 10px), -50%);
     display: block !important;
 
 }
 
-.selectionScreen button {
+.slideScreen button {
 
     position: fixed;
     top: 10px;
@@ -778,106 +790,51 @@ button.fullWidthButton.hidden {
 
 }
 
-.endRoundButton {
-
+.headerButtonsContainer {
+    
     position: fixed;
     top: 10px;
-    left: 25px;
+    left: 15px;
+    height: 25px;
+    
+}
+
+.headerButtonsContainer > div {
+
+    margin-left: 10px;
     height: 25px;
     width: 35px;
     border: none;
     background-color: var(--content-background-color);
     color: var(--primary-text-color);
     border-radius: 10px;
+    display: inline-block;
+    text-align: center;
 
     cursor: pointer;
 
 }
 
-.endRoundButton:active {
+.headerButtonsContainer > div:active {
 
     opacity: 0.5;
 
 }
 
-.endRoundButton img {
+.headerButtonsContainer > div img {
 
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin: 7px 0;
     width: 12px;
     height: 12px;
 
 }
 
-.bugReportButton {
-
-    position: fixed;
-    top: 10px;
-    left: 125px;
-    height: 25px;
-    width: 35px;
-    border: none;
-    background-color: var(--content-background-color);
-    color: var(--primary-text-color);
-    border-radius: 10px;
-
-    cursor: pointer;
-
-}
-
-.bugReportButton:active {
-
-    opacity: 0.5;
-
-}
-
-.bugReportButton img {
-
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 15px;
-    height: 15px;
-
-}
-
-.exportButton {
-
-    position: fixed;
-    top: 10px;
-    left: 75px;
-    height: 25px;
-    width: 35px;
-    border: none;
-    background-color: var(--content-background-color);
-    color: var(--primary-text-color);
-    border-radius: 10px;
-
-    cursor: pointer;
-
-}
-
-.exportButton:active {
-
-    opacity: 0.5;
-
-}
-
-.exportButton img {
-
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 15px;
-    height: 15px;
-
+.headerButtonsContainer .questionTypeTrackingButton img {
+    
+    margin: 1.25px 0;
+    width: 22px;
+    height: 22px;
+    
 }
 
 .mainContainer {
@@ -942,6 +899,18 @@ button.fullWidthButton.hidden {
     bottom: 7.5px;
     margin-left: 7.5px;
 
+}
+
+.checkboxContainer p span.tag {
+    
+    border-radius: 5px;
+    border: 1.5px solid var(--checkbox-tag-color);
+    color: var(--checkbox-tag-color);
+    padding: 2px;
+    margin-left: 5px;
+    font-size: 12px;
+    vertical-align: middle;
+    
 }
 
 .setupContainer .useTeamColorsCheckbox {
@@ -1258,5 +1227,181 @@ td:last-child {
     
     cursor: default;
     pointer-events: none;
+    
+}
+
+.questionTypeSelectionScreen .questionTypeCardsContainer {
+    
+    width: 100%;
+    margin-top: 35px;
+    
+}
+
+.questionTypeSelectionScreen .questionTypeCard {
+    
+    width: calc(50% - 30px);
+    min-height: 120px;
+    height: fit-content;
+    background-color: var(--content-background-color);
+    border-radius: 10px;
+    overflow: auto;
+    display: inline-block;
+    cursor: pointer;
+    
+    transition: background-color 0.1s ease;
+    
+}
+
+.questionTypeSelectionScreen .questionTypeCard.disabled {
+    
+    opacity: 0.7;
+    
+}
+
+.questionTypeSelectionScreen .questionTypeCard:active {
+    
+    background-color: var(--page-background-color);
+    
+}
+
+.questionTypeSelectionScreen .questionTypeCard:nth-child(odd) {
+    
+    margin: 20px 10px 0 20px;
+    
+}
+
+.questionTypeSelectionScreen .questionTypeCard:nth-child(even) {
+    
+    margin: 20px 0 0 10px;
+    
+}
+
+.questionTypeSelectionScreen .questionTypeCard h1.icon {
+    
+    text-align: center;
+    margin: 10px 0 5px 0;
+    font-size: 50px;
+    
+}
+
+.questionTypeSelectionScreen .questionTypeCard p.name {
+    
+    text-align: center;
+    margin: 0 0 2px 0;
+    
+}
+
+.questionTypeSelectionScreen .questionTypeCard p.used {
+    
+    text-align: center;
+    margin: 0 0 15px 0;
+    color: var(--secondary-text-color);
+    
+}
+
+
+.questionTypeOverviewScreen .questionTypeCardsContainer {
+    
+    width: 100%;
+    margin-top: 50px;
+    height: calc(100% - 50px);
+    
+}
+
+.questionTypeOverviewScreen .questionTypeCardsContainer.showAll .questionTypeCard.disabled {
+    
+    display: flex;
+    
+}
+
+.questionTypeOverviewScreen .questionTypeCard {
+    
+    background-color: var(--content-background-color);
+    width: calc(100% - 20px);
+    height: fit-content;
+    margin: 8px 10px 0 10px;
+    border-radius: 10px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+.questionTypeOverviewScreen .questionTypeCard.disabled {
+    
+    opacity: 0.6;
+    display: none;
+    
+}
+
+.questionTypeOverviewScreen .questionTypeCard h1.icon {
+    
+    margin: 15px;
+    
+}
+
+.questionTypeOverviewScreen .questionTypeCard p.questionType {
+    
+    margin-right: auto;
+    
+}
+
+.questionTypeOverviewScreen .questionTypeCard p.used {
+    
+    margin-right: 15px;
+    font-size: 16px;
+    color: var(--secondary-text-color);
+    
+}
+
+.questionTypeOverviewScreen .questionTypeCard p.remaining {
+    
+    margin-right: 15px;
+    font-size: 18px;
+    
+}
+
+.modalToggle {
+    
+    width: fit-content;
+    border: 2px solid var(--input-border-color);
+    border-radius: 15px;
+    padding: 5px;
+    margin: 10px auto;
+    cursor: pointer;
+    
+}
+
+.modalToggle .modeA, .modalToggle .modeB {
+    
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+    
+}
+
+.modalToggle .modeA {
+    
+    background-color: var(--input-border-color);
+    
+}
+
+.modalToggle .modeB {
+    
+    background-color: var(--content-background-color);
+    
+}
+
+.modalToggle.active .modeA {
+    
+    background-color: var(--content-background-color);
+    
+}
+
+.modalToggle.active .modeB {
+    
+    background-color: var(--input-border-color);
     
 }

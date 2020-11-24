@@ -24,6 +24,7 @@ var currentRoundState = {
     useTeamColors: true,
     allowFiveSeatedQuizzers: false,
     challengeAndAppealEnabled: false,
+    enableQuestionTypeTracking: false,
 
 };
 var previousRoundState = null;
@@ -31,8 +32,52 @@ var challengeAction = null;
 var scoresheetData = {
     questions: []
 };
+var questionTypeData = {
+    
+    order: [],
+    G: {
+        name: "General",
+        used: 0,
+        max: 11
+    },
+    A: {
+        name: "According To",
+        used: 0,
+        max: 4
+    },
+    V: {
+        name: "Verse",
+        used: 0,
+        max: 1
+    },
+    R: {
+        name: "Reference",
+        used: 0,
+        max: 1
+    },
+    Q: {
+        name: "Quote",
+        used: 0,
+        max: 1
+    },
+    X: {
+        name: "Context",
+        used: 0,
+        max: 1
+    },
+    S: {
+        name: "Situation/Book and Chapter",
+        used: 0,
+        max: 1
+    },
+    
+}
 
 var selectMode = null;
+
+var selectedQuestionType = null;
+var selectTeam = null;
+var desktopSelectedQuizzer = null;
 
 function getNumbersFromID(quizzerID) {
 
@@ -100,6 +145,50 @@ function hideWebClipPromptScreen() {
 
 }
 
+function showQuestionTypeSelectionScreen() {
+
+    document.querySelector(".questionTypeSelectionScreen").classList.remove("hidden");
+
+    document.querySelector(".selectionScreenOverlay").classList.remove("hidden");
+    requestAnimationFrame(function () {
+        document.querySelector(".selectionScreenOverlay").classList.remove("transparent");
+    });
+
+}
+
+function hideQuestionTypeSelectionScreen(teamNumber) {
+
+    document.querySelector(".questionTypeSelectionScreen").classList.add("hidden");
+
+    document.querySelector(".selectionScreenOverlay").classList.add("transparent");
+    setTimeout(function () {
+        document.querySelector(".selectionScreenOverlay").classList.add("hidden");
+    }, 300);
+
+}
+
+function showQuestionTypeOverviewScreen() {
+
+    document.querySelector(".questionTypeOverviewScreen").classList.remove("hidden");
+
+    document.querySelector(".selectionScreenOverlay").classList.remove("hidden");
+    requestAnimationFrame(function () {
+        document.querySelector(".selectionScreenOverlay").classList.remove("transparent");
+    });
+
+}
+
+function hideQuestionTypeOverviewScreen(teamNumber) {
+
+    document.querySelector(".questionTypeOverviewScreen").classList.add("hidden");
+
+    document.querySelector(".selectionScreenOverlay").classList.add("transparent");
+    setTimeout(function () {
+        document.querySelector(".selectionScreenOverlay").classList.add("hidden");
+    }, 300);
+
+}
+
 function showSelectionScreen(mode, teamNumber) {
 
     selectMode = mode;
@@ -154,15 +243,28 @@ function showSelectionScreen(mode, teamNumber) {
 
 function hideSelectionScreen(teamNumber) {
 
-    selectMode = null;
-
     document.querySelector(".team" + teamNumber + "SelectionScreen").classList.add("hidden");
 
-    document.querySelector(".selectionScreenOverlay").classList.add("transparent");
-    setTimeout(function () {
-        document.querySelector(".selectionScreenOverlay").classList.add("hidden");
-    }, 300);
+    if (!currentRoundState.enableQuestionTypeTracking || (selectMode !== "jump")) {
+        document.querySelector(".selectionScreenOverlay").classList.add("transparent");
+        setTimeout(function () {
+            document.querySelector(".selectionScreenOverlay").classList.add("hidden");
+        }, 300);
+    }
+    
+    selectMode = null;
 
+}
+
+function jumpButton(teamNumber) {
+    
+    if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
+        selectTeam = teamNumber;
+        showQuestionTypeSelectionScreen();
+    } else {
+        showSelectionScreen("jump", teamNumber);
+    }
+    
 }
 
 function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsForBonus) {
@@ -277,6 +379,12 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
                         event: "noJump"
                     }
                 }
+                
+                if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
+                    
+                    logQuestionType(selectedQuestionType);
+                    
+                }
 
                 savePreviousRoundState();
                 incrementQuestion();
@@ -317,6 +425,7 @@ function showConfirmationDialog(mode, teamNumber, quizzerID, dontRefreshButtonsF
                     localStorage.removeItem("previousRoundState");
                     localStorage.removeItem("challengeAction");
                     localStorage.removeItem("scoresheetData");
+                    localStorage.removeItem("questionTypeData");
                     window.location.reload();
                 }, 300);
             };
@@ -412,6 +521,7 @@ function finishSetup() {
 
     currentRoundState.useTeamColors = document.querySelector(".setupContainer .useTeamColorsCheckbox").classList.contains("checked");
     currentRoundState.allowFiveSeatedQuizzers = document.querySelector(".setupContainer .allowFivePersonQuizzingCheckbox").classList.contains("checked");
+    currentRoundState.enableQuestionTypeTracking = document.querySelector(".setupContainer .questionTypeTrackingCheckbox").classList.contains("checked");
 
     for (var i = 0; i < quizzerInputs.length; i++) {
 
@@ -455,6 +565,12 @@ function finishSetup() {
 
         document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card").classList.remove("hidden");
         document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card .cardLabel").textContent = currentInput.value;
+
+    }
+    
+    if (currentRoundState.enableQuestionTypeTracking) {
+
+        document.querySelector(".overviewContainer .headerButtonsContainer .questionTypeTrackingButton").classList.remove("hidden");
 
     }
 
@@ -631,9 +747,15 @@ function redrawScoreboard() {
 
             quizzerSelectionElementDesktop.classList.remove("disabled");
             (function (quizzerID) {
-                quizzerSelectionElementDesktop.onclick = function () {
+                
+                if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
+                    selectTeam = (quizzerID <= 5) ? 1 : 2;
+                    desktopSelectedQuizzer = quizzerID;
+                    showQuestionTypeSelectionScreen();
+                } else {
                     showConfirmationDialog("jump", (quizzerID <= 5) ? 1 : 2, quizzerID);
-                };
+                }
+                
             })(quizzerID)
 
             quizzerSelectionElementLabel.textContent = currentQuizzer.name;
@@ -699,7 +821,7 @@ function redrawScoreboard() {
 
             var team1Buttons = document.querySelectorAll(".overviewContainer .team1 .actionsContainer div");
             var team2Buttons = document.querySelectorAll(".overviewContainer .team2 .actionsContainer div");
-            for (var i = 0; i < 4; i++) {
+            for (var i = 0; i < team1Buttons.length; i++) {
                 team1Buttons[i].classList.add("disabled");
                 team1Buttons[i].onclick = null;
                 team2Buttons[i].classList.add("disabled");
@@ -813,7 +935,15 @@ function redrawSeatOrder() {
         team1OverviewQuizzerCardScores[i].textContent = currentQuizzerScore;
         (function (currentQuizzerNumber) {
             team1OverviewQuizzerCards[i].onclick = function () {
-                showConfirmationDialog("jump", 1, currentQuizzerNumber);
+                
+                if (currentRoundState.enableQuestionTypeTracking) {
+                    selectTeam = 1;
+                    desktopSelectedQuizzer = currentQuizzerNumber;
+                    showQuestionTypeSelectionScreen();
+                } else {
+                    showConfirmationDialog("jump", 1, currentQuizzerNumber);
+                }
+                
             }
         })(currentQuizzerNumber)
 
@@ -838,7 +968,15 @@ function redrawSeatOrder() {
         team2OverviewQuizzerCardScores[i].textContent = currentQuizzerScore;
         (function (currentQuizzerNumber) {
             team2OverviewQuizzerCards[i].onclick = function () {
-                showConfirmationDialog("jump", 2, (currentQuizzerNumber + 5));
+                
+                if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
+                    selectTeam = 2;
+                    desktopSelectedQuizzer = currentQuizzerNumber + 5;
+                    showQuestionTypeSelectionScreen();
+                } else {
+                    showConfirmationDialog("jump", 2, currentQuizzerNumber + 5);
+                }
+                
             }
         })(currentQuizzerNumber)
 
@@ -849,6 +987,47 @@ function redrawSeatOrder() {
         team2OverviewQuizzerCards[4].style.pointerEvents = "none";
     }
 
+}
+
+function redrawQuestionTypeUI() {
+    
+    localStorage.setItem("questionTypeData", JSON.stringify(questionTypeData));
+    
+    var types = ["G", "A", "V", "R", "Q", "X", "S"];
+    
+    // Update the "used" values on the question type selection screen
+    for (var i = 0; i < types.length; i++) {
+        
+        var currentTypeObject = questionTypeData[types[i]];
+        var currentTypeCard = document.querySelector(".questionTypeSelectionScreen .questionTypeCardsContainer ." + types[i]);
+        var currentTypeCardUsedText = document.querySelector(".questionTypeSelectionScreen .questionTypeCardsContainer ." + types[i] + " p.used");
+        
+        currentTypeCardUsedText.textContent = "Used: " + currentTypeObject.used + "/" + currentTypeObject.max;
+        
+        if (currentTypeObject.used >= currentTypeObject.max) {
+            currentTypeCard.classList.add("disabled");
+        }
+        
+    }
+    
+    // Update the question type overview screen
+    for (var i = 0; i < types.length; i++) {
+        
+        var currentTypeObject = questionTypeData[types[i]];
+        var currentTypeCard = document.querySelector(".questionTypeOverviewScreen .questionTypeCardsContainer ." + types[i]);
+        var currentTypeCardUsedText = document.querySelector(".questionTypeOverviewScreen .questionTypeCardsContainer ." + types[i] + " p.used");
+        var currentTypeCardRemainingText = document.querySelector(".questionTypeOverviewScreen .questionTypeCardsContainer ." + types[i] + " p.remaining");
+        
+        currentTypeCardUsedText.textContent = "Used: " + currentTypeObject.used + "/" + currentTypeObject.max;
+        currentTypeCardRemainingText.textContent = (currentTypeObject.max - currentTypeObject.used) + " Remaining";
+        
+        if (currentTypeObject.used >= currentTypeObject.max) {
+            currentTypeCard.classList.add("disabled");
+            currentTypeCardRemainingText.textContent = "All questions used"
+        }
+        
+    }
+    
 }
 
 var scoresheet = {
@@ -1072,6 +1251,8 @@ function selectedQuizzer(quizzerID) {
 
     }
 
+    hideQuestionTypeSelectionScreen();
+    
     switch (quizzerID) {
         case "team1":
             quizzerID = 1;
@@ -1085,6 +1266,27 @@ function selectedQuizzer(quizzerID) {
 
     hideSelectionScreen(quizzerID);
 
+}
+
+function selectQuestionType(questionType) {
+    
+    selectedQuestionType = questionType;
+    if (desktopSelectedQuizzer == "noJump") {
+        
+        hideQuestionTypeSelectionScreen();
+        showConfirmationDialog("noJump");
+        
+    } else if (desktopSelectedQuizzer) {
+        
+        hideQuestionTypeSelectionScreen();
+        showConfirmationDialog("jump", selectTeam, desktopSelectedQuizzer);
+        
+    } else {
+        
+        showSelectionScreen("jump", selectTeam);
+        
+    }
+    
 }
 
 function savePreviousRoundState() {
@@ -1111,7 +1313,16 @@ function showScoreAdjustment(teamNumber) {
 
 function showNoJumpPrompt() {
 
-    showConfirmationDialog("noJump");
+    if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
+        
+        desktopSelectedQuizzer = "noJump";
+        showQuestionTypeSelectionScreen();
+        
+    } else {
+        
+        showConfirmationDialog("noJump");
+        
+    }
 
 }
 
@@ -1122,6 +1333,10 @@ function correct(quizzerID) {
         functionName: "incorrect",
         arguments: [quizzerID, true],
     };
+    
+    if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
+        logQuestionType(selectedQuestionType);
+    }
 
     var numbers = getNumbersFromID(quizzerID);
 
@@ -1235,6 +1450,10 @@ function incorrect(quizzerID, dontRefreshButtons) {
         functionName: "correct",
         arguments: [quizzerID]
     };
+    
+    if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
+        logQuestionType(selectedQuestionType);
+    }
 
     var numbers = getNumbersFromID(quizzerID);
 
@@ -1474,6 +1693,8 @@ function appeal(teamNumber) {
     previousRoundState = null;
 
     scoresheetData.questions.pop();
+    
+    removeLastQuestionTypeLog();
 
     // Re-enable UI buttons that may have been disabled if the round had ended
     var team1Buttons = document.querySelectorAll(".overviewContainer .team1 .actionsContainer div");
@@ -1561,16 +1782,16 @@ function showTeamOptionsMenu(teamNumber) {
     };
 
     if (currentRoundState.challengeAndAppealEnabled) {
-        optionsMenu.children[1].onclick = function () {
+        optionsMenu.children[2].onclick = function () {
             hideTeamOptionsMenu(true);
             showConfirmationDialog("challenge", teamNumber);
         };
-        optionsMenu.children[2].onclick = function () {
+        optionsMenu.children[3].onclick = function () {
             hideTeamOptionsMenu(true);
             showConfirmationDialog("appeal", teamNumber);
         };
-        optionsMenu.children[1].classList.remove("disabled");
         optionsMenu.children[2].classList.remove("disabled");
+        optionsMenu.children[3].classList.remove("disabled");
     } else {
         optionsMenu.children[2].onclick = null;
         optionsMenu.children[3].onclick = null;
@@ -1748,6 +1969,22 @@ const bannerNotificationManager = {
 
 }
 
+function logQuestionType(questionType) {
+    
+    questionTypeData.order.push(questionType);
+    questionTypeData[questionType].used++;
+    redrawQuestionTypeUI();
+
+}
+
+function removeLastQuestionTypeLog() {
+    
+    var removedItem = questionTypeData.order.pop();
+    questionTypeData[removedItem].used--;
+    redrawQuestionTypeUI();
+
+}
+
 function exportScoresheet(exportType) {
     
     switch (exportType) {
@@ -1876,7 +2113,13 @@ for (var i = 0; i < 10; i++) {
     (function (quizzerID) {
         card.onclick = function () {
 
-            showConfirmationDialog("jump", (quizzerID <= 5) ? 1 : 2, quizzerID);
+            if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
+                selectTeam = (quizzerID <= 5) ? 1 : 2;
+                desktopSelectedQuizzer = quizzerID;
+                showQuestionTypeSelectionScreen();
+            } else {
+                showConfirmationDialog("jump", (quizzerID <= 5) ? 1 : 2, quizzerID);
+            }
 
         };
     })(quizzerID)
@@ -1964,6 +2207,7 @@ window.addEventListener("load", function () {
     var recalledPreviousRoundState = localStorage.getItem("previousRoundState");
     var recalledChallengeAction = localStorage.getItem("challengeAction");
     var recalledScoresheetData = localStorage.getItem("scoresheetData");
+    var recalledQuestionTypeData = localStorage.getItem("questionTypeData");
 
     if (
         (recalledPreviousRoundState ||
@@ -1980,6 +2224,13 @@ window.addEventListener("load", function () {
 
         scoresheetData = JSON.parse(recalledScoresheetData);
 
+    }
+    
+    if (recalledQuestionTypeData) {
+        
+        questionTypeData = JSON.parse(recalledQuestionTypeData);
+        redrawQuestionTypeUI();
+        
     }
 
     if (recalledRoundState) {
@@ -2001,6 +2252,12 @@ window.addEventListener("load", function () {
                 document.querySelector(".quizzerCardsContainer .quizzer" + i + "Card .cardLabel").textContent = currentQuizzer.name;
             }
 
+        }
+        
+        if (currentRoundState.enableQuestionTypeTracking) {
+            
+            document.querySelector(".overviewContainer .headerButtonsContainer .questionTypeTrackingButton").classList.remove("hidden");
+            
         }
 
         // Initial draw of the scoreboard
@@ -2032,7 +2289,7 @@ window.addEventListener("load", function () {
         rebuttalErroneousInformationCheckbox.classList.toggle("checked");
     });
 
-    // Set up setup screen checkbox event listener
+    // Set up setup screen checkbox event listeners
     var useTeamColorsCheckbox = document.querySelector(".setupContainer .useTeamColorsCheckbox");
     useTeamColorsCheckbox.addEventListener("click", function () {
         useTeamColorsCheckbox.classList.toggle("checked");
@@ -2042,6 +2299,36 @@ window.addEventListener("load", function () {
     allowFivePersonQuizzingCheckbox.addEventListener("click", function () {
         allowFivePersonQuizzingCheckbox.classList.toggle("checked");
     });
+    
+    var questionTypeTrackingCheckbox = document.querySelector(".setupContainer .questionTypeTrackingCheckbox");
+    questionTypeTrackingCheckbox.addEventListener("click", function () {
+        questionTypeTrackingCheckbox.classList.toggle("checked");
+    });
+    
+    
+    // Set up modal toggles
+    var modalToggles = document.querySelectorAll(".modalToggle");
+    
+    for (var i = 0; i < modalToggles.length; i++) {
+        
+        var currentToggle = modalToggles[i];
+        
+        (function (currentToggle) {
+            currentToggle.addEventListener("click", function () {
+                currentToggle.classList.toggle("active");
+            });
+        })(currentToggle)
+        
+    }
+    
+    // Set up question type overview screen modal toggle
+    var cardShowModeModalToggle = document.querySelector(".questionTypeOverviewScreen .cardShowModeModalToggle");
+    cardShowModeModalToggle.addEventListener("click", function () {
+        
+        document.querySelector(".questionTypeOverviewScreen .questionTypeCardsContainer").classList.toggle("showAll");
+        
+    });
+    
 
     // Enable :active CSS on mobile Safari
     document.addEventListener("touchstart", function () {}, true);

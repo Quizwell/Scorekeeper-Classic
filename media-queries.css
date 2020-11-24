@@ -251,7 +251,7 @@
         
     }
     
-    .selectionScreen {
+    .slideScreen {
         
         position: fixed;
         top: 50%;
@@ -262,10 +262,11 @@
         max-height: 500px;
         max-width: 700px;
         border-radius: 17.5px;
+        overflow: scroll;
         
     }
     
-    .selectionScreen.hidden {
+    .slideScreen.hidden {
 
         transform: translate(-50%, calc(100% + 100px));
         display: block !important;
