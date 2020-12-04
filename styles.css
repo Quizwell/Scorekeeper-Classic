@@ -1405,3 +1405,107 @@ td:last-child {
     background-color: var(--input-border-color);
     
 }
+
+.changelogScreen {
+    
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    width: 100%;
+    height: 100%;
+    background-color: var(--page-background-color);
+    padding-top: 50px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: auto;
+    
+}
+
+.changelogScreen .header {
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.changelogScreen .header img {
+    
+    width: 100px;
+    height: 100px;
+    border-radius: 20%;
+    box-shadow: 0 0 15px var(--primary-shadow-color);
+    
+}
+
+.changelogScreen .header h1 {
+    
+    margin: 10px 0 2px 0;
+    
+}
+
+.changelogScreen .header p {
+    
+    margin: 2px;
+    color: var(--secondary-text-color);
+    
+}
+
+.changelogScreen .changelogList {
+    
+    margin-top: 25px;
+    
+}
+
+.changelogScreen .changelogList .listItem {
+
+    background-color: var(--content-background-color);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 0 0 10px 0;
+    width: 300px;
+    
+}
+
+.changelogScreen .changelogList .listItem .title {
+    
+    margin: 0;
+    
+}
+
+.changelogScreen .changelogList .listItem .description {
+    
+    margin: 10px 0 0 0;
+    
+}
+
+.changelogScreen button {
+    
+    border: 0;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 10px;
+    width: 100px;
+    height: 50px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    background: var(--theme-gradient);
+    background-size: 200% 100%;
+    animation: gradient 18s ease infinite;
+    transition: opacity 0.2s ease;
+    
+}
+
+.changelogScreen button:active {
+    
+    opacity: 0.5;
+    
+}

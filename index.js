@@ -1,3 +1,5 @@
+const SCOREKEEPER_VERSION = 1.1;
+
 var currentRoundState = {
 
     question: 1,
@@ -254,6 +256,12 @@ function hideSelectionScreen(teamNumber) {
     
     selectMode = null;
 
+}
+
+function hideChangelogScreen() {
+    
+    document.querySelector(".changelogScreen").classList.add("hidden");
+    
 }
 
 function jumpButton(teamNumber) {
@@ -864,7 +872,7 @@ function redrawScoreboard() {
 
     if (currentRoundState.allowFiveSeatedQuizzers) {
 
-        document.querySelector(".optionsMenu div:first-child").classList.add("hidden");
+        document.querySelector(".optionsMenu div:nth-of-type(1)").classList.add("hidden");
 
     }
 
@@ -2335,6 +2343,22 @@ window.addEventListener("load", function () {
 
     // Activate CSS transitions again
     document.body.classList.remove("preload");
+    
+    // If the user has updated from a previous version of Scorekeeper, show the changelog screen
+    var hasUsedScorekeeper = localStorage.getItem("userHasUsedAppPreviously");
+    var lastScorekeeperVersion = localStorage.getItem("SCOREKEEPER_VERSION");
+    if (
+        hasUsedScorekeeper &&
+        lastScorekeeperVersion &&
+        (lastScorekeeperVersion < SCOREKEEPER_VERSION)
+    ) {
+        
+        document.querySelector(".changelogScreen").classList.remove("hidden");
+        
+    }
+    
+    // Set the current Scorekeeper version in localStorage
+    localStorage.setItem("SCOREKEEPER_VERSION", SCOREKEEPER_VERSION);
 
 });
 
