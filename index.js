@@ -698,13 +698,16 @@ function redrawScoreboard() {
         var numbers = getNumbersFromID(quizzerID);
 
         var currentQuizzer = currentRoundState[numbers.teamPropertyName][numbers.quizzerPropertyName];
+        
+        var seatOfCurrentQuizzer = currentRoundState[numbers.teamPropertyName].seatOrder.indexOf(numbers.quizzerNumber);
+        var quizzerCardID = (numbers.teamNumber == 1) ? (seatOfCurrentQuizzer + 1) : (seatOfCurrentQuizzer + 2);
 
-        var quizzerSelectionElement = document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card");
-        var quizzerSelectionElementLabel = document.querySelector(".selectionScreen .quizzer" + quizzerID + "Card p.cardLabel");
+        var quizzerSelectionElement = document.querySelector(".selectionScreen .quizzer" + quizzerCardID + "Card");
+        var quizzerSelectionElementLabel = document.querySelector(".selectionScreen .quizzer" + quizzerCardID + "Card p.cardLabel");
 
-        var quizzerSelectionElementDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card");
-        var quizzerSelectionElementLabelDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card p.cardLabel");
-        var quizzerSelectionElementScoreDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerID + "Card p.cardScore");
+        var quizzerSelectionElementDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerCardID + "Card");
+        var quizzerSelectionElementLabelDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerCardID + "Card p.cardLabel");
+        var quizzerSelectionElementScoreDesktop = document.querySelector(".quizzerCardsContainer .quizzer" + quizzerCardID + "Card p.cardScore");
 
         // If this quizzer doesn't exist, don't update him on the scoreboard
         if (currentQuizzer.name === null) {
@@ -756,12 +759,14 @@ function redrawScoreboard() {
             quizzerSelectionElementDesktop.classList.remove("disabled");
             (function (quizzerID) {
                 
-                if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
-                    selectTeam = (quizzerID <= 5) ? 1 : 2;
-                    desktopSelectedQuizzer = quizzerID;
-                    showQuestionTypeSelectionScreen();
-                } else {
-                    showConfirmationDialog("jump", (quizzerID <= 5) ? 1 : 2, quizzerID);
+                quizzerSelectionElementDesktop.onclick = function () {
+                    if (currentRoundState.enableQuestionTypeTracking && (currentRoundState.question <= 20)) {
+                        selectTeam = (quizzerID <= 5) ? 1 : 2;
+                        desktopSelectedQuizzer = quizzerID;
+                        showQuestionTypeSelectionScreen();
+                    } else {
+                        showConfirmationDialog("jump", (quizzerID <= 5) ? 1 : 2, quizzerID);
+                    }
                 }
                 
             })(quizzerID)
@@ -1427,6 +1432,20 @@ function correct(quizzerID) {
                 bannerNotificationManager.showMessage("Quiz Out", "4 Correct");
 
             }
+            
+            //If there is a fifth quizzer waiting to be subbed in, perform an automatic substitution
+            if (!currentRoundState.allowFiveSeatedQuizzers) {
+                
+                //Get the quizzer in the sub seat on the team
+                var fifthSeatedQuizzer = currentRoundState[numbers.teamPropertyName]["quizzer" + currentRoundState[numbers.teamPropertyName].seatOrder[4]];
+                //If that quizzer is still eligible, sub him in.
+                if (fifthSeatedQuizzer.enabled) {
+                    substitution(quizzerID);
+                    bannerNotificationManager.showMessage("Automatic Substitution", "For Quiz Out");
+                    
+                }
+                    
+            }
 
         }
 
@@ -1498,6 +1517,19 @@ function incorrect(quizzerID, dontRefreshButtons) {
         if (get("incorrect") == 3) {
 
             set("enabled", false);
+            
+            //If there is a fifth quizzer waiting to be subbed in, perform an automatic substitution
+            if (!currentRoundState.allowFiveSeatedQuizzers) {
+                
+                //Get the quizzer in the sub seat on the team
+                var fifthSeatedQuizzer = currentRoundState[numbers.teamPropertyName]["quizzer" + currentRoundState[numbers.teamPropertyName].seatOrder[4]];
+                //If that quizzer is still eligible, sub him in.
+                if (fifthSeatedQuizzer.enabled) {
+                    substitution(quizzerID);
+                    bannerNotificationManager.showMessage("Automatic Substitution", "For Error Out");
+                }
+                    
+            }
 
         }
 
@@ -1768,7 +1800,7 @@ function refreshChallengeAndAppealButtons(toggleTo) {
         enableButtons();
     } else if (toggleTo === "disable") {
         disableButtons();
-    } else if (document.querySelector(".overviewContainer .team1 div.actionsContainer div:nth-child(4)").classList.contains("disabled")) {
+    } else if (document.querySelector(".optionsMenu div:nth-child(3)").classList.contains("disabled")) {
         enableButtons();
     }
 
