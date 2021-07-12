@@ -12,6 +12,8 @@
     --input-background-color: #f8f8f8;
     --input-border-color: #bbbbbb;
     --overlay-color: #000000;
+    
+    --dark-shadow-color: #aaaaaa;
 
     --checkbox-tag-color: #66BC75;
     --theme-gradient: linear-gradient(70deg, #74BCBD 0%, #436F9E 20%, #836AC8 40%, #7D76D1 60%, #D88243 80%, #CF4F3D 100%);
@@ -33,6 +35,9 @@
         --input-background-color: #222222;
         --input-border-color: #4a4a4a;
         --overlay-color: #000000;
+        
+        --dark-shadow-color: #222222;
+        
     }
 
 }
@@ -147,59 +152,62 @@ input[type="text"] {
 
 }
 
-.welcomeContainer img.header {
-
-    width: 100vw;
-    height: 40vh;
-    object-fit: cover;
-
-}
-
-.welcomeContainer h1,
-.webClipPromptContainer h1 {
-
-    font-size: 40px;
-    line-height: 1em;
-    margin: 25px;
-
-}
-
-.welcomeContainer div {
-
+.welcomeContainer .headerBlock {
+    
     width: 100%;
-    height: 130px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-
+    height: 40%;
+    background: linear-gradient(70deg, #74BCBD 0%, #436F9E 20%, #836AC8 40%, #7D76D1 60%, #D88243 80%, #CF4F3D 100%);
+    background-size: 200% 100%;
+    animation: gradient 18s ease infinite;
+    
 }
 
-.welcomeContainer div img {
-
-    display: inline;
-    height: 75px;
-    width: 75px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px var(--primary-shadow-color);
-
+@keyframes gradient {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
 }
 
-.welcomeContainer div h1 {
-
-    display: inline;
-    height: 75px;
-    line-height: 75px;
-    margin: 0 0 0 20px;
-
+.welcomeContainer .headerBlock img {
+    
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+    
+    border-radius: 20px;
+    box-shadow: 0 0 10px var(--dark-shadow-color);
+    
 }
 
-.welcomeContainer > p {
+.welcomeContainer .textContainer {
 
-    margin: 0;
+    margin-top: 20px;
+    font-size: 30px;
     text-align: center;
-    font-size: 22px;
+    
+}
 
+.welcomeContainer .textContainer h1 {
+    
+    margin: 0 0 10px 0;
+    
+}
+
+.welcomeContainer .textContainer p {
+
+    display: inline-block;
+    font-size: 25px;
+    margin: 0 5px 10px 0;
+    font-weight: normal;
+    
+}
+
+.welcomeContainer .textContainer img {
+
+    display: inline-block;
+    vertical-align: middle;
+    
 }
 
 .webClipPromptContainer > p {

@@ -2195,16 +2195,6 @@ for (var i = 0; i < 10; i++) {
 
 }
 
-if (localStorage.getItem("userHasUsedAppPreviously") === "true") {
-
-    var header = document.querySelector(".welcomeContainer h1");
-    var text = document.querySelector(".welcomeContainer p");
-    var button = document.querySelector(".welcomeContainer button");
-
-    text.textContent = "Tap Next to start scorekeeping a round.";
-
-}
-
 // When the window is being resized, don't let other screens transition and remain in view when they're not supposed to be.
 var resizeTimer;
 window.addEventListener("resize", () => {

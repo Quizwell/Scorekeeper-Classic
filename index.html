@@ -50,15 +50,19 @@
     <div class="welcomeScreensContainer">
 
         <div class="welcomeContainer">
-            <picture>
-                <source srcset="HeaderDark.svg" media="(prefers-color-scheme: dark)">
-                <img class="header" src="Header.svg">
-            </picture>
-            <div>
-                <img src="apple-touch-icon.png">
-                <h1>Scorekeeper</h1>
+            <div class="headerBlock">
+                <img src="apple-touch-icon.png" width="auto" height="100px">
             </div>
-            <p>Scorekeeper allows you to scorekeep quiz rounds from your phone.</p>
+            <div class="textContainer">
+                <h1>Scorekeeper</h1>
+
+                <p>by</p>
+                <picture>
+                    <source srcset="Quizwell-Logo-White.svg" media="(prefers-color-scheme: dark)">
+                    <img src="Quizwell-Logo.svg" width="auto" height="40px">
+                </picture>
+            </div>
+
             <button class="fullWidthButton" onclick="hideWelcomeScreen()">Next</button>
         </div>
 
@@ -118,7 +122,7 @@
                     <p>Allow five seated quizzers</p>
                 </div>
                 <p class="checkboxDescription">Disables substitutions and allows all five quizzers on each team to jump at once.</p>
-                
+
                 <div class="questionTypeTrackingCheckbox checkboxContainer">
                     <div class="checkbox">
                         <div></div>
@@ -126,8 +130,8 @@
                     <p>Question type tracking</p>
                 </div>
                 <p class="checkboxDescription">Track question types for each question in the round, and see what question types remain.</p>
-                
-<!--            <span class="tag">Experimental</span>-->
+
+                <!--            <span class="tag">Experimental</span>-->
 
             </form>
 
@@ -148,7 +152,7 @@
 
         <div class="overviewContainer">
 
-           <div class="headerButtonsContainer">
+            <div class="headerButtonsContainer">
                 <div class="endRoundButton" onclick="showConfirmationDialog('endRound')">
                     <picture>
                         <source srcset="CloseIconDark.svg" media="(prefers-color-scheme: dark)">
@@ -163,13 +167,13 @@
                     </picture>
                 </div>
 
-               <div class="questionTypeTrackingButton hidden" onclick="showQuestionTypeOverviewScreen()">
+                <div class="questionTypeTrackingButton hidden" onclick="showQuestionTypeOverviewScreen()">
                     <picture>
                         <source srcset="QuestionTypeIconDark.svg" media="(prefers-color-scheme: dark)">
                         <img src="QuestionTypeIcon.svg">
                     </picture>
                 </div>
-               
+
                 <div class="bugReportButton" onclick="showConfirmationDialog('bugReport')">
                     <picture>
                         <source srcset="BugReportIconDark.svg" media="(prefers-color-scheme: dark)">
@@ -293,73 +297,73 @@
         </div>
 
         <div class="selectionScreenOverlay hidden transparent"></div>
-        
+
         <div class="questionTypeSelectionScreen slideScreen hidden">
-            
+
             <button onclick="hideQuestionTypeSelectionScreen()">Back</button>
             <p class="screenTitle">Question Type</p>
-            
+
             <div class="questionTypeCardsContainer">
-                
+
                 <div class="questionTypeCard G" onclick="selectQuestionType('G')">
                     <h1 class="icon">G</h1>
                     <p class="name">General</p>
                     <p class="used">0/11 Used</p>
                 </div>
-                
+
                 <div class="questionTypeCard A" onclick="selectQuestionType('A')">
                     <h1 class="icon">A</h1>
                     <p class="name">According To</p>
                     <p class="used">0/4 Used</p>
                 </div>
-                
+
                 <div class="questionTypeCard R" onclick="selectQuestionType('R')">
                     <h1 class="icon">R</h1>
                     <p class="name">Reference</p>
                     <p class="used">0/1 Used</p>
                 </div>
-                
+
                 <div class="questionTypeCard V" onclick="selectQuestionType('V')">
                     <h1 class="icon">V</h1>
                     <p class="name">Verse</p>
                     <p class="used">0/1 Used</p>
                 </div>
-                
+
                 <div class="questionTypeCard Q" onclick="selectQuestionType('Q')">
                     <h1 class="icon">Q</h1>
                     <p class="name">Quote</p>
                     <p class="used">0/1 Used</p>
                 </div>
-                
+
                 <div class="questionTypeCard X" onclick="selectQuestionType('X')">
                     <h1 class="icon">X</h1>
                     <p class="name">Context</p>
                     <p class="used">0/1 Used</p>
                 </div>
-                
+
                 <div class="questionTypeCard S" onclick="selectQuestionType('S')">
                     <h1 class="icon">S/I</h1>
                     <p class="name">Situation/Book and Chapter</p>
                     <p class="used">0/1 Used</p>
                 </div>
-                
+
             </div>
-            
+
         </div>
-        
+
         <div class="questionTypeOverviewScreen slideScreen hidden">
-            
+
             <button onclick="hideQuestionTypeOverviewScreen()">Back</button>
             <p class="screenTitle">Question Types</p>
-            
+
             <div class="questionTypeCardsContainer">
-               
-               <div class="modalToggle active cardShowModeModalToggle">
-                   <div class="selector"></div>
-                   <div class="modeA">Show all</div>
-                   <div class="modeB">Show remaining</div>
-               </div>
-                
+
+                <div class="modalToggle active cardShowModeModalToggle">
+                    <div class="selector"></div>
+                    <div class="modeA">Show all</div>
+                    <div class="modeB">Show remaining</div>
+                </div>
+
                 <div class="questionTypeCard G">
                     <h1 class="icon">G</h1>
                     <p class="questionType">General</p>
@@ -402,9 +406,9 @@
                     <p class="used">0/1 Used</p>
                     <p class="remaining">1 Remaining</p>
                 </div>
-                
+
             </div>
-            
+
         </div>
 
         <div class="team1SelectionScreen selectionScreen slideScreen hidden">
@@ -458,31 +462,31 @@
         </div>
 
     </div>
-    
+
     <div class="changelogScreen hidden">
-        
+
         <div class="header">
             <img src="android-chrome-192x192.png">
             <h1>What's New</h1>
             <p>Scorekeeper 1.1</p>
         </div>
-        
+
         <div class="changelogList">
-            
+
             <div class="listItem">
                 <h2 class="title">Question Type Tracking</h2>
                 <p class="description">Keep track of question types throughout the round, and see what questions remain.</p>
             </div>
-            
+
             <div class="listItem">
                 <h2 class="title">Bug fixes</h2>
                 <p class="description">Dozens of bug fixes across the app.</p>
             </div>
-            
+
         </div>
-        
+
         <button onclick="hideChangelogScreen()">Close</button>
-        
+
     </div>
 
     <div class="scoresheetContainer hidden">
