@@ -81,6 +81,8 @@ var selectedQuestionType = null;
 var selectTeam = null;
 var desktopSelectedQuizzer = null;
 
+var easterEggClickCount = 0;
+
 function getNumbersFromID(quizzerID) {
 
     if (quizzerID <= 5) {
@@ -107,6 +109,19 @@ function getNumbersFromID(quizzerID) {
 
     }
 
+}
+
+function easterEggClickHandler() {
+    
+    easterEggClickCount++;
+    
+    if (easterEggClickCount === 10) {
+        
+        alert("#RegionalsNotFieldFinals");
+        easterEggClickCount = 0;
+        
+    }
+    
 }
 
 function hideWelcomeScreen() {
