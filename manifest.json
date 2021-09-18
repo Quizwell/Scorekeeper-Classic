@@ -1,6 +1,6 @@
 {
     "short_name": "Scorekeeper",
-    "name": "Scorekeeper",
+    "name": "Scorekeeper Classic",
     "icons": [
         {
             "src": "android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "sizes": "512x512"
     }
   ],
-    "start_url": "/Scorekeeper/index.html",
+    "start_url": "/Scorekeeper-Classic/index.html",
     "background_color": "#ffffff",
     "display": "standalone",
     "scope": "/",
